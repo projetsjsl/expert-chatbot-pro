@@ -1118,6 +1118,13 @@ export default professionalProfiles;
     }
   };
 
+  const envApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  if (envApiKey) {
+    setApiKey(envApiKey);
+    setShowApiInput(false);
+  };
+
+
   const selectSector = (sectorKey) => {
     setSelectedSector(sectorKey);
   };
