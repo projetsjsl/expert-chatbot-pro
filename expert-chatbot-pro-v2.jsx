@@ -1194,25 +1194,47 @@ const ExpertChatbotPro = () => {
         parts: msg.parts
       }));
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            contents: [...history, userMessage],
-            systemInstruction: {
-              parts: [{ text: profile.systemPrompt }]
-            },
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 2048,
-            }
-          })
+      const requestBody = {
+        contents: [...history, userMessage],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 2048,
         }
-      );
+      };
+
+      // Essayer différentes URLs d'API
+      const apiUrls = [
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+      ];
+
+      let response = null;
+      let lastError = null;
+
+      for (const url of apiUrls) {
+        try {
+          response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (response.ok) {
+            break; // Succès, on arrête d'essayer
+          }
+          lastError = await response.text();
+        } catch (err) {
+          lastError = err;
+          continue; // Essayer la prochaine URL
+        }
+      }
+
+      if (!response || !response.ok) {
+        throw new Error(lastError || "Toutes les tentatives d'API ont échoué");
+      }
 
       const data = await response.json();
       
@@ -1227,12 +1249,14 @@ const ExpertChatbotPro = () => {
         if (newPoints.length > 0) {
           setKeyPoints(prev => [...prev, ...newPoints]);
         }
+      } else if (data.error) {
+        throw new Error(data.error.message || "Erreur API");
       }
     } catch (error) {
       console.error('Error:', error);
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: "Désolé, une erreur s'est produite. Vérifiez votre clé API." }]
+        parts: [{ text: `Désolé, une erreur s'est produite : ${error.message}. Vérifiez votre clé API sur https://makersuite.google.com/app/apikey` }]
       }]);
     } finally {
       setIsLoading(false);
