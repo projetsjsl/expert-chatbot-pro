@@ -1202,11 +1202,10 @@ const ExpertChatbotPro = () => {
         }
       };
 
-      // Essayer différentes URLs d'API
+      // Essayer différentes URLs d'API avec les modèles disponibles
       const apiUrls = [
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`,
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+        `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`
       ];
 
       let response = null;
