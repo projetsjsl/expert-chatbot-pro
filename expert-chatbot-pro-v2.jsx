@@ -1,108 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, RefreshCw, ArrowLeft, Clock, Mail, User, AlertCircle, Lightbulb, BookOpen, TrendingUp } from 'lucide-react';
 
-const ExpertChatbotPro = () => {
-  const [selectedSector, setSelectedSector] = useState(null);
-  const [selectedProfession, setSelectedProfession] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState('');
-  const [showApiInput, setShowApiInput] = useState(true);
-  const [keyPoints, setKeyPoints] = useState([]);
-  const [sessionStartTime, setSessionStartTime] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [showEmailModal, setShowEmailModal] = useState(false);
-  const [email, setEmail] = useState('');
-  const messagesEndRef = useRef(null);
-  const timerRef = useRef(null);
-
-  const sectors = {
-    sante: {
-      name: 'Santé & Bien-être',
-      icon: '🏥',
-      color: 'from-red-50 to-pink-100',
-      borderColor: 'border-red-400',
-      bgColor: 'bg-red-50',
-      professions: [
-        { id: 'medecin', name: 'Médecin Généraliste', icon: '🩺', description: 'Diagnostic et soins médicaux', color: 'bg-red-100' },
-        { id: 'psychologue', name: 'Psychologue', icon: '🧠', description: 'Santé mentale', color: 'bg-pink-100' },
-        { id: 'nutritionniste', name: 'Nutritionniste', icon: '🥗', description: 'Alimentation et nutrition', color: 'bg-orange-100' },
-        { id: 'kinesitherapeute', name: 'Kinésithérapeute', icon: '🤸', description: 'Rééducation physique', color: 'bg-red-100' }
-      ]
-    },
-    juridique: {
-      name: 'Juridique & Finance',
-      icon: '⚖️',
-      color: 'from-blue-50 to-indigo-100',
-      borderColor: 'border-blue-400',
-      bgColor: 'bg-blue-50',
-      professions: [
-        { id: 'avocat', name: 'Avocat', icon: '👨‍⚖️', description: 'Droit québécois', color: 'bg-blue-100' },
-        { id: 'notaire', name: 'Notaire', icon: '📜', description: 'Actes authentiques QC', color: 'bg-indigo-100' },
-        { id: 'comptable', name: 'CPA (Comptable)', icon: '💰', description: 'Fiscalité québécoise', color: 'bg-cyan-100' }
-      ]
-    },
-    tech: {
-      name: 'Technologie',
-      icon: '💻',
-      color: 'from-purple-50 to-violet-100',
-      borderColor: 'border-purple-400',
-      bgColor: 'bg-purple-50',
-      professions: [
-        { id: 'dev_fullstack', name: 'Développeur Full-Stack', icon: '👨‍💻', description: 'Web & applications', color: 'bg-purple-100' },
-        { id: 'designer_ux', name: 'Designer UX/UI', icon: '🎨', description: 'Expérience utilisateur', color: 'bg-violet-100' }
-      ]
-    },
-    construction: {
-      name: 'Construction',
-      icon: '🏗️',
-      color: 'from-orange-50 to-amber-100',
-      borderColor: 'border-orange-400',
-      bgColor: 'bg-orange-50',
-      professions: [
-        { id: 'architecte', name: 'Architecte', icon: '🏛️', description: 'Conception bâtiments QC', color: 'bg-orange-100' },
-        { id: 'electricien', name: 'Électricien', icon: '⚡', description: 'Installations électriques', color: 'bg-yellow-100' }
-      ]
-    },
-    business: {
-      name: 'Affaires',
-      icon: '💼',
-      color: 'from-green-50 to-emerald-100',
-      borderColor: 'border-green-400',
-      bgColor: 'bg-green-50',
-      professions: [
-        { id: 'entrepreneur', name: 'Entrepreneur', icon: '🚀', description: 'Création entreprise QC', color: 'bg-green-100' },
-        { id: 'consultant', name: 'Consultant Stratégie', icon: '📈', description: 'Stratégie business', color: 'bg-emerald-100' }
-      ]
-    },
-    immobilier: {
-      name: 'Immobilier',
-      icon: '🏠',
-      color: 'from-teal-50 to-cyan-100',
-      borderColor: 'border-teal-400',
-      bgColor: 'bg-teal-50',
-      professions: [
-        { id: 'agent_immobilier', name: 'Courtier Immobilier', icon: '🏘️', description: 'Marché immobilier QC', color: 'bg-teal-100' }
-      ]
-    }
-  };
-
 // ========================================
-// PROFILS MYPROAI - VERSION MISE À JOUR
-// Tous les experts utilisent "MyProAI" comme assistant virtuel
+// PROFILS PROFESSIONNELS - EN DEHORS DU COMPOSANT
 // ========================================
 
 const professionalProfiles = {
-
   // ==================== SANTÉ ====================
-
   medecin: {
     profile: {
       name: "MyProAI - Médecine Familiale",
       credentials: "Assistant virtuel expert - Médecine générale et soins de santé",
       specialties: ["Médecine familiale", "Soins préventifs", "Gestion maladies chroniques"],
-      sources: []  // Sources citées dans les réponses
+      sources: []
     },
     systemPrompt: `Tu es MyProAI, un assistant virtuel expert en médecine familiale québécoise.
 
@@ -1063,10 +973,117 @@ Tu es inspirant, exigeant et bienveillant.`,
       "Difficultés importantes nécessitent soutien spécialisé"
     ]
   }
-
 };
 
-  // Timer effect
+// ========================================
+// COMPOSANT PRINCIPAL
+// ========================================
+
+const ExpertChatbotPro = () => {
+  // États
+  const [selectedSector, setSelectedSector] = useState(null);
+  const [selectedProfession, setSelectedProfession] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState('');
+  const [showApiInput, setShowApiInput] = useState(true);
+  const [keyPoints, setKeyPoints] = useState([]);
+  const [sessionStartTime, setSessionStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [email, setEmail] = useState('');
+  const messagesEndRef = useRef(null);
+  const timerRef = useRef(null);
+
+  // Secteurs
+  const sectors = {
+    sante: {
+      name: 'Santé & Bien-être',
+      icon: '🏥',
+      color: 'from-red-50 to-pink-100',
+      borderColor: 'border-red-400',
+      bgColor: 'bg-red-50',
+      professions: [
+        { id: 'medecin', name: 'Médecin Généraliste', icon: '🩺', description: 'Diagnostic et soins médicaux', color: 'bg-red-100' },
+        { id: 'psychologue', name: 'Psychologue', icon: '🧠', description: 'Santé mentale', color: 'bg-pink-100' },
+        { id: 'nutritionniste', name: 'Nutritionniste', icon: '🥗', description: 'Alimentation et nutrition', color: 'bg-orange-100' },
+        { id: 'kinesitherapeute', name: 'Kinésithérapeute', icon: '🤸', description: 'Réé ducation physique', color: 'bg-red-100' },
+        { id: 'orthophoniste', name: 'Orthophoniste', icon: '🗣️', description: 'Communication et langage', color: 'bg-purple-100' },
+        { id: 'pharmacien', name: 'Pharmacien', icon: '💊', description: 'Médicaments et santé', color: 'bg-blue-100' }
+      ]
+    },
+    juridique: {
+      name: 'Juridique & Finance',
+      icon: '⚖️',
+      color: 'from-blue-50 to-indigo-100',
+      borderColor: 'border-blue-400',
+      bgColor: 'bg-blue-50',
+      professions: [
+        { id: 'avocat', name: 'Avocat', icon: '👨‍⚖️', description: 'Droit québécois', color: 'bg-blue-100' },
+        { id: 'notaire', name: 'Notaire', icon: '📜', description: 'Actes authentiques QC', color: 'bg-indigo-100' },
+        { id: 'comptable', name: 'CPA (Comptable)', icon: '💰', description: 'Fiscalité québécoise', color: 'bg-cyan-100' }
+      ]
+    },
+    tech: {
+      name: 'Technologie',
+      icon: '💻',
+      color: 'from-purple-50 to-violet-100',
+      borderColor: 'border-purple-400',
+      bgColor: 'bg-purple-50',
+      professions: [
+        { id: 'dev_fullstack', name: 'Développeur Full-Stack', icon: '👨‍💻', description: 'Web & applications', color: 'bg-purple-100' },
+        { id: 'designer_ux', name: 'Designer UX/UI', icon: '🎨', description: 'Expérience utilisateur', color: 'bg-violet-100' }
+      ]
+    },
+    construction: {
+      name: 'Construction',
+      icon: '🏗️',
+      color: 'from-orange-50 to-amber-100',
+      borderColor: 'border-orange-400',
+      bgColor: 'bg-orange-50',
+      professions: [
+        { id: 'architecte', name: 'Architecte', icon: '🏛️', description: 'Conception bâtiments QC', color: 'bg-orange-100' },
+        { id: 'electricien', name: 'Électricien', icon: '⚡', description: 'Installations électriques', color: 'bg-yellow-100' }
+      ]
+    },
+    business: {
+      name: 'Affaires',
+      icon: '💼',
+      color: 'from-green-50 to-emerald-100',
+      borderColor: 'border-green-400',
+      bgColor: 'bg-green-50',
+      professions: [
+        { id: 'entrepreneur', name: 'Entrepreneur', icon: '🚀', description: 'Création entreprise QC', color: 'bg-green-100' },
+        { id: 'consultant', name: 'Consultant Stratégie', icon: '📈', description: 'Stratégie business', color: 'bg-emerald-100' }
+      ]
+    },
+    immobilier: {
+      name: 'Immobilier',
+      icon: '🏠',
+      color: 'from-teal-50 to-cyan-100',
+      borderColor: 'border-teal-400',
+      bgColor: 'bg-teal-50',
+      professions: [
+        { id: 'agent_immobilier', name: 'Courtier Immobilier', icon: '🏘️', description: 'Marché immobilier QC', color: 'bg-teal-100' }
+      ]
+    },
+    education: {
+      name: 'Éducation & Services sociaux',
+      icon: '🎓',
+      color: 'from-amber-50 to-yellow-100',
+      borderColor: 'border-amber-400',
+      bgColor: 'bg-amber-50',
+      professions: [
+        { id: 'educatrice_specialisee', name: 'Éducatrice Spécialisée', icon: '👥', description: 'Intervention adaptée', color: 'bg-amber-100' },
+        { id: 'psychoeducatrice', name: 'Psychoéducatrice', icon: '🧩', description: 'Adaptation psychosociale', color: 'bg-yellow-100' },
+        { id: 'enseignante_prescolaire', name: 'Enseignante Préscolaire-Primaire', icon: '📚', description: 'Éducation jeunes enfants', color: 'bg-lime-100' },
+        { id: 'enseignante_secondaire', name: 'Enseignante Secondaire', icon: '🏫', description: 'Enseignement secondaire', color: 'bg-green-100' }
+      ]
+    }
+  };
+
+  // Effets
   useEffect(() => {
     if (sessionStartTime) {
       timerRef.current = setInterval(() => {
@@ -1084,15 +1101,22 @@ Tu es inspirant, exigeant et bienveillant.`,
       setApiKey(savedApiKey);
       setShowApiInput(false);
     }
+    
+    const envApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (envApiKey) {
+      setApiKey(envApiKey);
+      setShowApiInput(false);
+    }
   }, []);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Fonctions utilitaires
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -1101,8 +1125,6 @@ Tu es inspirant, exigeant et bienveillant.`,
   };
 
   const extractKeyPoints = (text) => {
-    // Logique simplifiée pour extraire les points clés
-    // Dans une vraie app, on pourrait utiliser l'IA pour ça
     const points = [];
     if (text.includes('important')) points.push(text.substring(0, 100) + '...');
     if (text.includes('rappel') || text.includes('à noter')) points.push(text.substring(0, 100) + '...');
@@ -1115,13 +1137,6 @@ Tu es inspirant, exigeant et bienveillant.`,
       setShowApiInput(false);
     }
   };
-
-  const envApiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (envApiKey) {
-    setApiKey(envApiKey);
-    setShowApiInput(false);
-  };
-
 
   const selectSector = (sectorKey) => {
     setSelectedSector(sectorKey);
@@ -1208,7 +1223,6 @@ Tu es inspirant, exigeant et bienveillant.`,
         };
         setMessages(prev => [...prev, assistantMessage]);
         
-        // Extraire les points clés
         const newPoints = extractKeyPoints(data.candidates[0].content.parts[0].text);
         if (newPoints.length > 0) {
           setKeyPoints(prev => [...prev, ...newPoints]);
@@ -1238,7 +1252,7 @@ Tu es inspirant, exigeant et bienveillant.`,
     summary += `Durée: ${formatTime(elapsedTime)}\n`;
     summary += `Date: ${new Date().toLocaleDateString('fr-CA')}\n\n`;
     summary += `CONVERSATION:\n\n`;
-    messages.forEach((msg, idx) => {
+    messages.forEach((msg) => {
       const role = msg.role === 'user' ? 'Vous' : professionalProfiles[selectedProfession.id].profile.name;
       summary += `${role}: ${msg.parts[0].text}\n\n`;
     });
@@ -1310,7 +1324,6 @@ Tu es inspirant, exigeant et bienveillant.`,
   if (!selectedSector) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        {/* Header avec logo */}
         <div className="bg-white shadow-lg border-b-2 border-indigo-200">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -1368,7 +1381,6 @@ Tu es inspirant, exigeant et bienveillant.`,
     const sector = sectors[selectedSector];
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-        {/* Header */}
         <div className="bg-white shadow-lg border-b-2 border-indigo-200">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center gap-3 mb-2">
@@ -1424,15 +1436,13 @@ Tu es inspirant, exigeant et bienveillant.`,
   
   return (
     <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      {/* Sidebar - Profil et Points Clés */}
+      {/* Sidebar */}
       <div className="w-80 bg-white shadow-xl border-r-2 border-indigo-200 overflow-y-auto">
-        {/* Logo */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 text-center">
           <h1 className="text-xl font-bold">JSL AI</h1>
           <p className="text-xs opacity-90">Intelligence Artificielle</p>
         </div>
 
-        {/* Profil Expert */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center gap-3 mb-4">
             <div className="text-4xl">{selectedProfession.icon}</div>
@@ -1455,21 +1465,9 @@ Tu es inspirant, exigeant et bienveillant.`,
                 ))}
               </div>
             </div>
-
-            <div>
-              <h4 className="text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1">
-                <BookOpen size={14} /> Sources fiables
-              </h4>
-              <div className="text-xs text-gray-600 space-y-1">
-                {profile.profile.sources.slice(0, 3).map((source, idx) => (
-                  <div key={idx}>• {source}</div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Timer */}
         <div className="px-6 py-4 bg-indigo-50 border-b border-indigo-200">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -1479,7 +1477,6 @@ Tu es inspirant, exigeant et bienveillant.`,
           </div>
         </div>
 
-        {/* Points Clés */}
         <div className="p-6 border-b border-gray-200">
           <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
             <TrendingUp size={14} /> Points importants à retenir
@@ -1497,7 +1494,6 @@ Tu es inspirant, exigeant et bienveillant.`,
           )}
         </div>
 
-        {/* Exemples de questions */}
         <div className="p-6 border-b border-gray-200">
           <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
             <Lightbulb size={14} /> Questions suggérées
@@ -1515,7 +1511,6 @@ Tu es inspirant, exigeant et bienveillant.`,
           </div>
         </div>
 
-        {/* Limites */}
         <div className="p-6">
           <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1">
             <AlertCircle size={14} /> Limites importantes
@@ -1533,7 +1528,6 @@ Tu es inspirant, exigeant et bienveillant.`,
 
       {/* Zone de chat */}
       <div className="flex-1 flex flex-col">
-        {/* Header Chat */}
         <div className="bg-white shadow-md border-b-2 border-indigo-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -1570,7 +1564,6 @@ Tu es inspirant, exigeant et bienveillant.`,
           </div>
         </div>
 
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-4xl mx-auto space-y-4">
             {messages.map((message, index) => (
@@ -1606,7 +1599,6 @@ Tu es inspirant, exigeant et bienveillant.`,
           </div>
         </div>
 
-        {/* Input */}
         <div className="bg-white border-t-2 border-indigo-200 p-4 shadow-lg">
           <div className="max-w-4xl mx-auto flex gap-3">
             <textarea
