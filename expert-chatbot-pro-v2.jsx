@@ -1066,8 +1066,6 @@ Tu es inspirant, exigeant et bienveillant.`,
 
 };
 
-export default professionalProfiles;
-
   // Timer effect
   useEffect(() => {
     if (sessionStartTime) {
