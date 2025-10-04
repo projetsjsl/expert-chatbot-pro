@@ -1202,10 +1202,11 @@ const ExpertChatbotPro = () => {
         }
       };
 
-      // Essayer différentes URLs d'API avec les modèles disponibles
+      // Utiliser l'API officielle Gemini avec le bon format
       const apiUrls = [
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-        `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent'
       ];
 
       let response = null;
@@ -1217,6 +1218,7 @@ const ExpertChatbotPro = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "x-goog-api-key": apiKey
             },
             body: JSON.stringify(requestBody)
           });
