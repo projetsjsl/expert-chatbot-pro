@@ -264,11 +264,11 @@ body {
   height: 100%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  animation: emmaIntroFadeOut 0.8s ease-in-out 3s forwards;
+  animation: emmaIntroFadeOut 0.8s ease-in-out 4s forwards;
+  overflow: hidden;
 }
 
 @keyframes emmaIntroFadeOut {
@@ -284,32 +284,64 @@ body {
 }
 
 .emma-intro-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 80vh;
+  max-width: 600px;
+  max-height: 600px;
+  border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 20px;
-  animation: emmaAvatarBounce 1s ease-in-out infinite;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  border: 4px solid rgba(255, 255, 255, 0.3);
+  animation: emmaAvatarZoom 3s ease-in-out;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  border: 6px solid rgba(255, 255, 255, 0.2);
+  z-index: 1;
 }
 
-@keyframes emmaAvatarBounce {
-  0%, 100% {
-    transform: translateY(0) scale(1);
+.emma-intro-avatar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+  z-index: 1;
+}
+
+@keyframes emmaAvatarZoom {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
   }
-  50% {
-    transform: translateY(-10px) scale(1.05);
+  20% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.8;
   }
 }
 
 .emma-intro-name {
-  font-size: 2.5rem;
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3.5rem;
   font-weight: bold;
   color: white;
-  margin-bottom: 10px;
-  animation: emmaNameSlide 1s ease-out 0.5s both;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: emmaNameSlide 1s ease-out 1s both;
+  text-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  text-align: center;
 }
 
 @keyframes emmaNameSlide {
@@ -324,13 +356,21 @@ body {
 }
 
 .emma-intro-subtitle {
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 30px;
-  animation: emmaSubtitleSlide 1s ease-out 1s both;
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.95);
+  animation: emmaSubtitleSlide 1s ease-out 1.5s both;
   text-align: center;
-  max-width: 400px;
+  max-width: 500px;
   line-height: 1.4;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
 }
 
 @keyframes emmaSubtitleSlide {
@@ -345,11 +385,21 @@ body {
 }
 
 .emma-intro-tagline {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
   font-style: italic;
-  animation: emmaTaglineSlide 1s ease-out 1.5s both;
+  animation: emmaTaglineSlide 1s ease-out 2s both;
   text-align: center;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px 16px;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  max-width: 600px;
 }
 
 @keyframes emmaTaglineSlide {
@@ -372,11 +422,12 @@ body {
 
 .sparkle {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
   background: white;
   border-radius: 50%;
   animation: sparkleFloat 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
 .sparkle:nth-child(1) {
