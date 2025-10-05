@@ -1267,7 +1267,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden emma-avatar flex-shrink-0">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden emma-avatar flex-shrink-0">
                   {selectedProfession && PROFESSION_AVATARS[selectedProfession.id] ? (
                     <img
                       src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
@@ -2813,7 +2813,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             })}
             {isLoading && (
               <div className="chat-message flex justify-start">
-                <div className="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0 shadow-lg">
+                <div className="w-20 h-20 rounded-full overflow-hidden mr-4 flex-shrink-0 shadow-lg">
                   {PROFESSION_AVATARS[selectedProfession.id] ? (
                     <img 
                       src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
