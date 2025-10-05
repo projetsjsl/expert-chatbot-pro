@@ -57,7 +57,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: white;
+  background: #ffffff !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,11 +100,11 @@ body {
 .mes-pros-logo {
   text-align: center;
   padding: 40px;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.08);
   border-radius: 30px;
   backdrop-filter: blur(20px);
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   animation: logoGlow 3s ease-in-out infinite;
 }
 
@@ -118,8 +118,8 @@ body {
 .logo-mes-pros {
   font-size: 4rem;
   font-weight: bold;
-  color: #1e3a8a;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #1e40af;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 0;
   animation: logoTextSlide 0.8s ease-out 0.8s both;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -138,8 +138,8 @@ body {
 .logo-emma {
   font-size: 4rem;
   font-weight: bold;
-  color: #7c3aed;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #8b5cf6;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 0;
   animation: logoTextSlide 0.8s ease-out 1.2s both;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
