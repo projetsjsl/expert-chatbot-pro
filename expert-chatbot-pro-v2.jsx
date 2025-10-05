@@ -390,6 +390,88 @@ const EmmaExpertChatbot = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Fonction helper pour extraire le texte de manière sûre
+  const extractResponseText = (apiResponse) => {
+    try {
+      // Vérifications progressives avec logs
+      if (!apiResponse) {
+        console.error('❌ Réponse API vide');
+        return null;
+      }
+      
+      if (!apiResponse.candidates || !Array.isArray(apiResponse.candidates)) {
+        console.error('❌ Pas de candidates dans la réponse');
+        return null;
+      }
+      
+      if (apiResponse.candidates.length === 0) {
+        console.error('❌ Tableau candidates vide');
+        return null;
+      }
+      
+      const candidate = apiResponse.candidates[0];
+      
+      if (!candidate) {
+        console.error('❌ Premier candidate est null/undefined');
+        return null;
+      }
+      
+      if (!candidate.content) {
+        console.error('❌ Pas de content dans candidate');
+        console.error('finishReason:', candidate.finishReason);
+        return null;
+      }
+      
+      if (!candidate.content.parts || !Array.isArray(candidate.content.parts)) {
+        console.error('❌ Pas de parts dans content');
+        return null;
+      }
+      
+      if (candidate.content.parts.length === 0) {
+        console.error('❌ Tableau parts vide');
+        return null;
+      }
+      
+      const text = candidate.content.parts[0]?.text;
+      
+      if (!text) {
+        console.error('❌ Pas de texte dans la première part');
+        return null;
+      }
+      
+      return text;
+    } catch (error) {
+      console.error('❌ Erreur lors de l\'extraction du texte:', error);
+      return null;
+    }
+  };
+
+  // Fonction pour diviser les réponses longues en plusieurs messages
+  const splitLongResponse = (text, maxLength = 1500) => {
+    if (text.length <= maxLength) {
+      return [text];
+    }
+    
+    const parts = [];
+    const sentences = text.split(/(?<=[.!?])\s+/);
+    let currentPart = '';
+    
+    for (const sentence of sentences) {
+      if ((currentPart + sentence).length > maxLength && currentPart.length > 0) {
+        parts.push(currentPart.trim());
+        currentPart = sentence;
+      } else {
+        currentPart += (currentPart ? ' ' : '') + sentence;
+      }
+    }
+    
+    if (currentPart.trim()) {
+      parts.push(currentPart.trim());
+    }
+    
+    return parts;
+  };
+
   // Fonction pour tester la connectivité API
   const testApiConnection = async () => {
     console.log('🔍 Test de connexion API...');
@@ -412,7 +494,7 @@ const EmmaExpertChatbot = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-goog-api-key": apiKey
+            "x-goog-api-key": currentApiKey.trim() // CORRECTION 3 : trim() important
           },
           body: JSON.stringify({
             contents: [{ role: 'user', parts: [{ text: 'Test de connexion' }] }],
@@ -650,17 +732,19 @@ Comment puis-je vous aider ?`;
     
     playSound('message');
 
-    // Vérifier la clé API
-    if (!apiKey || apiKey.trim() === '') {
+    // CORRECTION 1 : Vérification stricte de la clé API
+    const currentApiKey = apiKey || import.meta.env.VITE_GEMINI_API_KEY;
+    
+    if (!currentApiKey || currentApiKey.trim() === '') {
       setMessages(prev => [...prev, {
         role: 'model',
         parts: [{ text: "❌ Erreur de configuration : Clé API Gemini manquante.\n\n🔧 Configuration Vercel requise :\n• Variable d'environnement : VITE_GEMINI_API_KEY\n• Valeur : Votre clé API Gemini\n• Redéployez l'application après configuration\n\n💡 Consultez la console (F12) pour plus de détails sur la configuration." }]
       }]);
-      return;
+      return; // IMPORTANT : Sortir de la fonction
     }
 
-    // Vérifier que la profession est sélectionnée
-    if (!selectedProfession || !selectedProfession.id) {
+    // CORRECTION 2 : Vérification de la profession
+    if (!selectedProfession?.id) {
       setMessages(prev => [...prev, {
         role: 'model',
         parts: [{ text: "❌ Erreur : Aucune profession sélectionnée. Veuillez d'abord choisir un métier dans la liste." }]
@@ -727,7 +811,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-goog-api-key": apiKey
+            "x-goog-api-key": currentApiKey.trim() // CORRECTION 3 : trim() important
           },
           body: JSON.stringify({
             contents: [
@@ -738,7 +822,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             ],
             generationConfig: { 
               temperature: 0.7, 
-              maxOutputTokens: 500,
+              maxOutputTokens: 2048, // Augmenté pour éviter les réponses tronquées
               topP: 0.8,
               topK: 40
             }
@@ -753,14 +837,26 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }
 
       const data = await response.json();
-      console.log('Gemini Response:', data);
+      console.log('✅ Réponse API reçue:', data);
       
-      if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-        const responseText = data.candidates[0].content.parts[0].text;
-        setMessages(prev => [...prev, {
-          role: 'model',
-          parts: [{ text: responseText }]
-        }]);
+      // CORRECTION 4 : Extraction robuste du texte
+      const responseText = extractResponseText(data);
+      
+      if (responseText) {
+        // Diviser la réponse si elle est trop longue
+        const responseParts = splitLongResponse(responseText);
+        
+        // Ajouter chaque partie comme un message séparé
+        responseParts.forEach((part, index) => {
+          setMessages(prev => [...prev, {
+            role: 'model',
+            parts: [{ 
+              text: responseParts.length > 1 && index < responseParts.length - 1 
+                ? `${part}\n\n*[Suite...]*` 
+                : part 
+            }]
+          }]);
+        });
         
         // Extraire les points importants
         if (responseText.includes('important') || responseText.includes('rappel') || responseText.includes('noter')) {
@@ -774,57 +870,50 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           }
         }
       } else {
-        console.error('Aucune réponse valide reçue:', data);
-        console.error('Structure de la réponse:', {
-          hasCandidates: !!data.candidates,
-          candidatesLength: data.candidates?.length,
-          firstCandidate: data.candidates?.[0],
-          hasContent: !!data.candidates?.[0]?.content,
-          hasParts: !!data.candidates?.[0]?.content?.parts,
-          partsLength: data.candidates?.[0]?.content?.parts?.length,
-          firstPartText: data.candidates?.[0]?.content?.parts?.[0]?.text,
-          fullResponse: JSON.stringify(data, null, 2)
-        });
+        // CORRECTION 5 : Gestion détaillée des erreurs
+        console.error('Structure réponse:', JSON.stringify(data, null, 2));
         
-        let errorMessage = 'Désolé, je n\'ai pas pu traiter votre demande.';
+        let errorMsg = 'Désolé, je n\'ai pas pu générer de réponse.';
+        const candidate = data.candidates?.[0];
+        
         if (data.error) {
-          errorMessage = `Erreur API: ${data.error.message || 'Erreur inconnue'}`;
+          errorMsg = `Erreur API: ${data.error.message || 'Erreur inconnue'}`;
         } else if (!data.candidates || data.candidates.length === 0) {
-          errorMessage = 'Aucune réponse reçue de l\'API. Vérifiez votre clé API.';
-        } else if (!data.candidates[0]?.content?.parts?.[0]?.text) {
-          // Diagnostic plus détaillé
-          const candidate = data.candidates[0];
-          if (candidate?.finishReason === 'SAFETY') {
-            errorMessage = '⚠️ Contenu bloqué par les filtres de sécurité Gemini. Reformulez votre question.';
-          } else if (candidate?.finishReason === 'RECITATION') {
-            errorMessage = '⚠️ Contenu détecté comme récitation. Reformulez votre question.';
-          } else if (candidate?.finishReason === 'OTHER') {
-            errorMessage = '⚠️ Réponse interrompue par l\'API. Réessayez votre question.';
+          errorMsg = '❌ Aucune réponse de l\'API. Vérifiez votre clé API.';
+        } else if (candidate?.finishReason === 'SAFETY') {
+          errorMsg = '⚠️ Contenu bloqué par les filtres de sécurité. Reformulez votre question.';
+        } else if (candidate?.finishReason === 'RECITATION') {
+          errorMsg = '⚠️ Contenu détecté comme récitation. Reformulez.';
+        } else if (candidate?.finishReason === 'MAX_TOKENS') {
+          // Si on a du contenu même tronqué, l'afficher avec un message explicatif
+          const partialText = candidate?.content?.parts?.[0]?.text;
+          if (partialText) {
+            errorMsg = `${partialText}\n\n📝 *[Réponse tronquée - limite de tokens atteinte]*\n\n💡 Pour obtenir la suite, posez une question plus spécifique ou demandez-moi de continuer sur un aspect particulier.`;
           } else {
-            errorMessage = `🔍 Réponse API incomplète (raison: ${candidate?.finishReason || 'inconnue'}). Vérifiez votre clé API et réessayez.`;
+            errorMsg = '⚠️ Réponse trop longue. Question plus spécifique requise.';
           }
+        } else if (candidate?.finishReason === 'OTHER') {
+          errorMsg = '⚠️ Réponse interrompue par l\'API. Réessayez votre question.';
         }
         
         setMessages(prev => [...prev, {
           role: 'model',
-          parts: [{ text: errorMessage }]
+          parts: [{ text: errorMsg }]
         }]);
       }
     } catch (error) {
-      console.error('Error details:', error);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      console.error('❌ Erreur complète:', error);
       
-      let errorMessage = 'Erreur de connexion. Veuillez vérifier votre clé API.';
+      let errorMessage = 'Erreur de connexion. Vérifiez votre clé API.';
       
-      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-        errorMessage = 'Erreur de réseau. Vérifiez votre connexion internet.';
-      } else if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-        errorMessage = 'Clé API invalide. Veuillez vérifier votre clé API Gemini.';
-      } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
-        errorMessage = 'Accès refusé. Vérifiez les permissions de votre clé API.';
-      } else if (error.message.includes('429') || error.message.includes('Too Many Requests')) {
-        errorMessage = 'Limite de requêtes atteinte. Veuillez réessayer plus tard.';
+      if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+        errorMessage = '🌐 Erreur de réseau. Vérifiez votre connexion internet.';
+      } else if (error.message.includes('401')) {
+        errorMessage = '🔑 Clé API invalide. Vérifiez votre clé Gemini.';
+      } else if (error.message.includes('403')) {
+        errorMessage = '🚫 Accès refusé. Vérifiez les permissions de votre clé API.';
+      } else if (error.message.includes('429')) {
+        errorMessage = '⏱️ Limite de requêtes atteinte. Réessayez plus tard.';
       } else if (error.message.includes('Cannot read properties of undefined')) {
         errorMessage = 'Erreur de traitement de la réponse API. Vérifiez votre clé API.';
       }
