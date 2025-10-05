@@ -1120,10 +1120,10 @@ RAPPEL: Réponds en MAX 150 mots. Structure: Intro/Infos/Consulter professionnel
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden">
+                <div className="w-12 h-12 rounded-full overflow-hidden emma-avatar">
                   <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                 </div>
-                <div>
+                <div className="welcome-animation">
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     E.M.M.A.
                   </h1>
@@ -1190,7 +1190,7 @@ RAPPEL: Réponds en MAX 150 mots. Structure: Intro/Infos/Consulter professionnel
                       <div
                         key={profession.id}
                         onClick={() => selectProfession(profession)}
-                        className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 border-transparent hover:border-indigo-400"
+                        className="profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 border-transparent hover:border-indigo-400"
                       >
                         <div className="text-4xl mb-2 text-center">{profession.icon}</div>
                         <h3 className="text-sm font-bold text-gray-800 text-center mb-1">
