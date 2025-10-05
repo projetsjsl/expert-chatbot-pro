@@ -63,6 +63,19 @@ const EmmaExpertChatbot = () => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const formatMessageText = (text) => {
+    // Améliorer le formatage du texte
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Gras
+      .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italique
+      .replace(/\n\n/g, '<br><br>') // Paragraphes
+      .replace(/\n/g, '<br>') // Retours à la ligne
+      .replace(/^(\d+\.\s)/gm, '<br>$1') // Listes numérotées
+      .replace(/^[-•]\s/gm, '<br>• ') // Listes à puces
+      .replace(/^(\d+\.\s.*)$/gm, '<div class="list-item">$1</div>') // Items de liste
+      .replace(/^•\s(.*)$/gm, '<div class="list-item">• $1</div>'); // Items à puces
+  };
+
   const getPersonalityPrompt = () => {
     let prompt = '';
     
@@ -676,37 +689,45 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`chat-message flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'model' && (
-                  <div className="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0 shadow-md">
                     <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                   </div>
                 )}
                 <div
-                  className={`max-w-2xl rounded-2xl px-6 py-4 ${
+                  className={`${
                     message.role === 'user'
-                      ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
-                      : 'bg-white text-gray-800 shadow-md border border-gray-200'
+                      ? 'message-user'
+                      : 'message-emma'
                   }`}
                 >
-                  <div className="whitespace-pre-wrap text-sm">
-                    {message.parts[0].text}
-                  </div>
+                  <div 
+                    className="message-content"
+                    dangerouslySetInnerHTML={{ 
+                      __html: message.role === 'model' 
+                        ? formatMessageText(message.parts[0].text) 
+                        : message.parts[0].text 
+                    }}
+                  />
                 </div>
+                {message.role === 'user' && (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white text-sm font-semibold ml-3 flex-shrink-0 shadow-md">
+                    👤
+                  </div>
+                )}
               </div>
             ))}
             {isLoading && (
-              <div className="flex justify-start">
-                <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+              <div className="chat-message flex justify-start">
+                <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0 shadow-md">
                   <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                 </div>
-                <div className="bg-white rounded-2xl px-6 py-4 shadow-md border border-gray-200">
-                  <div className="flex gap-2">
-                    <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                    <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                  </div>
+                <div className="typing-indicator">
+                  <div className="typing-dot"></div>
+                  <div className="typing-dot"></div>
+                  <div className="typing-dot"></div>
                 </div>
               </div>
             )}
