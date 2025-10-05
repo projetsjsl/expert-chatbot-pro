@@ -3,6 +3,51 @@ import { Send, RefreshCw, ArrowLeft, Clock, AlertCircle, Lightbulb, Search, X, S
 import { professionalProfiles, getSectors } from './professionnalProfiles.js';
 
 // ========================================
+// MAPPING DES AVATARS DE MÉTIERS
+// ========================================
+const PROFESSION_AVATARS = {
+  'medecin': 'md.png',
+  'psychologue': 'psycho.png',
+  'nutritionniste': 'nutri.png',
+  'kinesitherapeute': 'kine.png',
+  'pharmacien': 'pharma.png',
+  'orthophoniste': 'orthop.png',
+  'dentiste': 'dentiste.png',
+  'infirmier': 'infirmier.png',
+  'optometriste': 'opto.png',
+  'ergotherapeute': 'ergo.png',
+  'physiotherapeute': 'physio.png',
+  'audiologiste': 'audio.png',
+  'chiropraticien': 'chiro.png',
+  'massotherapeute': 'masso.png',
+  'naturopathe': 'naturo.png',
+  'technologue_medical': 'tech medicale.png',
+  'avocat': 'avocat.png',
+  'notaire': 'notaire.png',
+  'comptable': 'comptable.png',
+  'dev_fullstack': 'fullstack.png',
+  'designer_ux': 'ux.png',
+  'architecte': 'architecte.png',
+  'electricien': 'electr.png',
+  'developpeur': 'fullstack.png',
+  'analyste': 'data.png',
+  'designer': 'ux.png',
+  'cybersecurite': 'cyber.png',
+  'data-scientist': 'data.png',
+  'devops': 'devops.png',
+  'product-manager': 'ux.png',
+  'ux-designer': 'ux.png',
+  'testeur': 'fullstack.png',
+  'architecte-logiciel': 'fullstack.png',
+  'admin-systeme': 'cloud.png',
+  'consultant-it': 'cloud.png',
+  'specialiste-cloud': 'cloud.png',
+  'ingenieur-ai': 'ia.png',
+  'tech-support': 'cloud.png',
+  'mobile': 'mobile.png'
+};
+
+// ========================================
 // BASE DE DONNÉES DES SOURCES FIABLES AVEC LIENS
 // ========================================
 const RELIABLE_SOURCES = {
@@ -761,14 +806,9 @@ const EmmaExpertChatbot = () => {
     
     const intro = `${profile.greeting}
 
-${personalityPrompt ? `🎯 **Personnalisation active** ✨
-• **Votre style** : ${userPersonality}
-• **Votre niveau** : ${expertiseLevel}  
-• **Mon ton** : ${emmaPersonality}
+📌 Rappel : Pour des conseils personnalisés, consultez toujours un expert qualifié du domaine.
 
-Je vais adapter toutes mes réponses selon ces préférences !` : ''}
-
-📌 **Rappel important** : Je suis une assistante virtuelle. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.`;
+Comment puis-je vous aider ?`;
     
     setMessages([{
       role: 'model',
@@ -1479,7 +1519,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         key={profile.id}
                         onClick={() => selectProfession({ id: profile.id, ...profile.profile })}
                         onMouseEnter={() => playSound('hover')}
-                        className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-3 hover:scale-105 border-2 relative group ${
+                        className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-3 hover:scale-105 border-2 relative group overflow-hidden ${
                           isTop3 
                             ? 'border-yellow-300 bg-gradient-to-br from-yellow-50 to-orange-50' 
                             : 'border-transparent hover:border-indigo-400'
@@ -1488,6 +1528,20 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         {isTop3 && (
                           <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
                             🔥 Top {popularity + 1}
+                          </div>
+                        )}
+                        
+                        {/* Avatar de métier en overlay */}
+                        {PROFESSION_AVATARS[profile.id] && (
+                          <div className="absolute top-1 right-1 w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-md z-5">
+                            <img 
+                              src={`/images/metier/${PROFESSION_AVATARS[profile.id]}`}
+                              alt={`Avatar ${profile.profile.name}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
                           </div>
                         )}
                         
@@ -1590,7 +1644,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         key={profession.id}
                         onClick={() => selectProfession(profession)}
                         onMouseEnter={() => playSound('hover')}
-                        className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 relative group ${
+                        className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 relative group overflow-hidden ${
                           isTop3 
                             ? 'border-gradient-to-r from-yellow-400 to-orange-400 bg-gradient-to-br from-yellow-50 to-orange-50' 
                             : isPopular 
@@ -1614,6 +1668,20 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         {count > 0 && (
                           <div className="absolute -top-2 -left-2 bg-green-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">
                             {count}
+                          </div>
+                        )}
+                        
+                        {/* Avatar de métier en overlay */}
+                        {PROFESSION_AVATARS[profession.id] && (
+                          <div className="absolute top-2 right-2 w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-md z-5">
+                            <img 
+                              src={`/images/metier/${PROFESSION_AVATARS[profession.id]}`}
+                              alt={`Avatar ${profession.name}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
                           </div>
                         )}
                         
