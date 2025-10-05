@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, RefreshCw, ArrowLeft, Clock, AlertCircle, Lightbulb, Search, X, Settings, TrendingUp, BookOpen } from 'lucide-react';
+import { Send, RefreshCw, ArrowLeft, Clock, AlertCircle, Lightbulb, Search, X, Settings, TrendingUp, BookOpen, Mail } from 'lucide-react';
 import { professionalProfiles, getSectors } from './professionnalProfiles.js';
 
 // ========================================
@@ -73,6 +73,8 @@ const EmmaExpertChatbot = () => {
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [keyPoints, setKeyPoints] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [email, setEmail] = useState('');
   const messagesEndRef = useRef(null);
 
   const sectors = getSectors();
@@ -107,6 +109,57 @@ const EmmaExpertChatbot = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const generateSummary = () => {
+    if (!selectedProfession || messages.length === 0) return '';
+    
+    const profile = professionalProfiles[selectedProfession.id];
+    const consultationDate = new Date().toLocaleDateString('fr-CA', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    
+    let summary = `📋 RÉSUMÉ DE CONSULTATION\n`;
+    summary += `================================\n\n`;
+    summary += `👩‍💼 Professionnel consulté : ${profile.profile.name}\n`;
+    summary += `🏢 Secteur : ${profile.profile.sector}\n`;
+    summary += `📅 Date : ${consultationDate}\n`;
+    summary += `⏱️ Durée : ${formatTime(elapsedTime)}\n`;
+    summary += `🎯 Style de consultation : ${userPersonality} / ${expertiseLevel} / ${emmaPersonality}\n\n`;
+    
+    summary += `💬 ÉCHANGE DE CONSULTATION\n`;
+    summary += `==========================\n\n`;
+    
+    messages.forEach((message, index) => {
+      if (message.role === 'user') {
+        summary += `👤 Vous : ${message.parts[0].text}\n\n`;
+      } else if (message.role === 'model') {
+        summary += `🤖 Emma : ${message.parts[0].text}\n\n`;
+      }
+    });
+    
+    if (keyPoints.length > 0) {
+      summary += `🔑 POINTS IMPORTANTS IDENTIFIÉS\n`;
+      summary += `==============================\n\n`;
+      keyPoints.forEach((point, index) => {
+        summary += `${index + 1}. ${point}\n`;
+      });
+      summary += `\n`;
+    }
+    
+    summary += `⚠️ RAPPEL IMPORTANT\n`;
+    summary += `==================\n`;
+    summary += `Cette consultation est fournie à titre informatif uniquement. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.\n\n`;
+    
+    summary += `---\n`;
+    summary += `Propulsé par JSL AI - Emma, votre assistante virtuelle spécialisée\n`;
+    summary += `www.mespros.ca`;
+    
+    return summary;
   };
 
   const formatMessageText = (text) => {
@@ -167,7 +220,7 @@ const EmmaExpertChatbot = () => {
     
     const intro = `${profile.greeting}
 
-${personalityPrompt ? `Je vais adapter mes réponses selon vos préférences : ${userPersonality}, niveau ${expertiseLevel}, style ${emmaPersonality}.` : ''}
+${personalityPrompt ? `🎯 Je vais adapter mes réponses selon vos préférences ✨` : ''}
 
 📌 Rappel important : Je suis une assistante virtuelle. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.
 
@@ -1057,6 +1110,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
                 <Settings size={16} className="text-indigo-600" />
                 Personnalisation des réponses
+                <span className="text-xs text-indigo-500 ml-2">← Ajustez ici</span>
               </h3>
               <button
                 onClick={() => setShowSettings(!showSettings)}
@@ -1220,17 +1274,50 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               </div>
             </div>
             
-            <button
-              onClick={() => {
-                setSelectedProfession(null);
-                setMessages([]);
-                setKeyPoints([]);
-              }}
-              className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
-            >
-              <RefreshCw size={18} />
-              Nouveau
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowEmailModal(true)}
+                className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                disabled={messages.length === 0}
+              >
+                <Mail size={18} />
+                Envoyer par email
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedProfession(null);
+                  setMessages([]);
+                  setKeyPoints([]);
+                }}
+                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+              >
+                <RefreshCw size={18} />
+                Nouveau
+              </button>
+            </div>
+          </div>
+          
+          {/* Bandeau des préférences actives */}
+          <div className="mt-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3 border border-indigo-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-gray-700">🎯 Préférences actives :</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-indigo-200">
+                  <span className="text-indigo-500">⚖️</span>
+                  <span className="text-xs font-medium text-gray-700">{userPersonality}</span>
+                </div>
+                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-purple-200">
+                  <span className="text-purple-500">📚</span>
+                  <span className="text-xs font-medium text-gray-700">{expertiseLevel}</span>
+                </div>
+                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-pink-200">
+                  <span className="text-pink-500">😊</span>
+                  <span className="text-xs font-medium text-gray-700">{emmaPersonality}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1318,6 +1405,94 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           </div>
         </div>
       </div>
+
+      {/* Modal d'envoi par email */}
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 p-4 overflow-y-auto" onClick={() => setShowEmailModal(false)}>
+          <div className="min-h-full flex items-center justify-center py-8">
+            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                  <Mail className="text-green-600" size={24} />
+                  Envoyer la consultation par email
+                </h2>
+                <button onClick={() => setShowEmailModal(false)} className="text-gray-500 hover:text-gray-700">
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-xl border border-green-200">
+                  <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                    <span className="text-xl">📋</span>
+                    Résumé de la consultation
+                  </h3>
+                  <div className="text-sm text-gray-700 space-y-1">
+                    <p><strong>Professionnel :</strong> {selectedProfession && professionalProfiles[selectedProfession.id].profile.name}</p>
+                    <p><strong>Durée :</strong> {formatTime(elapsedTime)}</p>
+                    <p><strong>Messages :</strong> {messages.length} échanges</p>
+                    {keyPoints.length > 0 && <p><strong>Points clés :</strong> {keyPoints.length} identifiés</p>}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Adresse email de destination
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="votre.email@exemple.com"
+                    className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-green-500"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Le résumé complet de votre consultation sera envoyé à cette adresse
+                  </p>
+                </div>
+
+                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Note :</strong> Cette fonctionnalité utilise votre client email par défaut. 
+                    Assurez-vous d'avoir un client email configuré sur votre appareil.
+                  </p>
+                </div>
+
+                <div className="flex gap-3 justify-end">
+                  <button
+                    onClick={() => setShowEmailModal(false)}
+                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!email.trim()) {
+                        alert('Veuillez saisir une adresse email valide');
+                        return;
+                      }
+                      
+                      const summary = generateSummary();
+                      const subject = `Résumé consultation - ${selectedProfession && professionalProfiles[selectedProfession.id].profile.name}`;
+                      const body = encodeURIComponent(summary);
+                      
+                      // Utiliser mailto: pour ouvrir le client email
+                      window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${body}`);
+                      
+                      setShowEmailModal(false);
+                      setEmail('');
+                    }}
+                    className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                  >
+                    <Mail size={18} />
+                    Ouvrir le client email
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
