@@ -36,6 +36,7 @@ const EmmaExpertChatbot = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [keyPoints, setKeyPoints] = useState([]);
+  const [showIntro, setShowIntro] = useState(true);
   const messagesEndRef = useRef(null);
 
   const sectors = getSectors();
@@ -54,6 +55,15 @@ const EmmaExpertChatbot = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Gérer la disparition de l'intro
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowIntro(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Fonction saveApiKey supprimée - API key gérée via Vercel
 
@@ -248,6 +258,39 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   // ========================================
   // ÉCRAN API SUPPRIMÉ - API KEY GÉRÉE VIA VERCEL
   // ========================================
+
+  // ========================================
+  // ANIMATION DE PRÉSENTATION EMMA
+  // ========================================
+  if (showIntro) {
+    return (
+      <div className="emma-intro">
+        <div className="emma-intro-sparkles">
+          <div className="sparkle"></div>
+          <div className="sparkle"></div>
+          <div className="sparkle"></div>
+          <div className="sparkle"></div>
+          <div className="sparkle"></div>
+          <div className="sparkle"></div>
+        </div>
+        
+        <div className="emma-intro-avatar">
+          <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+        </div>
+        
+        <h1 className="emma-intro-name">Emma</h1>
+        
+        <p className="emma-intro-subtitle">
+          Votre assistante virtuelle spécialisée<br />
+          en expertise professionnelle
+        </p>
+        
+        <p className="emma-intro-tagline">
+          "De la science au geste, de la théorie à la pratique — je relie les mondes du savoir."
+        </p>
+      </div>
+    );
+  }
 
   // ========================================
   // SÉLECTION MÉTIER
