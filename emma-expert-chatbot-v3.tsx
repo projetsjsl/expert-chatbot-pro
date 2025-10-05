@@ -947,8 +947,7 @@ const EmmaExpertChatbot = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState('');
-  const [showApiInput, setShowApiInput] = useState(true);
+  const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
   const [searchTerm, setSearchTerm] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [userPersonality, setUserPersonality] = useState('standard');
@@ -962,13 +961,7 @@ const EmmaExpertChatbot = () => {
 
   const sectors = getSectors();
 
-  useEffect(() => {
-    const saved = localStorage.getItem('gemini_api_key');
-    if (saved) {
-      setApiKey(saved);
-      setShowApiInput(false);
-    }
-  }, []);
+  // API key est maintenant gérée via les variables d'environnement Vercel
 
   useEffect(() => {
     if (sessionStartTime) {
@@ -983,12 +976,7 @@ const EmmaExpertChatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const saveApiKey = () => {
-    if (apiKey.trim()) {
-      localStorage.setItem('gemini_api_key', apiKey.trim());
-      setShowApiInput(false);
-    }
-  };
+  // Fonction saveApiKey supprimée - API key gérée via Vercel
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -1121,44 +1109,7 @@ RAPPEL: Réponds en MAX 150 mots. Structure: Intro/Infos/Consulter professionnel
     )
   ).sort();
 
-  // Écran API
-  if (showApiInput) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-          <div className="text-center mb-6">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl">
-              👋
-            </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              E.M.M.A.
-            </h1>
-            <p className="text-gray-600 text-sm">Exploration Multi-Métiers et Assistance</p>
-          </div>
-          
-          <input
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder="Clé API Gemini"
-            className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 mb-4 focus:outline-none focus:border-indigo-500"
-          />
-
-          <button
-            onClick={saveApiKey}
-            disabled={!apiKey.trim()}
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50 font-semibold"
-          >
-            Commencer
-          </button>
-
-          <p className="text-xs text-gray-500 mt-4 text-center">
-            Obtenez votre clé gratuite sur <a href="https://makersuite.google.com/app/apikey" target="_blank" className="text-indigo-600 hover:underline">Google AI Studio</a>
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // Écran API supprimé - API key gérée via Vercel
 
   // Sélection secteur/métier
   if (!selectedProfession) {
