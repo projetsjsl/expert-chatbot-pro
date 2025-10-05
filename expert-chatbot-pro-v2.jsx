@@ -64,6 +64,11 @@ const EmmaExpertChatbot = () => {
   };
 
   const formatMessageText = (text) => {
+    // Vérifier que le texte existe
+    if (!text || typeof text !== 'string') {
+      return '';
+    }
+    
     // Améliorer le formatage du texte
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Gras
@@ -686,7 +691,13 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
 
         <div className="flex-1 overflow-y-auto p-6">
           <div className="max-w-4xl mx-auto space-y-4">
-            {messages.map((message, index) => (
+            {messages.map((message, index) => {
+              // Vérifier que le message a la structure attendue
+              if (!message || !message.parts || !message.parts[0] || !message.parts[0].text) {
+                return null;
+              }
+              
+              return (
               <div
                 key={index}
                 className={`chat-message flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -707,8 +718,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                     className="message-content"
                     dangerouslySetInnerHTML={{ 
                       __html: message.role === 'model' 
-                        ? formatMessageText(message.parts[0].text) 
-                        : message.parts[0].text 
+                        ? formatMessageText(message.parts?.[0]?.text || '') 
+                        : (message.parts?.[0]?.text || '') 
                     }}
                   />
                 </div>
@@ -718,7 +729,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
             {isLoading && (
               <div className="chat-message flex justify-start">
                 <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0 shadow-md">
