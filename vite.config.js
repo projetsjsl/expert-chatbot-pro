@@ -7,5 +7,16 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
+  },
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
   }
 })

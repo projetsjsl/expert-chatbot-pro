@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, RefreshCw, ArrowLeft, Clock, AlertCircle, Lightbulb, Search, X, Settings, TrendingUp, BookOpen } from 'lucide-react';
-import { professionalProfiles, getSectors } from './professionalProfiles';
+import { professionalProfiles, getSectors } from './professionnalProfiles.js';
 
 // ========================================
 // GESTION LOCALE - COMPTEURS
