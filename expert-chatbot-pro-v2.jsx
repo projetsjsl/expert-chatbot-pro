@@ -1050,7 +1050,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
             <img 
-              src="/images/mes-pros-presente-emma.png" 
+              src="/images/mespros-presente-emma-bleu-fonce.png" 
               alt="Mes Pros présente Emma - Assistante Professionnelle" 
               className="emma-main-image"
             />
@@ -1146,7 +1146,19 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
   // ========================================
   if (!selectedProfession) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in relative">
+        {/* Bubble flottant Emma */}
+        <div className="emma-floating-bubble">
+          <div className="bubble-container">
+            <img 
+              src="/images/mespros-presente-emma-bleu-fonce.png" 
+              alt="Emma - Assistante IA" 
+              className="bubble-image"
+            />
+            <div className="bubble-pulse"></div>
+            <div className="bubble-glow"></div>
+          </div>
+        </div>
         <div className="bg-white shadow-lg border-b-2 border-indigo-200 fade-in-soft">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
@@ -1933,6 +1945,19 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
 
   return (
     <>
+      {/* Bubble flottant Emma dans l'interface de chat */}
+      <div className="emma-floating-bubble">
+        <div className="bubble-container">
+          <img 
+            src="/images/mespros-presente-emma-bleu-fonce.png" 
+            alt="Emma - Assistante IA" 
+            className="bubble-image"
+          />
+          <div className="bubble-pulse"></div>
+          <div className="bubble-glow"></div>
+        </div>
+      </div>
+      
       <style>{`
         /* Styles pour les messages d'Emma */
         .message-emma {
