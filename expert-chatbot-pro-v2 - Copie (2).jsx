@@ -18,25 +18,6 @@ const incrementConsultationCount = (professionId) => {
 };
 
 // ========================================
-// COMPOSANT AVATAR EMMA
-// ========================================
-const EmmaAvatar = ({ size = "md", className = "" }) => {
-  const sizes = {
-    sm: "w-8 h-8",
-    md: "w-12 h-12",
-    lg: "w-20 h-20"
-  };
-
-  return (
-    <img 
-      src="/emma-avatar.png" 
-      alt="Emma Assistant"
-      className={`${sizes[size]} rounded-full object-cover ${className}`}
-    />
-  );
-};
-
-// ========================================
 // COMPOSANT PRINCIPAL
 // ========================================
 const EmmaExpertChatbot = () => {
@@ -44,6 +25,8 @@ const EmmaExpertChatbot = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState('');
+  const [showApiInput, setShowApiInput] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [userPersonality, setUserPersonality] = useState('standard');
@@ -59,6 +42,14 @@ const EmmaExpertChatbot = () => {
   const sectors = getSectors();
 
   useEffect(() => {
+    const saved = localStorage.getItem('gemini_api_key');
+    if (saved) {
+      setApiKey(saved);
+      setShowApiInput(false);
+    }
+  }, []);
+
+  useEffect(() => {
     if (sessionStartTime) {
       const timer = setInterval(() => {
         setElapsedTime(Math.floor((Date.now() - sessionStartTime) / 1000));
@@ -70,6 +61,13 @@ const EmmaExpertChatbot = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const saveApiKey = () => {
+    if (apiKey.trim()) {
+      localStorage.setItem('gemini_api_key', apiKey.trim());
+      setShowApiInput(false);
+    }
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -160,9 +158,6 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         parts: msg.parts
       }));
 
-      // L'API key vient des variables d'environnement Vercel
-      const apiKey = process.env.REACT_APP_GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
       const response = await fetch(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
         {
@@ -201,10 +196,6 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }
     } catch (error) {
       console.error('Error:', error);
-      setMessages(prev => [...prev, {
-        role: 'model',
-        parts: [{ text: "Désolée, une erreur s'est produite. Veuillez réessayer." }]
-      }]);
     } finally {
       setIsLoading(false);
     }
@@ -218,6 +209,47 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   ).sort();
 
   // ========================================
+  // ÉCRAN API
+  // ========================================
+  if (showApiInput) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+          <div className="text-center mb-6">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl">
+              👋
+            </div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Emma
+            </h1>
+            <p className="text-gray-600 text-sm">Exploration Multi-Métiers et Assistance</p>
+          </div>
+          
+          <input
+            type="password"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            placeholder="Clé API Gemini"
+            className="w-full border-2 border-gray-300 rounded-lg px-4 py-3 mb-4 focus:outline-none focus:border-indigo-500"
+          />
+
+          <button
+            onClick={saveApiKey}
+            disabled={!apiKey.trim()}
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50 font-semibold"
+          >
+            Commencer
+          </button>
+
+          <p className="text-xs text-gray-500 mt-4 text-center">
+            Obtenez votre clé gratuite sur <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">Google AI Studio</a>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================
   // SÉLECTION MÉTIER
   // ========================================
   if (!selectedProfession) {
@@ -227,7 +259,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
-                <EmmaAvatar size="md" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl">
+                  👋
+                </div>
                 <div>
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     Emma
@@ -329,7 +363,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               
               <div className="space-y-4 text-gray-700">
                 <div className="flex items-center gap-4 mb-6">
-                  <EmmaAvatar size="lg" />
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl flex-shrink-0">
+                    👋
+                  </div>
                   <div>
                     <h3 className="text-xl font-bold">Emma</h3>
                     <p className="text-sm text-gray-600">Exploration Multi-Métiers et Assistance</p>
@@ -446,7 +482,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       <div className="w-80 bg-white shadow-xl border-r-2 border-indigo-200 overflow-y-auto">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
           <div className="flex items-center gap-3">
-            <EmmaAvatar size="md" className="ring-2 ring-white" />
+            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">
+              👋
+            </div>
             <div>
               <h1 className="text-xl font-bold">Emma</h1>
               <p className="text-xs opacity-90">Assistante Virtuelle</p>
@@ -625,7 +663,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 <ArrowLeft size={24} />
               </button>
               <div className="flex items-center gap-3">
-                <EmmaAvatar size="sm" />
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white">
+                  👋
+                </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
                     Consultation avec Emma
@@ -657,7 +697,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'model' && (
-                  <EmmaAvatar size="sm" className="mr-2 flex-shrink-0" />
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white mr-2 flex-shrink-0">
+                    👋
+                  </div>
                 )}
                 <div
                   className={`max-w-2xl rounded-2xl px-6 py-4 ${
@@ -674,7 +716,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <EmmaAvatar size="sm" className="mr-2" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white mr-2">
+                  👋
+                </div>
                 <div className="bg-white rounded-2xl px-6 py-4 shadow-md border border-gray-200">
                   <div className="flex gap-2">
                     <div className="w-2 h-2 bg-indigo-600 rounded-full animate-bounce"></div>
