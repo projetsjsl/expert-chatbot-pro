@@ -2978,7 +2978,8 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         </div>
       )}
 
-      {/* Footer avec liens légaux et admin - Complètement en bas de page */}
+      {/* Footer avec liens légaux et admin - DÉSACTIVÉ TEMPORAIREMENT */}
+      {/* 
       <div className="w-full bg-gray-50 border-t border-gray-200 py-4 px-6 mt-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -3015,6 +3016,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           </div>
         </div>
       </div>
+      */}
     </div>
     </>
   );
