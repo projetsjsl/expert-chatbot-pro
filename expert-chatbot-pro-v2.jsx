@@ -3,7 +3,7 @@ import { Send, RefreshCw, ArrowLeft, Clock, AlertCircle, Lightbulb, Search, X, S
 import { professionalProfiles, getSectors } from './professionnalProfiles.js';
 
 // ========================================
-// GESTION LOCALE - COMPTEURS
+// GESTION LOCALE - COMPTEURS ET POPULARITÉ
 // ========================================
 const getConsultationCount = (professionId) => {
   const counts = JSON.parse(localStorage.getItem('consultationCounts') || '{}');
@@ -15,6 +15,42 @@ const incrementConsultationCount = (professionId) => {
   counts[professionId] = (counts[professionId] || 0) + 1;
   localStorage.setItem('consultationCounts', JSON.stringify(counts));
   return counts[professionId];
+};
+
+// ========================================
+// SYSTÈME DE POPULARITÉ
+// ========================================
+const POPULAR_SECTORS = [
+  'Santé',
+  'Technologie', 
+  'Finance',
+  'Juridique',
+  'Affaires',
+  'Construction',
+  'Immobilier',
+  'Éducation'
+];
+
+const POPULAR_PROFESSIONS = {
+  'Santé': ['medecin', 'psychologue', 'infirmier', 'dentiste', 'pharmacien', 'physiotherapeute', 'nutritionniste', 'sage-femme', 'optometriste', 'chiropraticien', 'massotherapeute', 'acupuncteur', 'ergotherapeute', 'orthophoniste', 'psychiatre'],
+  'Technologie': ['developpeur', 'analyste', 'designer', 'cybersecurite', 'data-scientist', 'devops', 'product-manager', 'ux-designer', 'testeur', 'architecte-logiciel', 'admin-systeme', 'consultant-it', 'specialiste-cloud', 'ingenieur-ai', 'tech-support'],
+  'Finance': ['comptable', 'conseiller-financier', 'analyste-financier', 'courtier', 'auditeur', 'planificateur-financier', 'gestionnaire-portefeuille', 'specialiste-credit', 'evaluateur', 'actuaire', 'trader', 'analyste-risque', 'consultant-fiscal', 'gestionnaire-tresorerie', 'analyste-investissement'],
+  'Juridique': ['avocat', 'notaire', 'paralegal', 'mediateur', 'arbitre', 'conseiller-juridique', 'greffier', 'huissier', 'enqueteur', 'detective-prive', 'agent-immigration', 'specialiste-conformite', 'juriste-entreprise', 'avocat-criminaliste', 'avocat-familial'],
+  'Affaires': ['entrepreneur', 'consultant', 'marketing', 'ventes', 'rh', 'gestionnaire', 'analyste-affaires', 'coach', 'formateur', 'specialiste-export', 'gestionnaire-projet', 'analyste-operations', 'directeur-commercial', 'specialiste-innovation', 'gestionnaire-qualite'],
+  'Construction': ['architecte', 'ingenieur-civil', 'entrepreneur-construction', 'electricien', 'plombier', 'charpentier', 'macon', 'peintre', 'couvreur', 'menuisier', 'soudeur', 'mecanicien', 'technicien', 'superviseur', 'estimateur'],
+  'Immobilier': ['courtier', 'evaluateur', 'gestionnaire', 'conseiller', 'developpeur', 'promoteur', 'specialiste-commercial', 'consultant', 'analyste', 'negociateur', 'specialiste-location', 'gestionnaire-propriete', 'conseiller-investissement', 'specialiste-urbanisme', 'expert-foncier'],
+  'Éducation': ['enseignant', 'professeur', 'conseiller', 'bibliothecaire', 'formateur', 'coach', 'tuteur', 'directeur', 'coordonnateur', 'specialiste', 'consultant', 'evaluateur', 'animateur', 'pedagogue', 'chercheur']
+};
+
+const getSectorPopularity = (sectorName) => {
+  const index = POPULAR_SECTORS.indexOf(sectorName);
+  return index === -1 ? 999 : index;
+};
+
+const getProfessionPopularity = (professionId, sectorName) => {
+  const popularInSector = POPULAR_PROFESSIONS[sectorName] || [];
+  const index = popularInSector.indexOf(professionId);
+  return index === -1 ? 999 : index;
 };
 
 // ========================================
@@ -253,7 +289,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
     sectors[sector].some(prof => 
       prof.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
-  ).sort();
+  ).sort((a, b) => {
+    // Tri par popularité d'abord, puis alphabétique
+    const popularityA = getSectorPopularity(a);
+    const popularityB = getSectorPopularity(b);
+    
+    if (popularityA !== popularityB) {
+      return popularityA - popularityB;
+    }
+    return a.localeCompare(b);
+  });
 
   // ========================================
   // ÉCRAN API SUPPRIMÉ - API KEY GÉRÉE VIA VERCEL
@@ -309,7 +354,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     Emma
                   </h1>
-                  <p className="text-sm text-gray-600">Exploration Multi-Métiers et Assistance</p>
+                  <p className="text-sm text-gray-600">Exploratrice Multi-Métiers Autonome</p>
                 </div>
               </div>
               
@@ -351,39 +396,219 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         </div>
 
         <div className="max-w-7xl mx-auto px-6 py-8 fade-in-soft">
+          {/* Section Métiers Populaires */}
+          {searchTerm === '' && (
+            <div className="mb-12">
+              <div className="flex items-center gap-3 mb-6">
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+                  🔥 Métiers Populaires
+                </h2>
+                <div className="flex-1 h-px bg-gradient-to-r from-yellow-200 to-orange-200"></div>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+                {Object.values(professionalProfiles)
+                  .map(profile => ({
+                    ...profile,
+                    id: Object.keys(professionalProfiles).find(key => professionalProfiles[key] === profile)
+                  }))
+                  .filter(profile => profile.id)
+                  .sort((a, b) => {
+                    const countA = getConsultationCount(a.id);
+                    const countB = getConsultationCount(b.id);
+                    if (countA !== countB) return countB - countA;
+                    
+                    // Si pas de consultations, trier par popularité générale
+                    const sectorA = a.profile.sector;
+                    const sectorB = b.profile.sector;
+                    const popularityA = getProfessionPopularity(a.id, sectorA);
+                    const popularityB = getProfessionPopularity(b.id, sectorB);
+                    return popularityA - popularityB;
+                  })
+                  .slice(0, 16)
+                  .map((profile) => {
+                    const count = getConsultationCount(profile.id);
+                    const sector = profile.profile.sector;
+                    const popularity = getProfessionPopularity(profile.id, sector);
+                    const isTop3 = popularity < 3;
+                    
+                    return (
+                      <div
+                        key={profile.id}
+                        onClick={() => selectProfession({ id: profile.id, ...profile.profile })}
+                        className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-3 hover:scale-105 border-2 relative group ${
+                          isTop3 
+                            ? 'border-yellow-300 bg-gradient-to-br from-yellow-50 to-orange-50' 
+                            : 'border-transparent hover:border-indigo-400'
+                        }`}
+                      >
+                        {isTop3 && (
+                          <div className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                            {popularity + 1}
+                          </div>
+                        )}
+                        
+                        <div className="text-2xl mb-2 text-center group-hover:scale-110 transition-transform">
+                          {profile.profile.icon}
+                        </div>
+                        <h3 className="text-xs font-bold text-gray-800 text-center mb-1 leading-tight">
+                          {profile.profile.name}
+                        </h3>
+                        
+                        {count > 0 && (
+                          <div className="text-center">
+                            <span className="text-xs text-green-600 font-semibold">
+                              {count} consultation{count > 1 ? 's' : ''}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          )}
+
           {filteredSectors.map(sectorName => {
             const professions = sectors[sectorName].filter(prof =>
               searchTerm === '' ||
               prof.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
               sectorName.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            ).sort((a, b) => {
+              // Tri par popularité d'abord, puis par nombre de consultations, puis alphabétique
+              const popularityA = getProfessionPopularity(a.id, sectorName);
+              const popularityB = getProfessionPopularity(b.id, sectorName);
+              
+              if (popularityA !== popularityB) {
+                return popularityA - popularityB;
+              }
+              
+              // Ensuite par nombre de consultations (les plus consultés en premier)
+              const countA = getConsultationCount(a.id);
+              const countB = getConsultationCount(b.id);
+              
+              if (countA !== countB) {
+                return countB - countA;
+              }
+              
+              // Enfin alphabétique
+              return a.name.localeCompare(b.name);
+            });
 
             if (professions.length === 0) return null;
 
+            const sectorPopularity = getSectorPopularity(sectorName);
+            const isTopSector = sectorPopularity < 3;
+            
             return (
               <div key={sectorName} className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  {sectorName}
-                  <span className="text-sm font-normal text-gray-500">({professions.length} {professions.length > 1 ? 'métiers' : 'métier'})</span>
-                </h2>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                      {sectorName}
+                      {isTopSector && (
+                        <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold px-2 py-1 rounded-full">
+                          🔥 Top {sectorPopularity + 1}
+                        </span>
+                      )}
+                    </h2>
+                    <span className="text-sm font-normal text-gray-500">({professions.length} {professions.length > 1 ? 'métiers' : 'métier'})</span>
+                  </div>
+                  
+                  {/* Indicateur de popularité du secteur */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 text-xs text-gray-500">
+                      <TrendingUp size={14} />
+                      <span>#{sectorPopularity + 1} secteur</span>
+                    </div>
+                    <div className="w-16 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className={`h-2 rounded-full ${
+                          isTopSector 
+                            ? 'bg-gradient-to-r from-yellow-400 to-orange-400' 
+                            : 'bg-indigo-500'
+                        }`}
+                        style={{ 
+                          width: `${Math.max(20, 100 - (sectorPopularity * 12))}%` 
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                  {professions.map((profession) => {
+                  {professions.map((profession, index) => {
                     const count = getConsultationCount(profession.id);
+                    const popularity = getProfessionPopularity(profession.id, sectorName);
+                    const isPopular = popularity < 5; // Top 5 de chaque section
+                    const isTop3 = popularity < 3; // Top 3 de chaque section
+                    
                     return (
                       <div
                         key={profession.id}
                         onClick={() => selectProfession(profession)}
-                        className="profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 border-transparent hover:border-indigo-400"
+                        className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 relative group ${
+                          isTop3 
+                            ? 'border-gradient-to-r from-yellow-400 to-orange-400 bg-gradient-to-br from-yellow-50 to-orange-50' 
+                            : isPopular 
+                            ? 'border-indigo-300 hover:border-indigo-500' 
+                            : 'border-transparent hover:border-indigo-400'
+                        }`}
                       >
-                        <div className="text-4xl mb-2 text-center">{profession.icon}</div>
-                        <h3 className="text-sm font-bold text-gray-800 text-center mb-1">
+                        {/* Badge de popularité */}
+                        {isTop3 && (
+                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                            🔥 Top {popularity + 1}
+                          </div>
+                        )}
+                        {isPopular && !isTop3 && (
+                          <div className="absolute -top-2 -right-2 bg-indigo-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                            ⭐ Populaire
+                          </div>
+                        )}
+                        
+                        {/* Indicateur de consultations récentes */}
+                        {count > 0 && (
+                          <div className="absolute -top-1 -left-1 bg-green-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg">
+                            {count}
+                          </div>
+                        )}
+                        
+                        <div className="text-4xl mb-3 text-center group-hover:scale-110 transition-transform">
+                          {profession.icon}
+                        </div>
+                        <h3 className="text-sm font-bold text-gray-800 text-center mb-2 leading-tight">
                           {profession.name}
                         </h3>
-                        {count > 0 && (
-                          <p className="text-xs text-gray-500 text-center">
-                            {count} consultation{count > 1 ? 's' : ''}
-                          </p>
-                        )}
+                        
+                        {/* Barre de popularité visuelle */}
+                        <div className="w-full bg-gray-200 rounded-full h-1 mb-2">
+                          <div 
+                            className={`h-1 rounded-full transition-all ${
+                              isTop3 
+                                ? 'bg-gradient-to-r from-yellow-400 to-orange-400' 
+                                : isPopular 
+                                ? 'bg-indigo-500' 
+                                : 'bg-gray-400'
+                            }`}
+                            style={{ 
+                              width: `${Math.max(20, 100 - (popularity * 10))}%` 
+                            }}
+                          ></div>
+                        </div>
+                        
+                        {/* Statistiques */}
+                        <div className="flex justify-between items-center text-xs text-gray-500">
+                          <span className="flex items-center gap-1">
+                            <TrendingUp size={12} />
+                            #{popularity + 1}
+                          </span>
+                          {count > 0 && (
+                            <span className="flex items-center gap-1 text-green-600">
+                              <Clock size={12} />
+                              {count}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     );
                   })}
@@ -395,8 +620,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
 
         {/* Modal À propos */}
         {showAbout && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowAbout(false)}>
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 p-4 overflow-y-auto" onClick={() => setShowAbout(false)}>
+            <div className="min-h-full flex items-center justify-center py-8">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">À propos d'Emma</h2>
                 <button onClick={() => setShowAbout(false)} className="text-gray-500 hover:text-gray-700">
@@ -411,7 +637,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">Emma</h3>
-                    <p className="text-sm text-gray-600">Exploration Multi-Métiers et Assistance</p>
+                    <p className="text-sm text-gray-600">Exploratrice Multi-Métiers Autonome</p>
                   </div>
                 </div>
 
@@ -436,14 +662,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
 
                 <p className="text-sm text-gray-600 mt-4">Propulsé par JSL AI - Intelligence Artificielle au service des professionnels.</p>
               </div>
+              </div>
             </div>
           </div>
         )}
 
         {/* Modal Disclaimer */}
         {showDisclaimer && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowDisclaimer(false)}>
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 p-4 overflow-y-auto" onClick={() => setShowDisclaimer(false)}>
+            <div className="min-h-full flex items-center justify-center py-8">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">Avis légal et Disclaimer</h2>
                 <button onClick={() => setShowDisclaimer(false)} className="text-gray-500 hover:text-gray-700">
@@ -505,6 +733,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 </div>
 
                 <p className="text-xs text-gray-500 mt-4">Dernière mise à jour : Octobre 2025</p>
+              </div>
               </div>
             </div>
           </div>
@@ -584,60 +813,146 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         <div className="p-6 border-b border-gray-200">
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-indigo-600 mb-3 w-full"
+            className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-indigo-600 mb-4 w-full transition-colors"
           >
             <Settings size={16} /> Personnaliser les réponses
             {showSettings ? ' ▼' : ' ▶'}
           </button>
           
           {showSettings && (
-            <div className="space-y-3 text-sm">
+            <div className="space-y-6">
+              {/* Style utilisateur */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Votre style :</label>
-                <select
-                  value={userPersonality}
-                  onChange={(e) => setUserPersonality(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-2 py-1 text-xs"
-                >
-                  <option value="standard">Standard</option>
-                  <option value="analytique">Analytique</option>
-                  <option value="créatif">Créatif</option>
-                  <option value="pragmatique">Pragmatique</option>
-                  <option value="empathique">Empathique</option>
-                </select>
+                <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                  Votre style de communication
+                </h4>
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    { value: 'standard', label: 'Standard', desc: 'Équilibré et adaptatif', icon: '⚖️' },
+                    { value: 'analytique', label: 'Analytique', desc: 'Données précises et structurées', icon: '📊' },
+                    { value: 'créatif', label: 'Créatif', desc: 'Explications imagées et analogies', icon: '🎨' },
+                    { value: 'pragmatique', label: 'Pragmatique', desc: 'Solutions concrètes et directes', icon: '🎯' },
+                    { value: 'empathique', label: 'Empathique', desc: 'Ton chaleureux et compréhensif', icon: '💝' }
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setUserPersonality(option.value)}
+                      className={`p-3 rounded-lg border-2 text-left transition-all ${
+                        userPersonality === option.value
+                          ? 'border-indigo-500 bg-indigo-50 text-indigo-800'
+                          : 'border-gray-200 bg-white hover:border-indigo-300 hover:bg-indigo-25'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{option.icon}</span>
+                        <div>
+                          <div className="font-semibold text-sm">{option.label}</div>
+                          <div className="text-xs text-gray-600">{option.desc}</div>
+                        </div>
+                        {userPersonality === option.value && (
+                          <div className="ml-auto w-2 h-2 bg-indigo-500 rounded-full"></div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
+              {/* Niveau d'expertise */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Niveau :</label>
-                <select
-                  value={expertiseLevel}
-                  onChange={(e) => setExpertiseLevel(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-2 py-1 text-xs"
-                >
-                  <option value="débutant">Débutant</option>
-                  <option value="intermediaire">Intermédiaire</option>
-                  <option value="avancé">Avancé</option>
-                  <option value="expert">Expert</option>
-                </select>
+                <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                  Votre niveau d'expertise
+                </h4>
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    { value: 'débutant', label: 'Débutant', desc: 'Je découvre le sujet', icon: '🌱' },
+                    { value: 'intermediaire', label: 'Intermédiaire', desc: 'J\'ai quelques connaissances', icon: '📚' },
+                    { value: 'avancé', label: 'Avancé', desc: 'Je maîtrise les bases', icon: '🎓' },
+                    { value: 'expert', label: 'Expert', desc: 'Je suis spécialiste', icon: '🏆' }
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setExpertiseLevel(option.value)}
+                      className={`p-3 rounded-lg border-2 text-left transition-all ${
+                        expertiseLevel === option.value
+                          ? 'border-purple-500 bg-purple-50 text-purple-800'
+                          : 'border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-25'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{option.icon}</span>
+                        <div>
+                          <div className="font-semibold text-sm">{option.label}</div>
+                          <div className="text-xs text-gray-600">{option.desc}</div>
+                        </div>
+                        {expertiseLevel === option.value && (
+                          <div className="ml-auto w-2 h-2 bg-purple-500 rounded-full"></div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
+              {/* Ton d'Emma */}
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Ton Emma :</label>
-                <select
-                  value={emmaPersonality}
-                  onChange={(e) => setEmmaPersonality(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-2 py-1 text-xs"
-                >
-                  <option value="professionnelle">Professionnelle</option>
-                  <option value="amicale">Amicale</option>
-                  <option value="pédagogue">Pédagogue</option>
-                  <option value="directe">Directe</option>
-                </select>
+                <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
+                  Le ton d'Emma
+                </h4>
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    { value: 'professionnelle', label: 'Professionnelle', desc: 'Formel mais accessible', icon: '👔' },
+                    { value: 'amicale', label: 'Amicale', desc: 'Chaleureux et naturel', icon: '😊' },
+                    { value: 'pédagogue', label: 'Pédagogue', desc: 'Explicatif et patient', icon: '👩‍🏫' },
+                    { value: 'directe', label: 'Directe', desc: 'Concis et efficace', icon: '⚡' }
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setEmmaPersonality(option.value)}
+                      className={`p-3 rounded-lg border-2 text-left transition-all ${
+                        emmaPersonality === option.value
+                          ? 'border-pink-500 bg-pink-50 text-pink-800'
+                          : 'border-gray-200 bg-white hover:border-pink-300 hover:bg-pink-25'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{option.icon}</span>
+                        <div>
+                          <div className="font-semibold text-sm">{option.label}</div>
+                          <div className="text-xs text-gray-600">{option.desc}</div>
+                        </div>
+                        {emmaPersonality === option.value && (
+                          <div className="ml-auto w-2 h-2 bg-pink-500 rounded-full"></div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              <div className="bg-blue-50 p-2 rounded text-xs text-blue-800">
-                <p className="font-semibold">Actif :</p>
-                <p>• {userPersonality} / {expertiseLevel} / {emmaPersonality}</p>
+              {/* Résumé actuel */}
+              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-lg border border-indigo-200">
+                <h5 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                  Configuration actuelle
+                </h5>
+                <div className="space-y-1 text-xs text-gray-700">
+                  <div className="flex items-center gap-2">
+                    <span className="text-indigo-500">•</span>
+                    <span><strong>Style:</strong> {userPersonality}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-purple-500">•</span>
+                    <span><strong>Niveau:</strong> {expertiseLevel}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-pink-500">•</span>
+                    <span><strong>Ton Emma:</strong> {emmaPersonality}</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}

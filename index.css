@@ -478,3 +478,188 @@ body {
     transform: translateY(-20px) scale(1);
   }
 }
+
+/* Styles pour les cartes de métiers améliorées */
+.profession-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.profession-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s;
+}
+
+.profession-card:hover::before {
+  left: 100%;
+}
+
+/* Animation pour les badges de popularité */
+.profession-card .absolute {
+  animation: badgeBounce 0.6s ease-out;
+}
+
+@keyframes badgeBounce {
+  0% {
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Styles pour les barres de popularité */
+.profession-card .bg-gradient-to-r {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Animation pour les icônes des métiers */
+.profession-card .group-hover\:scale-110 {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Styles pour la section métiers populaires */
+.bg-gradient-to-r.from-yellow-500.to-orange-500 {
+  background-size: 200% 200%;
+  animation: titleGradient 4s ease infinite;
+}
+
+@keyframes titleGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Animation pour les cartes de la section populaire */
+.grid .bg-white {
+  animation: cardSlideIn 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.grid .bg-white:nth-child(1) { animation-delay: 0.1s; }
+.grid .bg-white:nth-child(2) { animation-delay: 0.15s; }
+.grid .bg-white:nth-child(3) { animation-delay: 0.2s; }
+.grid .bg-white:nth-child(4) { animation-delay: 0.25s; }
+.grid .bg-white:nth-child(5) { animation-delay: 0.3s; }
+.grid .bg-white:nth-child(6) { animation-delay: 0.35s; }
+.grid .bg-white:nth-child(7) { animation-delay: 0.4s; }
+.grid .bg-white:nth-child(8) { animation-delay: 0.45s; }
+
+@keyframes cardSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Styles pour les indicateurs de secteur */
+.flex.items-center.gap-2 .w-16 {
+  position: relative;
+  overflow: hidden;
+}
+
+.flex.items-center.gap-2 .w-16 .h-2 {
+  transition: all 0.3s ease;
+}
+
+/* Animation pour les barres de progression */
+.flex.items-center.gap-2 .w-16 .h-2 .rounded-full {
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Effet de brillance pour les cartes populaires */
+.border-yellow-300 {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-yellow-300::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  animation: rotate 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.border-yellow-300:hover::after {
+  opacity: 1;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Styles pour les statistiques */
+.text-green-600 {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Amélioration des ombres */
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.hover\:shadow-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Styles pour les séparateurs */
+.h-px.bg-gradient-to-r {
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.5), transparent);
+  height: 2px;
+}
