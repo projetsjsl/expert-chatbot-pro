@@ -63,7 +63,7 @@ const PROFESSION_AVATARS = {
   // Éducation
   'enseignante_primaire': 'enseignante primaire.png',
   'educatrice_specialisee': 'education specialisee.png',
-  'psychoeducatrice': 'psycho.png',
+  'psychoeducatrice': 'education specialisee.png',
   'orthopedagogue': 'orthop.png',
   'conseiller_orientation': 'conseiller orientation.png',
   'bibliothecaire': 'bibliothecaire.png',
@@ -80,15 +80,15 @@ const PROFESSION_AVATARS = {
   
   // Mappings alternatifs pour compatibilité
   'developpeur': 'fullstack.png',
-  'analyste': 'data.png',
-  'designer': 'ux.png',
+  'analyste': 'analyste financier.png',
+  'designer': 'artiste.png',
   'data-scientist': 'data.png',
   'product-manager': 'gestionnaire projet.png',
   'ux-designer': 'ux.png',
   'testeur': 'cyber.png',
-  'architecte-logiciel': 'cloud.png',
+  'architecte-logiciel': 'architecte.png',
   'admin-systeme': 'devops.png',
-  'consultant-it': 'cyber.png',
+  'consultant-it': 'marketing.png',
   'specialiste-cloud': 'cloud.png',
   'ingenieur-ai': 'ia.png',
   'tech-support': 'tech medicale.png',
@@ -1157,7 +1157,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
             <img 
-              src="/images/mespros-presente-emma-bleu-fonce.jpg" 
+              src="/images/mespros-presente-emma-bleu-fonceia.jpg" 
               alt="Emma - Consultations Gratuites" 
               className="emma-main-image"
             />
@@ -1243,7 +1243,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
       <div className="emma-transition-screen">
         <div className="transition-content">
           <img 
-            src="images/mespros-presente-emma-bleu-fonce.jpg" 
+            src="images/mespros-presente-emma-bleu-fonceia.jpg" 
             alt="Emma" 
             className="transition-image"
           />
@@ -1300,17 +1300,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               </div>
               
               <div className="flex items-center gap-3">
-                {/* Bouton Admin discret */}
-                <button
-                  onClick={() => {
-                    playSound('click');
-                    setShowAdminPanel(!showAdminPanel);
-                  }}
-                  className="text-xs text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 px-2 py-1 rounded transition-colors border border-gray-200"
-                  title="Panneau d'administration"
-                >
-                  ⚙️ Admin
-                </button>
+                {/* Espace réservé pour d'autres boutons si nécessaire */}
               </div>
             </div>
 
@@ -2848,7 +2838,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         </div>
       )}
 
-      {/* Section Footer avec liens légaux - Déplacée en bas de page */}
+      {/* Section Footer avec liens légaux et admin - Déplacée en bas de page */}
       <div className="fixed bottom-4 left-4 z-30">
         <div className="flex items-center gap-2">
           <button
@@ -2870,6 +2860,16 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             title="Avis légal et disclaimer"
           >
             <span>⚖️</span> Avis légal
+          </button>
+          <button
+            onClick={() => {
+              playSound('click');
+              setShowAdminPanel(!showAdminPanel);
+            }}
+            className="text-xs text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors border border-gray-200 flex items-center gap-1"
+            title="Panneau d'administration"
+          >
+            <span>⚙️</span> Admin
           </button>
         </div>
       </div>
