@@ -2096,7 +2096,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full overflow-hidden">
-              <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+              <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
             </div>
             <div>
               <h1 className="text-xl font-bold">Emma</h1>
