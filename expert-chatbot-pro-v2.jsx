@@ -1380,7 +1380,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                       value={expertiseLevel}
                       onChange={(e) => setExpertiseLevel(e.target.value)}
                       className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-2 sm:py-3 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 bg-white transition-all duration-200 hover:border-purple-400"
-                      aria-label="Sélectionner votre niveau d'expertise"
+                      aria-label="Sélectionner votre niveau de profondeur"
                     >
                       <option value="débutant">🌱 Débutant</option>
                       <option value="intermediaire">📚 Intermédiaire</option>
@@ -1788,7 +1788,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                       <p className="text-gray-700">
                         Clair, chaleureux et accessible au grand public, 
                         tout en respectant la précision professionnelle. 
-                        Je m'adapte à votre niveau et votre style !
+                        Je m'adapte à votre niveau de profondeur et votre style !
                       </p>
                     </div>
                   </div>
@@ -1961,7 +1961,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
       <style>{`
         /* Styles pour les messages d'Emma */
         .message-emma {
-          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+          background: white;
           padding: 1.5rem;
           border-radius: 1rem;
           max-width: 80%;
@@ -1985,7 +1985,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
 
         /* Styles pour les sources */
         .sources-section {
-          background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+          background: #f8fafc;
           padding: 0.75rem;
           border-radius: 0.5rem;
           margin-top: 1rem;
@@ -2181,7 +2181,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     value={expertiseLevel}
                     onChange={(e) => setExpertiseLevel(e.target.value)}
                     className="sidebar-personalization-select w-full text-xs border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-200 bg-white transition-all duration-200 hover:border-purple-400"
-                    aria-label="Sélectionner votre niveau d'expertise"
+                    aria-label="Sélectionner votre niveau de profondeur"
                   >
                     <option value="débutant">🌱 Débutant</option>
                     <option value="intermediaire">📚 Intermédiaire</option>
