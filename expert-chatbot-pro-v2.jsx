@@ -351,13 +351,13 @@ const EmmaExpertChatbot = () => {
   useEffect(() => {
     const timers = [];
     
-    // Séquence d'animation : chaque élément apparaît avec un délai
-    timers.push(setTimeout(() => setIntroStep(1), 800));   // Avatar
-    timers.push(setTimeout(() => setIntroStep(2), 1600));  // Nom
-    timers.push(setTimeout(() => setIntroStep(3), 2400));  // Description
-    timers.push(setTimeout(() => setIntroStep(4), 3200));  // Marketing
-    timers.push(setTimeout(() => setIntroStep(5), 4000));  // Final
-    timers.push(setTimeout(() => setShowIntro(false), 6000)); // Disparition totale
+    // Séquence d'animation : l'image principale reste affichée plus longtemps
+    timers.push(setTimeout(() => setIntroStep(1), 2000));   // Icônes après 2s
+    timers.push(setTimeout(() => setIntroStep(2), 3500));  // Titre après 3.5s
+    timers.push(setTimeout(() => setIntroStep(3), 4500));  // Description après 4.5s
+    timers.push(setTimeout(() => setIntroStep(4), 5500));  // Statistiques après 5.5s
+    timers.push(setTimeout(() => setIntroStep(5), 6500));  // Call-to-action après 6.5s
+    timers.push(setTimeout(() => setShowIntro(false), 8000)); // Disparition après 8s
 
     return () => timers.forEach(timer => clearTimeout(timer));
   }, []);
@@ -643,14 +643,32 @@ const EmmaExpertChatbot = () => {
     
     // Améliorer le formatage du texte de manière sécurisée
     let formattedText = safeText
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Gras
-      .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italique
-      .replace(/\n\n/g, '<br><br>') // Paragraphes
-      .replace(/\n/g, '<br>') // Retours à la ligne
-      .replace(/^(\d+\.\s)/gm, '<br>$1') // Listes numérotées
-      .replace(/^[-•]\s/gm, '<br>• ') // Listes à puces
-      .replace(/^(\d+\.\s.*)$/gm, '<div class="list-item">$1</div>') // Items de liste
-      .replace(/^•\s(.*)$/gm, '<div class="list-item">• $1</div>'); // Items à puces
+      // Gras (double astérisque)
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-700 font-bold">$1</strong>')
+      // Italique (simple astérisque)
+      .replace(/\*(.*?)\*/g, '<em class="text-gray-700 italic">$1</em>')
+      // Sections avec émojis (détection automatique)
+      .replace(/^(🔍|📌|💡|⚠️|✅|❌|🎯|🔑|📊|💰|🏥|⚖️|💻|🏗️|🎓|📚|🌟|⭐|🚀|💪|🤝|👉|📝|✨|🔔|💬|📢|🎨|🔧|⚙️)\s*\*\*(.*?)\*\*/gm, 
+        '<div class="section-header mt-4 mb-2 flex items-center gap-2"><span class="text-2xl">$1</span><h3 class="text-lg font-bold text-indigo-800">$2</h3></div>')
+      // Paragraphes (double saut de ligne)
+      .replace(/\n\n/g, '</p><p class="mb-3">')
+      // Listes numérotées
+      .replace(/^(\d+)\.\s+(.+)$/gm, '<li class="ml-6 mb-2"><span class="font-semibold text-indigo-600">$1.</span> $2</li>')
+      // Listes à puces avec bullet spéciaux
+      .replace(/^[•●○◦▪▫■□]\s+(.+)$/gm, '<li class="ml-6 mb-2 flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span><span>$1</span></li>')
+      // Simple retours à la ligne
+      .replace(/\n/g, '<br>');
+
+    // Wrapper les listes dans des balises ul
+    formattedText = formattedText.replace(
+      /(<li class="ml-6.*?<\/li>\s*)+/g,
+      '<ul class="list-none my-3">$&</ul>'
+    );
+
+    // Wrapper dans un paragraphe si pas déjà fait
+    if (!formattedText.startsWith('<')) {
+      formattedText = `<p class="mb-3">${formattedText}</p>`;
+    }
 
     // Traiter les sections de sources pour ajouter des liens
     formattedText = formattedText.replace(
@@ -658,14 +676,44 @@ const EmmaExpertChatbot = () => {
       (match, sourcesText) => {
         const sources = sourcesText.split(',').map(s => s.trim()).filter(s => s);
         const linkedSources = formatSourcesWithLinks(sources);
-        return `Sources: ${linkedSources}`;
+        return `<div class="sources-section mt-4 pt-3 border-t border-gray-200"><p class="text-sm font-semibold text-gray-600 mb-2 flex items-center gap-2"><span class="text-lg">🔗</span> Sources fiables :</p><div class="text-sm text-gray-700">${linkedSources}</div></div>`;
       }
     );
 
     // Traiter les liens markdown [texte](url) pour les convertir en liens HTML
     formattedText = formattedText.replace(
       /\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener noreferrer" class="source-link">$1</a>'
+      '<a href="$2" target="_blank" rel="noopener noreferrer" class="source-link text-indigo-600 hover:text-indigo-800 underline font-medium">$1</a>'
+    );
+
+    // Ajouter des icônes spéciales pour les avertissements
+    formattedText = formattedText.replace(
+      /<strong class="text-indigo-700 font-bold">(Attention|Important|Rappel|Note|Avertissement)<\/strong>/gi,
+      '<span class="inline-flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-800 rounded-md font-bold text-sm"><span>⚠️</span>$1</span>'
+    );
+
+    // Ajouter des icônes pour les points positifs
+    formattedText = formattedText.replace(
+      /<strong class="text-indigo-700 font-bold">(Avantage|Bénéfice|Conseil|Astuce|Recommandation)<\/strong>/gi,
+      '<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-800 rounded-md font-bold text-sm"><span>✅</span>$1</span>'
+    );
+
+    // Sections "À retenir" avec style spécial
+    formattedText = formattedText.replace(
+      /📌\s*\*\*À retenir\*\*(.*?)(?=<div class="section-header|$)/gs,
+      '<div class="key-points-card bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-4 rounded-lg my-4"><div class="flex items-center gap-2 mb-3"><span class="text-2xl">📌</span><h3 class="text-lg font-bold text-yellow-800">À retenir</h3></div>$1</div>'
+    );
+
+    // Sections "Attention" avec style alerte
+    formattedText = formattedText.replace(
+      /⚠️\s*\*\*Attention\*\*(.*?)(?=<div class="section-header|$)/gs,
+      '<div class="warning-card bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-400 p-4 rounded-lg my-4"><div class="flex items-center gap-2 mb-3"><span class="text-2xl">⚠️</span><h3 class="text-lg font-bold text-red-800">Attention</h3></div>$1</div>'
+    );
+
+    // Sections "Conseils" avec style succès
+    formattedText = formattedText.replace(
+      /(💡|✅)\s*\*\*(Points clés|Conseils|Recommandations)\*\*(.*?)(?=<div class="section-header|$)/gs,
+      '<div class="tips-card bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-400 p-4 rounded-lg my-4"><div class="flex items-center gap-2 mb-3"><span class="text-2xl">$1</span><h3 class="text-lg font-bold text-green-800">$2</h3></div>$3</div>'
     );
 
     return formattedText;
@@ -798,7 +846,38 @@ INSTRUCTIONS POUR LES SOURCES:
 - Assure-toi que chaque source citée a un lien fonctionnel vers le site officiel
 - Limite à 2-3 sources les plus pertinentes par réponse pour éviter la surcharge
 
-RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brève 2) Infos principales 3) Appel à consulter professionnel réel 4) Sources avec liens.`;
+🎨 INSTRUCTIONS DE FORMATAGE OBLIGATOIRES:
+- Utilise des ÉMOJIS appropriés au début de chaque section (🔍 📌 💡 ⚠️ ✅ etc.)
+- Structure ta réponse avec des SECTIONS claires utilisant des émojis
+- Mets en GRAS (**texte**) les termes clés et informations importantes
+- Utilise des puces (•) pour lister les points
+- Ajoute des sous-sections si nécessaire
+- Termine TOUJOURS par une section "📌 À retenir" avec 2-3 points clés en gras
+
+EXEMPLE DE FORMAT:
+🔍 **Introduction**
+Explication brève avec **termes importants** en gras.
+
+💡 **Points clés**
+• **Premier point** : Description
+• **Deuxième point** : Description
+
+⚠️ **Attention**
+Information importante avec **mise en garde** en gras.
+
+📌 **À retenir**
+• **Point clé 1** : Résumé
+• **Point clé 2** : Résumé
+
+INSTRUCTIONS POUR LES SOURCES:
+- À la fin de chaque réponse, cite tes sources avec des liens vers les sites officiels
+- Utilise le format markdown: "Sources: [Nom de la source](URL), [Autre source](URL)"
+- Privilégie toujours les sources officielles et vérifiées du Québec
+- Inclus des liens vers les ordres professionnels, organismes gouvernementaux et guides officiels
+- Assure-toi que chaque source citée a un lien fonctionnel vers le site officiel
+- Limite à 2-3 sources les plus pertinentes par réponse pour éviter la surcharge
+
+RAPPEL CRITIQUE: Réponds en MAX 500 mots. Structure obligatoire avec émojis et formatage en gras.`;
 
       const history = messages.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : msg.role,
@@ -972,7 +1051,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           <div className="emma-main-image-container">
             <img 
               src="/images/mes-pros-presente-emma.png" 
-              alt="Emma - Assistante Professionnelle" 
+              alt="Mes Pros présente Emma - Assistante Professionnelle" 
               className="emma-main-image"
             />
           </div>
@@ -1853,7 +1932,116 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   const consultationCount = getConsultationCount(selectedProfession.id);
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in">
+    <>
+      <style>{`
+        /* Styles pour les messages d'Emma */
+        .message-emma {
+          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+          padding: 1.5rem;
+          border-radius: 1rem;
+          max-width: 80%;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-emma .section-header {
+          animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        /* Styles pour les sources */
+        .sources-section {
+          background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+          padding: 0.75rem;
+          border-radius: 0.5rem;
+          margin-top: 1rem;
+        }
+
+        .source-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.25rem;
+          margin-right: 0.5rem;
+          padding: 0.25rem 0.5rem;
+          background: white;
+          border-radius: 0.375rem;
+          transition: all 0.2s;
+        }
+
+        .source-link:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Badges colorés */
+        .badge-warning {
+          background: #fef3c7;
+          color: #92400e;
+          padding: 0.25rem 0.75rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .badge-success {
+          background: #d1fae5;
+          color: #065f46;
+          padding: 0.25rem 0.75rem;
+          border-radius: 0.5rem;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        /* Animation pour les listes */
+        .message-emma ul li {
+          animation: fadeInUp 0.3s ease-out;
+          animation-fill-mode: both;
+        }
+
+        .message-emma ul li:nth-child(1) { animation-delay: 0.05s; }
+        .message-emma ul li:nth-child(2) { animation-delay: 0.1s; }
+        .message-emma ul li:nth-child(3) { animation-delay: 0.15s; }
+        .message-emma ul li:nth-child(4) { animation-delay: 0.2s; }
+        .message-emma ul li:nth-child(5) { animation-delay: 0.25s; }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        /* Styles pour les cartes spéciales */
+        .key-points-card {
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .warning-card {
+          box-shadow: 0 4px 6px rgba(239, 68, 68, 0.1);
+        }
+
+        .tips-card {
+          box-shadow: 0 4px 6px rgba(34, 197, 94, 0.1);
+        }
+      `}</style>
+      <div className="flex h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in">
       {/* Sidebar */}
       <div className="w-80 bg-white shadow-xl border-r-2 border-indigo-200 overflow-y-auto">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
@@ -2356,6 +2544,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         </div>
       )}
     </div>
+    </>
   );
 };
 
