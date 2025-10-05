@@ -91,7 +91,7 @@ const EmmaExpertChatbot = () => {
     try {
       console.log('Envoi de la requête de test...');
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent',
+        'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent',
         {
           method: "POST",
           headers: {
@@ -227,7 +227,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }));
 
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent',
+        'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent',
         {
           method: "POST",
           headers: {
