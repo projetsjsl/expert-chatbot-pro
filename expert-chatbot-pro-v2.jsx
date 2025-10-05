@@ -250,6 +250,7 @@ const EmmaExpertChatbot = () => {
   const [keyPoints, setKeyPoints] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
   const [introStep, setIntroStep] = useState(0); // 0: logo, 1: avatar, 2: nom, 3: description, 4: marketing, 5: final
+  const [showTransition, setShowTransition] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -357,7 +358,12 @@ const EmmaExpertChatbot = () => {
     timers.push(setTimeout(() => setIntroStep(3), 4500));  // Description après 4.5s
     timers.push(setTimeout(() => setIntroStep(4), 5500));  // Statistiques après 5.5s
     timers.push(setTimeout(() => setIntroStep(5), 6500));  // Call-to-action après 6.5s
-    timers.push(setTimeout(() => setShowIntro(false), 8000)); // Disparition après 8s
+    timers.push(setTimeout(() => {
+      setShowIntro(false);
+      setShowTransition(true);
+    }, 8000)); // Disparition après 8s et début de transition
+    
+    timers.push(setTimeout(() => setShowTransition(false), 10000)); // Fin de transition après 10s
 
     return () => timers.forEach(timer => clearTimeout(timer));
   }, []);
@@ -723,29 +729,29 @@ const EmmaExpertChatbot = () => {
     let prompt = '';
     
     const userStyles = {
-      analytique: "L'utilisateur préfère des réponses structurées, avec données et faits précis.",
-      créatif: "L'utilisateur aime les explications imagées, créatives et les analogies.",
-      pragmatique: "L'utilisateur veut du concret, des solutions directes et actionnables.",
-      empathique: "L'utilisateur apprécie un ton chaleureux, compréhensif et rassurant.",
-      standard: ""
+      analytique: "STYLE UTILISATEUR: L'utilisateur préfère des réponses structurées, avec données chiffrées, faits précis et analyses détaillées. Utilise des tableaux, des listes numérotées et des comparaisons factuelles.",
+      créatif: "STYLE UTILISATEUR: L'utilisateur aime les explications imagées, créatives et les analogies. Utilise des métaphores, des exemples concrets et des illustrations pour rendre les concepts accessibles.",
+      pragmatique: "STYLE UTILISATEUR: L'utilisateur veut du concret, des solutions directes et actionnables. Va droit au but, propose des étapes claires et des actions immédiates.",
+      empathique: "STYLE UTILISATEUR: L'utilisateur apprécie un ton chaleureux, compréhensif et rassurant. Montre de l'empathie, rassure et accompagne avec bienveillance.",
+      standard: "STYLE UTILISATEUR: Approche équilibrée entre professionnalisme et accessibilité."
     };
     prompt += userStyles[userPersonality] || '';
     
     const expertiseLevels = {
-      débutant: "Explique comme à quelqu'un qui découvre le sujet. Vulgarise au maximum.",
-      intermediaire: "Équilibre entre vulgarisation et précision technique.",
-      avancé: "Utilise termes techniques, suppose connaissances de base.",
-      expert: "Niveau expert, détails poussés, références spécialisées."
+      débutant: "NIVEAU: L'utilisateur découvre le sujet. Vulgarise au maximum, explique chaque terme technique, utilise des analogies simples et évite le jargon professionnel.",
+      intermediaire: "NIVEAU: L'utilisateur a des connaissances de base. Équilibre entre vulgarisation et précision technique, utilise quelques termes spécialisés avec explications.",
+      avancé: "NIVEAU: L'utilisateur a des connaissances solides. Utilise termes techniques, suppose connaissances de base, va dans les détails et nuances.",
+      expert: "NIVEAU: L'utilisateur est expert. Utilise jargon professionnel, détails poussés, références spécialisées et analyses approfondies."
     };
-    prompt += ' ' + (expertiseLevels[expertiseLevel] || '');
+    prompt += '\n\n' + (expertiseLevels[expertiseLevel] || '');
     
     const emmaStyles = {
-      professionnelle: "Ton professionnel, formel mais accessible.",
-      amicale: "Ton chaleureux, amical, tutoiement naturel.",
-      pédagogue: "Ton enseignant, explicatif, patient.",
-      directe: "Ton direct, concis, va droit au but."
+      professionnelle: "TON D'EMMA: Réponds avec un ton professionnel, formel mais accessible. Utilise 'vous', sois respectueux et maintiens une distance professionnelle appropriée.",
+      amicale: "TON D'EMMA: Réponds avec un ton chaleureux et amical. Utilise 'tu', sois proche et bienveillant, comme un ami qui connaît bien le sujet.",
+      pédagogue: "TON D'EMMA: Réponds comme un enseignant patient et bienveillant. Explique étape par étape, encourage et guide l'apprentissage.",
+      directe: "TON D'EMMA: Réponds avec un ton direct et concis. Va droit au but, sois efficace et ne perds pas de temps avec des détours."
     };
-    prompt += ' ' + (emmaStyles[emmaPersonality] || '');
+    prompt += '\n\n' + (emmaStyles[emmaPersonality] || '');
     
     return prompt.trim();
   };
@@ -760,9 +766,14 @@ const EmmaExpertChatbot = () => {
     
     const intro = `${profile.greeting}
 
-${personalityPrompt ? `🎯 Je vais adapter mes réponses selon vos préférences ✨` : ''}
+${personalityPrompt ? `🎯 **Personnalisation active** ✨
+• **Votre style** : ${userPersonality}
+• **Votre niveau** : ${expertiseLevel}  
+• **Mon ton** : ${emmaPersonality}
 
-📌 Rappel important : Je suis une assistante virtuelle. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.
+Je vais adapter toutes mes réponses selon ces préférences !` : ''}
+
+📌 **Rappel important** : Je suis une assistante virtuelle. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.
 
 Comment puis-je vous aider ?`;
     
@@ -832,8 +843,14 @@ Comment puis-je vous aider ?`;
 
       const enhancedPrompt = `${profile.systemPrompt}
 
-PERSONNALISATION UTILISATEUR:
+🎯 PERSONNALISATION DE LA RÉPONSE (OBLIGATOIRE):
 ${personalityPrompt}
+
+⚠️ CRITIQUE: Tu DOIS adapter ta réponse selon ces préférences utilisateur. 
+- Respecte le style demandé (analytique, créatif, pragmatique, empathique)
+- Adapte le niveau de détail selon l'expertise (débutant, intermédiaire, avancé, expert)  
+- Utilise le ton demandé (professionnel, amical, pédagogue, direct)
+- Ne donne JAMAIS une réponse générique qui ignore ces préférences
 
 SOURCES FIABLES DISPONIBLES:
 ${sourcesWithLinks}
@@ -1142,23 +1159,28 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
   }
 
   // ========================================
+  // ANIMATION DE TRANSITION
+  // ========================================
+  if (showTransition) {
+    return (
+      <div className="emma-transition-screen">
+        <div className="transition-content">
+          <img 
+            src="/images/mespros-presente-emma-bleu-fonce.png" 
+            alt="Mes Pros présente Emma" 
+            className="transition-image"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================
   // SÉLECTION MÉTIER
   // ========================================
   if (!selectedProfession) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in relative">
-        {/* Bubble flottant Emma */}
-        <div className="emma-floating-bubble">
-          <div className="bubble-container">
-            <img 
-              src="/images/mespros-presente-emma-bleu-fonce.png" 
-              alt="Emma - Assistante IA" 
-              className="bubble-image"
-            />
-            <div className="bubble-pulse"></div>
-            <div className="bubble-glow"></div>
-          </div>
-        </div>
         <div className="bg-white shadow-lg border-b-2 border-indigo-200 fade-in-soft">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
@@ -1945,19 +1967,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
 
   return (
     <>
-      {/* Bubble flottant Emma dans l'interface de chat */}
-      <div className="emma-floating-bubble">
-        <div className="bubble-container">
-          <img 
-            src="/images/mespros-presente-emma-bleu-fonce.png" 
-            alt="Emma - Assistante IA" 
-            className="bubble-image"
-          />
-          <div className="bubble-pulse"></div>
-          <div className="bubble-glow"></div>
-        </div>
-      </div>
-      
       <style>{`
         /* Styles pour les messages d'Emma */
         .message-emma {
@@ -1970,6 +1979,29 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
 
         .message-emma .section-header {
           animation: slideIn 0.3s ease-out;
+        }
+
+        .message-emma .section-header h3 {
+          font-weight: 800 !important;
+          color: #1f2937 !important;
+        }
+
+        .message-emma h1,
+        .message-emma h2,
+        .message-emma h3,
+        .message-emma h4,
+        .message-emma h5,
+        .message-emma h6 {
+          font-weight: 800 !important;
+          color: #1f2937 !important;
+          margin: 1rem 0 0.5rem 0;
+        }
+
+        /* Styles pour les titres dans les cartes spéciales */
+        .key-points-card h3,
+        .warning-card h3,
+        .tips-card h3 {
+          font-weight: 800 !important;
         }
 
         @keyframes slideIn {
