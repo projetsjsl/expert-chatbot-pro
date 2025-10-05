@@ -69,14 +69,14 @@ const EmmaExpertChatbot = () => {
     const timers = [];
     
     // Séquence d'animation : chaque élément apparaît avec un délai
-    timers.push(setTimeout(() => setIntroStep(1), 800));   // Avatar
-    timers.push(setTimeout(() => setIntroStep(2), 1600));  // Nom
-    timers.push(setTimeout(() => setIntroStep(3), 2400));  // Description
-    timers.push(setTimeout(() => setIntroStep(4), 3200));  // Marketing
+    timers.push(setTimeout(() => setIntroStep(1), 1000));   // Avatar (fixe)
+    timers.push(setTimeout(() => setIntroStep(2), 2000));  // Nom et Description ensemble
+    timers.push(setTimeout(() => setIntroStep(3), 2000));  // Nom et Description ensemble
+    timers.push(setTimeout(() => setIntroStep(4), 3000));  // Marketing
     timers.push(setTimeout(() => setIntroStep(5), 4000));  // Final
     
-    // Masquer l'intro après 5 secondes
-    timers.push(setTimeout(() => setShowIntro(false), 5000));
+    // Masquer l'intro après 7 secondes (plus longtemps)
+    timers.push(setTimeout(() => setShowIntro(false), 7000));
     
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -309,17 +309,15 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               </div>
             )}
             
-            {/* Nom - Étape 2 */}
+            {/* Nom et Description - Étape 2 (ensemble) */}
             {introStep >= 2 && (
-              <h1 className="emma-intro-name animate-fade-in-up">Emma</h1>
-            )}
-            
-            {/* Description - Étape 3 */}
-            {introStep >= 3 && (
-              <p className="emma-intro-subtitle animate-fade-in-up">
-                Votre assistante virtuelle spécialisée<br />
-                en expertise professionnelle
-              </p>
+              <>
+                <h1 className="emma-intro-name animate-fade-in-up">Emma</h1>
+                <p className="emma-intro-subtitle animate-fade-in-up">
+                  Votre assistante virtuelle spécialisée<br />
+                  en expertise professionnelle
+                </p>
+              </>
             )}
             
             {/* Marketing - Étape 4 */}
