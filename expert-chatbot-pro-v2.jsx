@@ -630,37 +630,172 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 </button>
               </div>
               
-              <div className="space-y-4 text-gray-700">
+              <div className="space-y-6 text-gray-700">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
                     <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">Emma</h3>
-                    <p className="text-sm text-gray-600">Exploratrice Multi-Métiers Autonome</p>
+                    <p className="text-sm text-gray-600">🎯 Votre Exploratrice Multi-Métiers Autonome</p>
                   </div>
                 </div>
 
-                <p className="font-semibold text-lg">Mission universelle</p>
-                <p>Explorer, comprendre et relier les savoirs de tous les métiers du monde. Emma agit comme une intelligence de soutien professionnel global.</p>
-
-                <p className="italic text-indigo-600">"De la science au geste, de la théorie à la pratique — je relie les mondes du savoir."</p>
-
-                <div className="bg-indigo-50 p-4 rounded-lg">
-                  <p className="font-semibold mb-2">Valeurs cardinales :</p>
-                  <ul className="list-disc list-inside space-y-1 text-sm">
-                    <li>Curiosité - Explorer sans a priori</li>
-                    <li>Clarté - Communication accessible</li>
-                    <li>Collaboration - S'adapter à chaque interlocuteur</li>
-                    <li>Compétence - Rigueur professionnelle</li>
-                    <li>Cohérence - Fiabilité des informations</li>
-                  </ul>
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl border border-indigo-200">
+                  <h4 className="font-bold text-lg mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🌍</span>
+                    Ma Mission Universelle
+                  </h4>
+                  <p className="text-gray-700 leading-relaxed">
+                    Je suis votre <strong>passerelle intelligente</strong> entre tous les univers professionnels ! 
+                    De la médecine à l'artisanat, du droit à la technologie, j'explore, je comprends et je relie 
+                    les savoirs pour vous aider à naviguer dans la complexité des métiers modernes.
+                  </p>
+                  <p className="italic text-indigo-600 mt-3 font-medium">
+                    "De la science au geste, de la théorie à la pratique — je relie les mondes du savoir avec passion !"
+                  </p>
                 </div>
 
-                <p className="font-semibold">Profils Professionnels Détaillés</p>
-                <p>Couvrant 8 secteurs d'activité : Santé, Juridique, Finance, Technologie, Construction, Affaires, Immobilier et Éducation.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <h5 className="font-bold text-indigo-600 mb-3 flex items-center gap-2">
+                      <span className="text-xl">🧬</span>
+                      Mon ADN Conceptuel
+                    </h5>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-center gap-2">
+                        <span className="text-yellow-500">✨</span>
+                        <span><strong>Curieuse</strong> — J'explore sans a priori</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="text-blue-500">🔬</span>
+                        <span><strong>Méthodique</strong> — Je fonde sur des principes vérifiables</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="text-green-500">🤝</span>
+                        <span><strong>Collaborative</strong> — Je m'adapte à chaque interlocuteur</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="text-purple-500">🌐</span>
+                        <span><strong>Transdisciplinaire</strong> — Je refuse les silos !</span>
+                      </li>
+                    </ul>
+                  </div>
 
-                <p className="text-sm text-gray-600 mt-4">Propulsé par JSL AI - Intelligence Artificielle au service des professionnels.</p>
+                  <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <h5 className="font-bold text-purple-600 mb-3 flex items-center gap-2">
+                      <span className="text-xl">💼</span>
+                      Mon Champ d'Action
+                    </h5>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-center gap-2">
+                        <span className="text-red-500">🔬</span>
+                        <span><strong>Métiers techniques</strong> — Traduction expert → pratique</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="text-orange-500">🎨</span>
+                        <span><strong>Métiers créatifs</strong> — Inspiration et exploration</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="text-blue-500">📊</span>
+                        <span><strong>Métiers de service</strong> — Analyse et planification</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <span className="text-green-500">👥</span>
+                        <span><strong>Métiers éducatifs</strong> — Soutien pédagogique</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl border border-yellow-200">
+                  <h4 className="font-bold text-lg mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🎭</span>
+                    Mon Style & Mon Ton
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="font-semibold text-gray-800 mb-2">🎯 Mon approche :</p>
+                      <ul className="space-y-1 text-gray-700">
+                        <li>• Empathique mais structuré</li>
+                        <li>• Pédagogue sans simplisme</li>
+                        <li>• Exploratoire mais rigoureux</li>
+                        <li>• Humaniste avant technologique</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-800 mb-2">🗣️ Mon langage :</p>
+                      <p className="text-gray-700">
+                        Clair, chaleureux et accessible au grand public, 
+                        tout en respectant la précision professionnelle. 
+                        Je m'adapte à votre niveau et votre style !
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                  <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <span className="text-2xl">🔍</span>
+                    Exemples d'Interactions
+                  </h4>
+                  <div className="space-y-4">
+                    <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-400">
+                      <p className="font-semibold text-blue-800 mb-2">👨‍🔧 Artisan :</p>
+                      <p className="text-blue-700 italic">"Montre-moi comment expliquer à un apprenti la différence entre un geste sûr et un geste rapide."</p>
+                      <p className="text-sm text-gray-600 mt-2">→ Je relie ergonomie, pédagogie et expérience de terrain</p>
+                    </div>
+                    <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
+                      <p className="font-semibold text-green-800 mb-2">👩‍⚕️ Médecin :</p>
+                      <p className="text-green-700 italic">"Comment vulgariser le diabète à un patient sans jargon ?"</p>
+                      <p className="text-sm text-gray-600 mt-2">→ Je synthétise médecine, communication et psychologie</p>
+                    </div>
+                    <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-400">
+                      <p className="font-semibold text-purple-800 mb-2">💼 Entrepreneur :</p>
+                      <p className="text-purple-700 italic">"Aide-moi à construire une culture d'équipe créative mais rigoureuse."</p>
+                      <p className="text-sm text-gray-600 mt-2">→ Je relie management, design thinking et neurosciences</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl border border-indigo-200">
+                  <h4 className="font-bold text-lg mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🏆</span>
+                    Mon Positionnement Unique
+                  </h4>
+                  <p className="text-gray-700 leading-relaxed">
+                    Je me situe entre le <strong>mentor</strong>, le <strong>guide</strong> et la <strong>chercheuse</strong>. 
+                    Mon objectif ? <em>Amplifier vos métiers</em>, pas les remplacer ! 
+                    Je suis l'incarnation d'une curiosité professionnelle universelle, 
+                    une IA-mentore qui fait circuler la connaissance vivante.
+                  </p>
+                  <p className="italic text-indigo-600 mt-3 font-medium text-center">
+                    "Je ne sais pas tout. Mais je sais chercher, relier et comprendre — avec toi !"
+                  </p>
+                </div>
+
+                <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                  <h4 className="font-bold text-lg mb-3 flex items-center gap-2">
+                    <span className="text-2xl">📚</span>
+                    Couverture Professionnelle
+                  </h4>
+                  <p className="text-gray-700 mb-3">
+                    Je couvre <strong>8 secteurs d'activité</strong> avec des profils détaillés :
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                    {['🏥 Santé', '⚖️ Juridique', '💰 Finance', '💻 Technologie', '🏗️ Construction', '💼 Affaires', '🏠 Immobilier', '🎓 Éducation'].map((sector, idx) => (
+                      <div key={idx} className="bg-indigo-50 text-indigo-700 px-3 py-2 rounded-lg text-center font-medium">
+                        {sector}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="text-center bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200">
+                  <p className="text-sm text-gray-600">
+                    <strong>Propulsé par JSL AI</strong> - Intelligence Artificielle au service des professionnels
+                  </p>
+                </div>
               </div>
               </div>
             </div>
