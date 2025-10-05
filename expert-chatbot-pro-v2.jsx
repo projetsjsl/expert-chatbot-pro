@@ -251,6 +251,7 @@ const EmmaExpertChatbot = () => {
   const [showIntro, setShowIntro] = useState(true);
   const [introStep, setIntroStep] = useState(0); // 0: logo, 1: avatar, 2: nom, 3: description, 4: marketing, 5: final
   const [showTransition, setShowTransition] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -2099,8 +2100,8 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         }
       `}</style>
       <div className="flex h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in">
-      {/* Sidebar */}
-      <div className="w-80 bg-white shadow-xl border-r-2 border-indigo-200 overflow-y-auto">
+      {/* Sidebar Desktop */}
+      <div className="hidden lg:block w-80 bg-white shadow-xl border-r-2 border-indigo-200 overflow-y-auto">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full overflow-hidden">
@@ -2333,11 +2334,178 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         </div>
       </div>
 
+      {/* Sidebar Mobile */}
+      {showMobileSidebar && (
+        <>
+          {/* Overlay */}
+          <div 
+            className="lg:hidden fixed inset-0 mobile-sidebar-overlay z-40"
+            onClick={() => setShowMobileSidebar(false)}
+          />
+          
+          {/* Sidebar Mobile */}
+          <div className="lg:hidden fixed left-0 top-0 h-full w-80 bg-white mobile-sidebar z-50 transform transition-transform duration-300 ease-in-out">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full overflow-hidden">
+                    <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold">Emma</h1>
+                    <p className="text-xs opacity-90">Assistante Virtuelle</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowMobileSidebar(false)}
+                  className="text-white hover:text-gray-200 p-2 rounded-lg hover:bg-white hover:bg-opacity-20"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="text-4xl">{profile.profile.icon}</div>
+                <div>
+                  <h3 className="font-bold text-gray-800">{profile.profile.name}</h3>
+                  <p className="text-xs text-gray-600">{profile.profile.sector}</p>
+                  {consultationCount > 0 && (
+                    <p className="text-xs text-indigo-600">{consultationCount} consultation{consultationCount > 1 ? 's' : ''}</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-semibold text-gray-700 mb-2">Spécialités</h4>
+                <div className="flex flex-wrap gap-1">
+                  {profile.profile.specialties.map((spec, idx) => (
+                    <span key={idx} className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
+                      {spec}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between bg-indigo-50 p-3 rounded-lg mt-4">
+                <span className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  <Clock size={16} /> Durée
+                </span>
+                <span className="text-lg font-bold text-indigo-600">{formatTime(elapsedTime)}</span>
+              </div>
+            </div>
+
+            {keyPoints.length > 0 && (
+              <div className="p-6 border-b border-gray-200">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <Target size={16} />
+                  Points clés
+                </h4>
+                <div className="space-y-2">
+                  {keyPoints.map((point, index) => (
+                    <div key={index} className="flex items-start gap-2 text-sm">
+                      <span className="text-indigo-500 mt-1">•</span>
+                      <span className="text-gray-700">{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="p-6">
+              <h4 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                <Settings size={16} />
+                Personnalisation
+              </h4>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="sidebar-personalization-label text-xs font-semibold text-gray-700 mb-1 block flex items-center gap-2">
+                    <span className="sidebar-personalization-indicator w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></span>
+                    <span>Votre style</span>
+                  </label>
+                  <select
+                    value={userPersonality}
+                    onChange={(e) => setUserPersonality(e.target.value)}
+                    className="sidebar-personalization-select w-full text-xs border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 bg-white transition-all duration-200 hover:border-indigo-400"
+                    aria-label="Sélectionner votre style de communication"
+                  >
+                    <option value="standard">⚖️ Standard</option>
+                    <option value="analytique">📊 Analytique</option>
+                    <option value="créatif">🎨 Créatif</option>
+                    <option value="pragmatique">⚡ Pragmatique</option>
+                    <option value="empathique">💝 Empathique</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="sidebar-personalization-label text-xs font-semibold text-gray-700 mb-1 block flex items-center gap-2">
+                    <span className="sidebar-personalization-indicator w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></span>
+                    <span>Votre niveau</span>
+                  </label>
+                  <select
+                    value={expertiseLevel}
+                    onChange={(e) => setExpertiseLevel(e.target.value)}
+                    className="sidebar-personalization-select w-full text-xs border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-200 bg-white transition-all duration-200 hover:border-purple-400"
+                    aria-label="Sélectionner votre niveau de profondeur"
+                  >
+                    <option value="débutant">🌱 Débutant</option>
+                    <option value="intermediaire">📚 Intermédiaire</option>
+                    <option value="avancé">🎓 Avancé</option>
+                    <option value="expert">🏆 Expert</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="sidebar-personalization-label text-xs font-semibold text-gray-700 mb-1 block flex items-center gap-2">
+                    <span className="sidebar-personalization-indicator w-2 h-2 bg-pink-500 rounded-full flex-shrink-0"></span>
+                    <span>Ton d'Emma</span>
+                  </label>
+                  <select
+                    value={emmaPersonality}
+                    onChange={(e) => setEmmaPersonality(e.target.value)}
+                    className="sidebar-personalization-select w-full text-xs border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-200 bg-white transition-all duration-200 hover:border-pink-400"
+                    aria-label="Sélectionner le ton de communication d'Emma"
+                  >
+                    <option value="professionnelle">👔 Professionnelle</option>
+                    <option value="amicale">😊 Amicale</option>
+                    <option value="pédagogue">👩‍🏫 Pédagogue</option>
+                    <option value="directe">⚡ Directe</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-gray-200">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-medium text-gray-600">Préférences actives :</span>
+                  <div className="flex flex-wrap gap-2">
+                    <div className="personalization-badge flex items-center gap-1 bg-white px-2 py-1 rounded-full border border-indigo-200 text-xs">
+                      <span className="text-indigo-500">⚖️</span>
+                      <span className="font-medium text-gray-700">{userPersonality}</span>
+                    </div>
+                    <div className="personalization-badge flex items-center gap-1 bg-white px-2 py-1 rounded-full border border-purple-200 text-xs">
+                      <span className="text-purple-500">📚</span>
+                      <span className="font-medium text-gray-700">{expertiseLevel}</span>
+                    </div>
+                    <div className="personalization-badge flex items-center gap-1 bg-white px-2 py-1 rounded-full border border-pink-200 text-xs">
+                      <span className="text-pink-500">😊</span>
+                      <span className="font-medium text-gray-700">{emmaPersonality}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Zone de chat */}
       <div className="flex-1 flex flex-col">
         <div className="bg-white shadow-md border-b-2 border-indigo-200 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
+              {/* Bouton retour */}
               <button
                 onClick={() => {
                   playSound('click');
@@ -2349,6 +2517,17 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 className="text-gray-600 hover:text-gray-800"
               >
                 <ArrowLeft size={24} />
+              </button>
+              
+              {/* Bouton sidebar mobile */}
+              <button
+                onClick={() => {
+                  playSound('click');
+                  setShowMobileSidebar(!showMobileSidebar);
+                }}
+                className="lg:hidden text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100"
+              >
+                <Settings size={20} />
               </button>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
