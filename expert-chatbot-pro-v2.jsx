@@ -121,6 +121,15 @@ Comment puis-je vous aider ?`;
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
 
+    // Vérifier la clé API
+    if (!apiKey) {
+      setMessages(prev => [...prev, {
+        role: 'model',
+        parts: [{ text: "Erreur: Clé API Gemini manquante. Veuillez vérifier la configuration." }]
+      }]);
+      return;
+    }
+
     const userMessage = {
       role: 'user',
       parts: [{ text: inputMessage }]
@@ -163,9 +172,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       );
 
       const data = await response.json();
+      console.log('Gemini Response:', data); // Debug log
+      
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} - ${data.error?.message || 'Unknown error'}`);
+      }
       
       if (data.candidates?.[0]?.content) {
         const responseText = data.candidates[0].content.parts[0].text;
+        console.log('Response text:', responseText); // Debug log
+        
         setMessages(prev => [...prev, {
           role: 'model',
           parts: [{ text: responseText }]
@@ -181,9 +197,19 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             setKeyPoints(prev => [...prev, ...sentences.map(s => s.trim())].slice(-5));
           }
         }
+      } else {
+        console.error('No candidates in response:', data);
+        setMessages(prev => [...prev, {
+          role: 'model',
+          parts: [{ text: "Désolée, je n'ai pas pu générer de réponse. Veuillez réessayer." }]
+        }]);
       }
     } catch (error) {
       console.error('Error:', error);
+      setMessages(prev => [...prev, {
+        role: 'model',
+        parts: [{ text: `Désolée, une erreur s'est produite: ${error.message}. Veuillez vérifier votre connexion et réessayer.` }]
+      }]);
     } finally {
       setIsLoading(false);
     }
