@@ -1,0 +1,452 @@
+[
+  {
+    "profession": "medecin",
+    "image_path": "images/professions\\medecin.png",
+    "config": {
+      "clothes": "blouse_blanche",
+      "accessories": [
+        "stethoscope",
+        "badge_medical"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "blue"
+      }
+    }
+  },
+  {
+    "profession": "psychologue",
+    "image_path": "images/professions\\psychologue.png",
+    "config": {
+      "clothes": "chemise_professionnelle",
+      "accessories": [
+        "lunettes",
+        "carnet_notes"
+      ],
+      "colors": {
+        "top": "light_blue",
+        "accent": "navy"
+      }
+    }
+  },
+  {
+    "profession": "nutritionniste",
+    "image_path": "images/professions\\nutritionniste.png",
+    "config": {
+      "clothes": "blouse_blanche",
+      "accessories": [
+        "lunettes",
+        "balance_nutrition"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "green"
+      }
+    }
+  },
+  {
+    "profession": "kinesitherapeute",
+    "image_path": "images/professions\\kinesitherapeute.png",
+    "config": {
+      "clothes": "polo_sportif",
+      "accessories": [
+        "badge_medical",
+        "gants"
+      ],
+      "colors": {
+        "top": "light_blue",
+        "accent": "white"
+      }
+    }
+  },
+  {
+    "profession": "pharmacien",
+    "image_path": "images/professions\\pharmacien.png",
+    "config": {
+      "clothes": "blouse_blanche",
+      "accessories": [
+        "lunettes",
+        "mortier_pilule"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "green"
+      }
+    }
+  },
+  {
+    "profession": "orthophoniste",
+    "image_path": "images/professions\\orthophoniste.png",
+    "config": {
+      "clothes": "chemise_professionnelle",
+      "accessories": [
+        "lunettes",
+        "livre_communication"
+      ],
+      "colors": {
+        "top": "light_pink",
+        "accent": "purple"
+      }
+    }
+  },
+  {
+    "profession": "dentiste",
+    "image_path": "images/professions\\dentiste.png",
+    "config": {
+      "clothes": "blouse_blanche",
+      "accessories": [
+        "masque_medical",
+        "loupe_dentaire"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "blue"
+      }
+    }
+  },
+  {
+    "profession": "infirmier",
+    "image_path": "images/professions\\infirmier.png",
+    "config": {
+      "clothes": "uniforme_medical",
+      "accessories": [
+        "stethoscope",
+        "badge_medical"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "blue"
+      }
+    }
+  },
+  {
+    "profession": "optometriste",
+    "image_path": "images/professions\\optometriste.png",
+    "config": {
+      "clothes": "blouse_blanche",
+      "accessories": [
+        "lunettes",
+        "loupe_optique"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "blue"
+      }
+    }
+  },
+  {
+    "profession": "ergotherapeute",
+    "image_path": "images/professions\\ergotherapeute.png",
+    "config": {
+      "clothes": "polo_professionnel",
+      "accessories": [
+        "lunettes",
+        "outils_adaptation"
+      ],
+      "colors": {
+        "top": "light_green",
+        "accent": "navy"
+      }
+    }
+  },
+  {
+    "profession": "physiotherapeute",
+    "image_path": "images/professions\\physiotherapeute.png",
+    "config": {
+      "clothes": "polo_sportif",
+      "accessories": [
+        "badge_medical",
+        "gants"
+      ],
+      "colors": {
+        "top": "light_blue",
+        "accent": "white"
+      }
+    }
+  },
+  {
+    "profession": "audiologiste",
+    "image_path": "images/professions\\audiologiste.png",
+    "config": {
+      "clothes": "blouse_blanche",
+      "accessories": [
+        "lunettes",
+        "casque_audio"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "blue"
+      }
+    }
+  },
+  {
+    "profession": "chiropraticien",
+    "image_path": "images/professions\\chiropraticien.png",
+    "config": {
+      "clothes": "chemise_professionnelle",
+      "accessories": [
+        "lunettes",
+        "table_ajustement"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "navy"
+      }
+    }
+  },
+  {
+    "profession": "massotherapeute",
+    "image_path": "images/professions\\massotherapeute.png",
+    "config": {
+      "clothes": "polo_confortable",
+      "accessories": [
+        "lunettes",
+        "huiles_massage"
+      ],
+      "colors": {
+        "top": "light_green",
+        "accent": "brown"
+      }
+    }
+  },
+  {
+    "profession": "naturopathe",
+    "image_path": "images/professions\\naturopathe.png",
+    "config": {
+      "clothes": "chemise_naturelle",
+      "accessories": [
+        "lunettes",
+        "plantes_medicinales"
+      ],
+      "colors": {
+        "top": "beige",
+        "accent": "green"
+      }
+    }
+  },
+  {
+    "profession": "technologue_medical",
+    "image_path": "images/professions\\technologue_medical.png",
+    "config": {
+      "clothes": "blouse_blanche",
+      "accessories": [
+        "lunettes",
+        "equipement_labo"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "blue"
+      }
+    }
+  },
+  {
+    "profession": "avocat",
+    "image_path": "images/professions\\avocat.png",
+    "config": {
+      "clothes": "costume_professionnel",
+      "accessories": [
+        "lunettes",
+        "toge_avocat"
+      ],
+      "colors": {
+        "top": "navy",
+        "accent": "white"
+      }
+    }
+  },
+  {
+    "profession": "notaire",
+    "image_path": "images/professions\\notaire.png",
+    "config": {
+      "clothes": "costume_professionnel",
+      "accessories": [
+        "lunettes",
+        "sceau_notaire"
+      ],
+      "colors": {
+        "top": "navy",
+        "accent": "gold"
+      }
+    }
+  },
+  {
+    "profession": "comptable",
+    "image_path": "images/professions\\comptable.png",
+    "config": {
+      "clothes": "costume_professionnel",
+      "accessories": [
+        "lunettes",
+        "calculatrice"
+      ],
+      "colors": {
+        "top": "navy",
+        "accent": "green"
+      }
+    }
+  },
+  {
+    "profession": "dev_fullstack",
+    "image_path": "images/professions\\dev_fullstack.png",
+    "config": {
+      "clothes": "polo_tech",
+      "accessories": [
+        "lunettes",
+        "laptop"
+      ],
+      "colors": {
+        "top": "dark_blue",
+        "accent": "green"
+      }
+    }
+  },
+  {
+    "profession": "designer_ux",
+    "image_path": "images/professions\\designer_ux.png",
+    "config": {
+      "clothes": "chemise_creative",
+      "accessories": [
+        "lunettes",
+        "tablette_graphique"
+      ],
+      "colors": {
+        "top": "black",
+        "accent": "purple"
+      }
+    }
+  },
+  {
+    "profession": "architecte",
+    "image_path": "images/professions\\architecte.png",
+    "config": {
+      "clothes": "chemise_professionnelle",
+      "accessories": [
+        "lunettes",
+        "plan_architecture"
+      ],
+      "colors": {
+        "top": "white",
+        "accent": "navy"
+      }
+    }
+  },
+  {
+    "profession": "electricien",
+    "image_path": "images/professions\\electricien.png",
+    "config": {
+      "clothes": "uniforme_travail",
+      "accessories": [
+        "casque_securite",
+        "outils_electriques"
+      ],
+      "colors": {
+        "top": "orange",
+        "accent": "yellow"
+      }
+    }
+  },
+  {
+    "profession": "entrepreneur",
+    "image_path": "images/professions\\entrepreneur.png",
+    "config": {
+      "clothes": "costume_professionnel",
+      "accessories": [
+        "lunettes",
+        "telephone"
+      ],
+      "colors": {
+        "top": "navy",
+        "accent": "red"
+      }
+    }
+  },
+  {
+    "profession": "consultant",
+    "image_path": "images/professions\\consultant.png",
+    "config": {
+      "clothes": "costume_professionnel",
+      "accessories": [
+        "lunettes",
+        "presentation"
+      ],
+      "colors": {
+        "top": "navy",
+        "accent": "blue"
+      }
+    }
+  },
+  {
+    "profession": "agent_immobilier",
+    "image_path": "images/professions\\agent_immobilier.png",
+    "config": {
+      "clothes": "costume_professionnel",
+      "accessories": [
+        "lunettes",
+        "cles_maison"
+      ],
+      "colors": {
+        "top": "navy",
+        "accent": "gold"
+      }
+    }
+  },
+  {
+    "profession": "educatrice_specialisee",
+    "image_path": "images/professions\\educatrice_specialisee.png",
+    "config": {
+      "clothes": "chemise_confortable",
+      "accessories": [
+        "lunettes",
+        "materiel_educatif"
+      ],
+      "colors": {
+        "top": "light_blue",
+        "accent": "yellow"
+      }
+    }
+  },
+  {
+    "profession": "psychoeducatrice",
+    "image_path": "images/professions\\psychoeducatrice.png",
+    "config": {
+      "clothes": "chemise_professionnelle",
+      "accessories": [
+        "lunettes",
+        "jeux_therapeutiques"
+      ],
+      "colors": {
+        "top": "light_green",
+        "accent": "purple"
+      }
+    }
+  },
+  {
+    "profession": "enseignante_prescolaire",
+    "image_path": "images/professions\\enseignante_prescolaire.png",
+    "config": {
+      "clothes": "chemise_colorée",
+      "accessories": [
+        "lunettes",
+        "livres_enfants"
+      ],
+      "colors": {
+        "top": "light_pink",
+        "accent": "yellow"
+      }
+    }
+  },
+  {
+    "profession": "enseignante_secondaire",
+    "image_path": "images/professions\\enseignante_secondaire.png",
+    "config": {
+      "clothes": "chemise_professionnelle",
+      "accessories": [
+        "lunettes",
+        "livres_cours"
+      ],
+      "colors": {
+        "top": "light_blue",
+        "accent": "navy"
+      }
+    }
+  }
+]

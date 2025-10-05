@@ -179,19 +179,12 @@ const RELIABLE_SOURCES = {
 };
 
 // ========================================
-// GESTION LOCALE - COMPTEURS ET POPULARITÉ
+// GESTION PERSISTANTE - COMPTEURS ET POPULARITÉ
 // ========================================
-const getConsultationCount = (professionId) => {
-  const counts = JSON.parse(localStorage.getItem('consultationCounts') || '{}');
-  return counts[professionId] || 0;
-};
+import { getConsultationCount, incrementConsultationCount, getAllConsultationCounts, testSupabaseConnection } from './consultation-service.js';
 
-const incrementConsultationCount = (professionId) => {
-  const counts = JSON.parse(localStorage.getItem('consultationCounts') || '{}');
-  counts[professionId] = (counts[professionId] || 0) + 1;
-  localStorage.setItem('consultationCounts', JSON.stringify(counts));
-  return counts[professionId];
-};
+// Test de connexion au démarrage
+testSupabaseConnection();
 
 // ========================================
 // SYSTÈME DE POPULARITÉ
@@ -1049,8 +1042,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
   const MesProsLogo = () => (
     <div className="mes-pros-logo">
       <div className="logo-text-container">
-        <h1 className="logo-mes-pros">Mes Pros</h1>
-        <p className="logo-presents">présente</p>
         <h1 className="logo-emma">Emma</h1>
       </div>
     </div>
@@ -1068,7 +1059,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           <div className="emma-main-image-container">
             <img 
               src="/images/mespros-presente-emma-bleu-fonce.jpg" 
-              alt="Mes Pros présente Emma - Assistante Professionnelle" 
+              alt="Emma - Assistante Professionnelle" 
               className="emma-main-image"
             />
           </div>
@@ -1089,8 +1080,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {introStep >= 2 && (
             <div className="emma-minimalist-title animate-minimalist-slide">
               <div className="minimalist-logo">
-                <span className="logo-main">MES PROS</span>
-                <span className="logo-presents">présente</span>
+                <span className="logo-main">EMMA</span>
               </div>
               <h1 className="emma-name">EMMA</h1>
               <div className="minimalist-tagline">
@@ -1167,7 +1157,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         <div className="transition-content">
           <img 
             src="/images/mespros-presente-emma-bleu-fonce.jpg" 
-            alt="Mes Pros présente Emma" 
+            alt="Emma" 
             className="transition-image"
           />
         </div>
@@ -1317,26 +1307,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   </div>
                 </div>
                 
-                {/* Résumé des préférences actives */}
-                <div className="personalization-summary mt-4 pt-4 border-t border-indigo-200">
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                    <span className="text-xs sm:text-sm font-medium text-gray-600">Préférences actives :</span>
-                    <div className="flex flex-wrap gap-2">
-                      <div className="personalization-badge flex items-center gap-1 bg-white px-2 sm:px-3 py-1 rounded-full border border-indigo-200 text-xs sm:text-sm">
-                        <span className="text-indigo-500">⚖️</span>
-                        <span className="font-medium text-gray-700">{userPersonality}</span>
-                      </div>
-                      <div className="personalization-badge flex items-center gap-1 bg-white px-2 sm:px-3 py-1 rounded-full border border-purple-200 text-xs sm:text-sm">
-                        <span className="text-purple-500">📚</span>
-                        <span className="font-medium text-gray-700">{expertiseLevel}</span>
-                      </div>
-                      <div className="personalization-badge flex items-center gap-1 bg-white px-2 sm:px-3 py-1 rounded-full border border-pink-200 text-xs sm:text-sm">
-                        <span className="text-pink-500">😊</span>
-                        <span className="font-medium text-gray-700">{emmaPersonality}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -1516,8 +1486,8 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         }`}
                       >
                         {isTop3 && (
-                          <div className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                            {popularity + 1}
+                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
+                            🔥 Top {popularity + 1}
                           </div>
                         )}
                         
@@ -1580,7 +1550,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
                       {sectorName}
                       {isTopSector && (
-                        <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white">
                           🔥 Top {sectorPopularity + 1}
                         </span>
                       )}
@@ -1630,19 +1600,19 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                       >
                         {/* Badge de popularité */}
                         {isTop3 && (
-                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
                             🔥 Top {popularity + 1}
                           </div>
                         )}
                         {isPopular && !isTop3 && (
-                          <div className="absolute -top-2 -right-2 bg-indigo-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                          <div className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
                             ⭐ Populaire
                           </div>
                         )}
                         
                         {/* Indicateur de consultations récentes */}
                         {count > 0 && (
-                          <div className="absolute -top-1 -left-1 bg-green-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg">
+                          <div className="absolute -top-2 -left-2 bg-green-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">
                             {count}
                           </div>
                         )}
@@ -2467,25 +2437,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-medium text-gray-600">Préférences actives :</span>
-                  <div className="flex flex-wrap gap-2">
-                    <div className="personalization-badge flex items-center gap-1 bg-white px-2 py-1 rounded-full border border-indigo-200 text-xs">
-                      <span className="text-indigo-500">⚖️</span>
-                      <span className="font-medium text-gray-700">{userPersonality}</span>
-                    </div>
-                    <div className="personalization-badge flex items-center gap-1 bg-white px-2 py-1 rounded-full border border-purple-200 text-xs">
-                      <span className="text-purple-500">📚</span>
-                      <span className="font-medium text-gray-700">{expertiseLevel}</span>
-                    </div>
-                    <div className="personalization-badge flex items-center gap-1 bg-white px-2 py-1 rounded-full border border-pink-200 text-xs">
-                      <span className="text-pink-500">😊</span>
-                      <span className="font-medium text-gray-700">{emmaPersonality}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </>
@@ -2552,7 +2503,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   setMessages([]);
                   setKeyPoints([]);
                 }}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors shadow-lg border-2 border-indigo-500"
               >
                 <RefreshCw size={18} />
                 Nouveau
@@ -2560,28 +2511,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             </div>
           </div>
           
-          {/* Bandeau des préférences actives */}
-          <div className="mt-4 bg-white sm:bg-gradient-to-r sm:from-indigo-50 sm:to-purple-50 rounded-lg p-3 border border-gray-200 sm:border-indigo-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-gray-700">🎯 Préférences actives :</span>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-indigo-200">
-                  <span className="text-indigo-500">⚖️</span>
-                  <span className="text-xs font-medium text-gray-700">{userPersonality}</span>
-                </div>
-                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-purple-200">
-                  <span className="text-purple-500">📚</span>
-                  <span className="text-xs font-medium text-gray-700">{expertiseLevel}</span>
-                </div>
-                <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-pink-200">
-                  <span className="text-pink-500">😊</span>
-                  <span className="text-xs font-medium text-gray-700">{emmaPersonality}</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6">
