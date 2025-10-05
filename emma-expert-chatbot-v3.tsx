@@ -1081,7 +1081,7 @@ RAPPEL: Réponds en MAX 150 mots. Structure: Intro/Infos/Consulter professionnel
       }));
 
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
         {
           method: "POST",
           headers: {
@@ -1091,7 +1091,12 @@ RAPPEL: Réponds en MAX 150 mots. Structure: Intro/Infos/Consulter professionnel
           body: JSON.stringify({
             contents: [...history, userMessage],
             systemInstruction: { parts: [{ text: enhancedPrompt }] },
-            generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
+            generationConfig: { 
+              temperature: 0.7, 
+              maxOutputTokens: 500,
+              topP: 0.8,
+              topK: 40
+            }
           })
         }
       );
