@@ -447,7 +447,7 @@ const EmmaExpertChatbot = () => {
   };
 
   // Fonction pour diviser les réponses longues en plusieurs messages
-  const splitLongResponse = (text, maxLength = 1500) => {
+  const splitLongResponse = (text, maxLength = 3000) => {
     if (text.length <= maxLength) {
       return [text];
     }
@@ -877,7 +877,7 @@ INSTRUCTIONS POUR LES SOURCES:
 - Assure-toi que chaque source citée a un lien fonctionnel vers le site officiel
 - Limite à 2-3 sources les plus pertinentes par réponse pour éviter la surcharge
 
-RAPPEL CRITIQUE: Réponds en MAX 500 mots. Structure obligatoire avec émojis et formatage en gras.`;
+RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obligatoire avec émojis et formatage en gras. N'hésite pas à être exhaustif dans tes explications.`;
 
       const history = messages.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : msg.role,
@@ -901,7 +901,7 @@ RAPPEL CRITIQUE: Réponds en MAX 500 mots. Structure obligatoire avec émojis et
             ],
             generationConfig: { 
               temperature: 0.7, 
-              maxOutputTokens: 2048, // Augmenté pour éviter les réponses tronquées
+              maxOutputTokens: 8192, // Maximum autorisé par Gemini pour des réponses complètes
               topP: 0.8,
               topK: 40
             }
