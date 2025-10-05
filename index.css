@@ -17,6 +17,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   min-height: 100vh;
+  color-scheme: light only;
 }
 
 * {
@@ -27,6 +28,7 @@ body {
 html {
   overflow-x: hidden;
   width: 100%;
+  color-scheme: light only;
 }
 
 #root {
@@ -1894,36 +1896,7 @@ html {
   }
 }
 
-/* Mode sombre (si implémenté) */
-@media (prefers-color-scheme: dark) {
-  .personalization-section {
-    background: linear-gradient(135deg, #1e1b4b, #581c87);
-    border-color: #4f46e5;
-  }
-  
-  .sidebar-personalization {
-    background: linear-gradient(135deg, #1e1b4b, #581c87);
-    border-color: #4f46e5;
-  }
-  
-  .personalization-title,
-  .sidebar-personalization-title {
-    color: #e0e7ff;
-  }
-  
-  .personalization-select,
-  .sidebar-personalization-select {
-    background: #374151;
-    border-color: #6b7280;
-    color: #f9fafb;
-  }
-  
-  .personalization-badge {
-    background: #374151;
-    border-color: #6b7280;
-    color: #f9fafb;
-  }
-}
+/* Mode sombre désactivé - Utilisation forcée du mode Light uniquement */
 
 /* Réduction des animations pour les utilisateurs sensibles */
 @media (prefers-reduced-motion: reduce) {
@@ -2467,9 +2440,9 @@ html {
 }
 
 .emma-main-image {
-  width: 320px;
+  width: 450px;
   height: auto;
-  max-height: 400px;
+  max-height: 500px;
   object-fit: contain;
   object-position: center;
   border-radius: 12px;
@@ -2725,9 +2698,9 @@ html {
   }
   
   .emma-main-image {
-    width: 250px;
+    width: 400px;
     height: auto;
-    max-height: 300px;
+    max-height: 450px;
     object-fit: contain;
     object-position: center;
   }
@@ -2776,9 +2749,9 @@ html {
   }
   
   .emma-main-image {
-    width: 200px;
+    width: 320px;
     height: auto;
-    max-height: 250px;
+    max-height: 380px;
     border-radius: 8px;
     object-fit: contain;
     object-position: center;
@@ -2903,9 +2876,9 @@ html {
   }
   
   .emma-main-image {
-    width: 180px;
+    width: 220px;
     height: auto;
-    max-height: 220px;
+    max-height: 280px;
     object-fit: contain;
     object-position: center;
   }
@@ -2985,9 +2958,9 @@ html {
   }
   
   .emma-main-image {
-    width: 200px;
+    width: 240px;
     height: auto;
-    max-height: 250px;
+    max-height: 300px;
     object-fit: contain;
     object-position: center;
   }
@@ -3018,9 +2991,9 @@ html {
   }
   
   .emma-main-image {
-    width: 160px;
+    width: 200px;
     height: auto;
-    max-height: 200px;
+    max-height: 250px;
     object-fit: contain;
     object-position: center;
   }
@@ -3362,9 +3335,9 @@ html {
   
   /* Optimisation de l'image principale en portrait */
   .emma-main-image {
-    max-width: 90vw;
+    max-width: 95vw;
     height: auto;
-    max-height: 50vh;
+    max-height: 60vh;
   }
   
   /* Optimisation des marges et espacements */
@@ -3413,8 +3386,8 @@ html {
   }
   
   .emma-main-image {
-    max-width: 85vw;
-    max-height: 45vh;
+    max-width: 90vw;
+    max-height: 55vh;
   }
 }
 
@@ -3432,8 +3405,8 @@ html {
   }
   
   .emma-main-image {
-    max-width: 88vw;
-    max-height: 48vh;
+    max-width: 92vw;
+    max-height: 58vh;
   }
 }
 
@@ -3451,8 +3424,8 @@ html {
   }
   
   .emma-main-image {
-    max-width: 92vw;
-    max-height: 52vh;
+    max-width: 95vw;
+    max-height: 62vh;
   }
   
   .emma-name {

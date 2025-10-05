@@ -252,6 +252,7 @@ const EmmaExpertChatbot = () => {
   const [introStep, setIntroStep] = useState(0); // 0: logo, 1: avatar, 2: nom, 3: description, 4: marketing, 5: final
   const [showTransition, setShowTransition] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -774,9 +775,7 @@ ${personalityPrompt ? `🎯 **Personnalisation active** ✨
 
 Je vais adapter toutes mes réponses selon ces préférences !` : ''}
 
-📌 **Rappel important** : Je suis une assistante virtuelle. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.
-
-Comment puis-je vous aider ?`;
+📌 **Rappel important** : Je suis une assistante virtuelle. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.`;
     
     setMessages([{
       role: 'model',
@@ -1203,130 +1202,16 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               </div>
               
               <div className="flex items-center gap-3">
-                {/* Indicateur de statut API amélioré */}
-                <div className="flex items-center gap-2">
-                  <div className={`text-xs flex items-center gap-1 px-2 py-1 rounded ${
-                    apiStatus === 'connected' 
-                      ? 'text-green-600 bg-green-50 border border-green-200' 
-                      : apiStatus === 'error'
-                      ? 'text-red-600 bg-red-50 border border-red-200'
-                      : 'text-yellow-600 bg-yellow-50 border border-yellow-200'
-                  }`}>
-                    <span>{apiStatus === 'connected' ? '🟢' : apiStatus === 'error' ? '🔴' : '🟡'}</span>
-                    {apiStatus === 'connected' ? 'API OK' : apiStatus === 'error' ? 'API Erreur' : 'API Test...'}
-                  </div>
-                  
-                  {apiStatus === 'error' && (
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => {
-                          playSound('click');
-                          testApiConnection();
-                        }}
-                        className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded transition-colors border border-blue-200"
-                        title="Retester la connexion API"
-                      >
-                        🔄 Retester
-                      </button>
-                      <button
-                        onClick={async () => {
-                          playSound('click');
-                          console.log('🔍 DIAGNOSTIC COMPLET:');
-                          console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
-                          console.log('📋 Toutes les variables env:', import.meta.env);
-                          console.log('📋 Mode:', import.meta.env.MODE);
-                          console.log('📋 Base URL:', import.meta.env.BASE_URL);
-                          console.log('📋 Clé API actuelle:', apiKey ? `${apiKey.substring(0, 10)}...` : 'AUCUNE');
-                          console.log('📋 Longueur de la clé:', apiKey?.length || 0);
-                          
-                          // Test de connectivité avancé
-                          console.log('🧪 Test de connectivité avancé...');
-                          try {
-                            const testResponse = await fetch('https://generativelanguage.googleapis.com/v1/models', {
-                              headers: {
-                                'x-goog-api-key': apiKey || import.meta.env.VITE_GEMINI_API_KEY || ''
-                              }
-                            });
-                            console.log('📊 Test de liste des modèles:', {
-                              status: testResponse.status,
-                              ok: testResponse.ok,
-                              headers: Object.fromEntries(testResponse.headers.entries())
-                            });
-                            
-                            if (testResponse.ok) {
-                              const models = await testResponse.json();
-                              console.log('📋 Modèles disponibles:', models);
-                            } else {
-                              const error = await testResponse.text();
-                              console.error('❌ Erreur lors du test:', error);
-                            }
-                          } catch (err) {
-                            console.error('❌ Erreur de test:', err);
-                          }
-                        }}
-                        className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
-                        title="Diagnostic avancé dans la console"
-                      >
-                        🔍 Diagnostic
-                      </button>
-                      <div className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded border border-red-200 max-w-xs">
-                        <details className="cursor-help">
-                          <summary className="font-semibold">💡 Aide</summary>
-                          <div className="mt-1 text-xs space-y-1">
-                            <p>• Vérifiez la clé API Gemini</p>
-                            <p>• Vérifiez votre connexion internet</p>
-                            <p>• Consultez la console (F12) pour plus de détails</p>
-                          </div>
-                        </details>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {apiStatus === 'unknown' && (
-                    <button
-                      onClick={() => {
-                        playSound('click');
-                        testApiConnection();
-                      }}
-                      className="text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-2 py-1 rounded transition-colors border border-indigo-200"
-                      title="Tester la connexion API"
-                    >
-                      🧪 Tester
-                    </button>
-                  )}
-                  
-                  {/* Bouton de diagnostic pour Vercel */}
-                  <button
-                    onClick={() => {
-                      playSound('click');
-                      console.log('🔍 DIAGNOSTIC VERCEL:');
-                      console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
-                      console.log('📋 Toutes les variables env:', import.meta.env);
-                      console.log('📋 Mode:', import.meta.env.MODE);
-                      console.log('📋 Base URL:', import.meta.env.BASE_URL);
-                      alert('Diagnostic envoyé dans la console (F12)');
-                    }}
-                    className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
-                    title="Diagnostic des variables d'environnement"
-                  >
-                    🔍 Diagnostic
-                  </button>
-                </div>
-                
+                {/* Bouton Admin discret */}
                 <button
                   onClick={() => {
                     playSound('click');
-                    setSoundEnabled(!soundEnabled);
+                    setShowAdminPanel(!showAdminPanel);
                   }}
-                  className={`text-sm flex items-center gap-1 px-2 py-1 rounded transition-colors ${
-                    soundEnabled 
-                      ? 'text-green-600 hover:text-green-800 bg-green-50' 
-                      : 'text-gray-400 hover:text-gray-600 bg-gray-50'
-                  }`}
-                  title={soundEnabled ? 'Désactiver les sons' : 'Activer les sons'}
+                  className="text-xs text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 px-2 py-1 rounded transition-colors border border-gray-200"
+                  title="Panneau d'administration"
                 >
-                  <span>{soundEnabled ? '🔊' : '🔇'}</span>
-                  {soundEnabled ? 'Son' : 'Muet'}
+                  ⚙️ Admin
                 </button>
                 <button
                   onClick={() => {
@@ -1350,7 +1235,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             </div>
 
             {/* Options de personnalisation optimisées */}
-            <div className="personalization-section bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200 mb-6 shadow-sm">
+            <div className="personalization-section bg-white sm:bg-gradient-to-r sm:from-indigo-50 sm:to-purple-50 rounded-xl p-4 sm:p-6 border border-gray-200 sm:border-indigo-200 mb-6 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
                 <h3 className="text-sm sm:text-base font-bold text-gray-800 flex items-center gap-2">
                   <Settings size={16} className="text-indigo-600 flex-shrink-0" />
@@ -1454,6 +1339,112 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 </div>
               </div>
             </div>
+
+            {/* Section Admin */}
+            {showAdminPanel && (
+              <div className="admin-panel bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                    <span className="text-lg">⚙️</span>
+                    <span>Panneau d'administration</span>
+                  </h3>
+                  <button
+                    onClick={() => setShowAdminPanel(false)}
+                    className="text-gray-500 hover:text-gray-700 text-sm"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Statut API */}
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <h4 className="text-xs font-semibold text-gray-700 mb-2">Statut API</h4>
+                    <div className="flex items-center gap-2">
+                      <div className={`text-xs flex items-center gap-1 px-2 py-1 rounded ${
+                        apiStatus === 'connected' 
+                          ? 'text-green-600 bg-green-50 border border-green-200' 
+                          : apiStatus === 'error'
+                          ? 'text-red-600 bg-red-50 border border-red-200'
+                          : 'text-yellow-600 bg-yellow-50 border border-yellow-200'
+                      }`}>
+                        <span>{apiStatus === 'connected' ? '🟢' : apiStatus === 'error' ? '🔴' : '🟡'}</span>
+                        {apiStatus === 'connected' ? 'API OK' : apiStatus === 'error' ? 'API Erreur' : 'API Test...'}
+                      </div>
+                      <button
+                        onClick={() => {
+                          playSound('click');
+                          testApiConnection();
+                        }}
+                        className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded transition-colors border border-blue-200"
+                        title="Tester la connexion API"
+                      >
+                        🔄 Tester
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Outils de diagnostic */}
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <h4 className="text-xs font-semibold text-gray-700 mb-2">Outils de diagnostic</h4>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={async () => {
+                          playSound('click');
+                          console.log('🔍 DIAGNOSTIC COMPLET:');
+                          console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
+                          console.log('📋 Toutes les variables env:', import.meta.env);
+                          console.log('📋 Mode:', import.meta.env.MODE);
+                          console.log('📋 Base URL:', import.meta.env.BASE_URL);
+                          console.log('📋 Clé API actuelle:', apiKey ? `${apiKey.substring(0, 10)}...` : 'AUCUNE');
+                          console.log('📋 Longueur de la clé:', apiKey?.length || 0);
+                          alert('Diagnostic envoyé dans la console (F12)');
+                        }}
+                        className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
+                        title="Diagnostic complet"
+                      >
+                        🔍 Diagnostic complet
+                      </button>
+                      <button
+                        onClick={() => {
+                          playSound('click');
+                          console.log('🔍 DIAGNOSTIC VERCEL:');
+                          console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
+                          console.log('📋 Toutes les variables env:', import.meta.env);
+                          console.log('📋 Mode:', import.meta.env.MODE);
+                          console.log('📋 Base URL:', import.meta.env.BASE_URL);
+                          alert('Diagnostic Vercel envoyé dans la console (F12)');
+                        }}
+                        className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
+                        title="Diagnostic Vercel"
+                      >
+                        🔍 Diagnostic Vercel
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Contrôles audio */}
+                  <div className="bg-white p-3 rounded-lg border border-gray-200">
+                    <h4 className="text-xs font-semibold text-gray-700 mb-2">Contrôles audio</h4>
+                    <button
+                      onClick={() => {
+                        playSound('click');
+                        setSoundEnabled(!soundEnabled);
+                      }}
+                      className={`text-xs flex items-center gap-1 px-2 py-1 rounded transition-colors ${
+                        soundEnabled 
+                          ? 'text-green-600 hover:text-green-800 bg-green-50' 
+                          : 'text-gray-400 hover:text-gray-600 bg-gray-50'
+                      }`}
+                      title={soundEnabled ? 'Désactiver les sons' : 'Activer les sons'}
+                    >
+                      <span>{soundEnabled ? '🔊' : '🔇'}</span>
+                      {soundEnabled ? 'Son activé' : 'Son désactivé'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -2570,7 +2561,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           </div>
           
           {/* Bandeau des préférences actives */}
-          <div className="mt-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3 border border-indigo-200">
+          <div className="mt-4 bg-white sm:bg-gradient-to-r sm:from-indigo-50 sm:to-purple-50 rounded-lg p-3 border border-gray-200 sm:border-indigo-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-gray-700">🎯 Préférences actives :</span>
