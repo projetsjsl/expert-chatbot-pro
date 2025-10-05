@@ -689,8 +689,12 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             "x-goog-api-key": apiKey
           },
           body: JSON.stringify({
-            contents: [...history, userMessage],
-            systemInstruction: { parts: [{ text: enhancedPrompt }] },
+            contents: [
+              {
+                role: 'user',
+                parts: [{ text: `${enhancedPrompt}\n\n${userMessage.parts[0].text}` }]
+              }
+            ],
             generationConfig: { 
               temperature: 0.7, 
               maxOutputTokens: 500,
@@ -701,85 +705,23 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         }
       );
 
-      const data = await response.json();
-      console.log('Gemini Response:', data); // Debug log
-      
       if (!response.ok) {
-        console.error('API Error Response:', data);
-        let errorMessage = `Erreur API (${response.status}): `;
-        
-        if (data.error?.message) {
-          errorMessage += data.error.message;
-        } else if (data.error?.status) {
-          errorMessage += data.error.status;
-        } else {
-          errorMessage += 'Erreur inconnue';
-        }
-        
-        // Messages d'erreur spécifiques selon le code de statut
-        if (response.status === 400) {
-          errorMessage += ". Vérifiez que votre clé API est correcte et que la requête est bien formatée.";
-        } else if (response.status === 401) {
-          errorMessage += ". Clé API invalide ou expirée.";
-        } else if (response.status === 403) {
-          errorMessage += ". Accès refusé. Vérifiez les permissions de votre clé API.";
-        } else if (response.status === 429) {
-          errorMessage += ". Limite de requêtes atteinte. Veuillez patienter avant de réessayer.";
-        } else if (response.status >= 500) {
-          errorMessage += ". Erreur serveur. Veuillez réessayer plus tard.";
-        }
-        
-        throw new Error(errorMessage);
+        const errorData = await response.json();
+        console.error('Erreur API Response:', errorData);
+        throw new Error(`Erreur API (${response.status}): ${errorData.error?.message || 'Erreur inconnue'}`);
       }
+
+      const data = await response.json();
+      console.log('Gemini Response:', data);
       
-      // Vérification flexible de la structure de la réponse
-      let responseText = null;
-      
-      // Essayer différentes structures de réponse possibles
-      if (data.candidates && data.candidates.length > 0) {
-        const candidate = data.candidates[0];
-        
-        // Structure standard
-        if (candidate.content?.parts?.[0]?.text) {
-          responseText = candidate.content.parts[0].text;
-        }
-        // Structure alternative 1
-        else if (candidate.text) {
-          responseText = candidate.text;
-        }
-        // Structure alternative 2
-        else if (candidate.parts?.[0]?.text) {
-          responseText = candidate.parts[0].text;
-        }
-        // Structure alternative 3 - réponse directe
-        else if (typeof candidate === 'string') {
-          responseText = candidate;
-        }
-        // Vérifier s'il y a un finishReason qui indique un problème
-        else if (candidate.finishReason) {
-          console.warn('Finish reason:', candidate.finishReason);
-          if (candidate.finishReason === 'SAFETY') {
-            responseText = "Je ne peux pas répondre à cette question pour des raisons de sécurité. Veuillez reformuler votre demande.";
-          } else if (candidate.finishReason === 'RECITATION') {
-            responseText = "Je ne peux pas répondre à cette question car elle pourrait contenir du contenu protégé par des droits d'auteur.";
-          } else {
-            responseText = "Je n'ai pas pu générer une réponse complète. Veuillez réessayer avec une question différente.";
-          }
-        }
-      }
-      
-      // Si on a trouvé du texte, l'utiliser
-      if (responseText && responseText.trim()) {
-        console.log('Response text:', responseText); // Debug log
-        
+      if (data.candidates?.[0]?.content) {
+        const responseText = data.candidates[0].content.parts[0].text;
         setMessages(prev => [...prev, {
           role: 'model',
           parts: [{ text: responseText }]
         }]);
         
-        // Son de notification pour la réponse d'Emma
-        setTimeout(() => playSound('notification'), 100);
-        
+        // Extraire les points importants
         if (responseText.includes('important') || responseText.includes('rappel') || responseText.includes('noter')) {
           const sentences = responseText.split('.').filter(s => 
             s.toLowerCase().includes('important') || 
@@ -791,29 +733,10 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           }
         }
       } else {
-        // Log détaillé pour le debugging
-        console.error('No valid response text found. Full response:', data);
-        console.error('Candidates:', data.candidates);
-        if (data.candidates?.[0]) {
-          console.error('First candidate:', data.candidates[0]);
-          console.error('Candidate keys:', Object.keys(data.candidates[0]));
-        }
-        
-        // Message d'erreur plus informatif
-        let errorMessage = "Désolée, je n'ai pas pu générer de réponse valide. ";
-        
-        if (data.candidates && data.candidates.length > 0) {
-          const candidate = data.candidates[0];
-          if (candidate.finishReason) {
-            errorMessage += `Raison: ${candidate.finishReason}. `;
-          }
-        }
-        
-        errorMessage += "Veuillez réessayer avec une question différente.";
-        
+        console.error('Aucune réponse valide reçue:', data);
         setMessages(prev => [...prev, {
           role: 'model',
-          parts: [{ text: errorMessage }]
+          parts: [{ text: 'Désolé, je n\'ai pas pu traiter votre demande. Veuillez réessayer.' }]
         }]);
       }
     } catch (error) {
@@ -821,32 +744,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       console.error('Error message:', error.message);
       console.error('Error stack:', error.stack);
       
-      let errorMessage = "Désolée, une erreur s'est produite. ";
-      
-      // Gestion d'erreurs plus spécifique
-      if (error.message.includes('API Error')) {
-        errorMessage += "Problème avec l'API Gemini. ";
-      } else if (error.message.includes('fetch')) {
-        errorMessage += "Problème de connexion réseau. ";
-      } else if (error.message.includes('JSON')) {
-        errorMessage += "Erreur de format de données. ";
-      } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
-        errorMessage += "Problème de connexion internet. ";
-      } else if (error.message.includes('timeout')) {
-        errorMessage += "Délai d'attente dépassé. ";
-      } else if (error.message.includes('CORS')) {
-        errorMessage += "Problème de configuration CORS. ";
-      } else if (error.message.includes('quota') || error.message.includes('limit')) {
-        errorMessage += "Limite d'utilisation atteinte. ";
-      } else {
-        errorMessage += "Erreur technique. ";
-      }
-      
-      errorMessage += "Veuillez vérifier votre connexion et réessayer. Si le problème persiste, contactez le support technique.";
-      
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: errorMessage }]
+        parts: [{ text: `Erreur de connexion: ${error.message}. Veuillez vérifier votre clé API.` }]
       }]);
     } finally {
       setIsLoading(false);
