@@ -1157,7 +1157,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
             <img 
-              src="/images/mespros-presente-emma-bleu-fonceia.jpg" 
+              src="images/mespros-presente-emma-bleu-fonceia.jpg" 
               alt="Emma - Consultations Gratuites" 
               className="emma-main-image"
             />
