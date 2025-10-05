@@ -1309,9 +1309,8 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Consultations Gratuites - 50+ Métiers</p>
                   <div className="marketing-banner">
                     <p className="text-xs sm:text-sm font-semibold text-green-700 bg-green-50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-green-200 leading-tight">
-                      ✨ Consultations gratuites<br className="sm:hidden"/>
-                      <span className="hidden sm:inline"> avec des spécialistes</span><br className="sm:hidden"/>
-                      <span className="sm:hidden">50+ métiers • 8 domaines</span>
+                      ✨ Explore gratuitement les différents métiers et pose tes questions pour en savoir plus !<br className="sm:hidden"/>
+                      <span className="sm:hidden">Accès instantané à 50+ métiers dans 8 domaines</span>
                       <span className="hidden sm:inline">Accès instantané à <strong>50+ métiers</strong> dans <strong>8 domaines</strong></span>
                     </p>
                   </div>
