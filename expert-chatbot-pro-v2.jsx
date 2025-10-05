@@ -1488,7 +1488,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 <div className="flex-1 h-px bg-gradient-to-r from-yellow-200 to-orange-200"></div>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                 {Object.values(professionalProfiles)
                   .map(profile => ({
                     ...profile,
@@ -1519,7 +1519,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         key={profile.id}
                         onClick={() => selectProfession({ id: profile.id, ...profile.profile })}
                         onMouseEnter={() => playSound('hover')}
-                        className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-3 hover:scale-105 border-2 relative group overflow-hidden ${
+                        className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 relative group overflow-hidden ${
                           isTop3 
                             ? 'border-yellow-300 bg-gradient-to-br from-yellow-50 to-orange-50' 
                             : 'border-transparent hover:border-indigo-400'
@@ -1531,34 +1531,40 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           </div>
                         )}
                         
-                        {/* Avatar de métier en overlay */}
-                        {PROFESSION_AVATARS[profile.id] && (
-                          <div className="absolute top-1 right-1 w-16 h-16 rounded-full overflow-hidden border-3 border-white shadow-lg z-5">
-                            <img 
-                              src={`/images/metier/${PROFESSION_AVATARS[profile.id]}`}
-                              alt={`Avatar ${profile.profile.name}`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
-                            />
+                        {/* Layout horizontal avec avatar et nom */}
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          {/* Avatar de métier */}
+                          {PROFESSION_AVATARS[profile.id] && (
+                            <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded-full overflow-hidden border-3 border-white shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                              <img 
+                                src={`/images/metier/${PROFESSION_AVATARS[profile.id]}`}
+                                alt={`Avatar ${profile.profile.name}`}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                }}
+                              />
+                            </div>
+                          )}
+                          
+                          {/* Contenu à droite de l'avatar */}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-lg sm:text-xl mb-1 group-hover:scale-110 transition-transform">
+                              {profile.profile.icon}
+                            </div>
+                            <h3 className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-tight font-['Inter']">
+                              {profile.profile.name}
+                            </h3>
+                            
+                            {count > 0 && (
+                              <div className="mt-1">
+                                <span className="text-xs text-green-600 font-medium">
+                                  {count} consultation{count > 1 ? 's' : ''}
+                                </span>
+                              </div>
+                            )}
                           </div>
-                        )}
-                        
-                        <div className="text-2xl mb-2 text-center group-hover:scale-110 transition-transform">
-                          {profile.profile.icon}
                         </div>
-                        <h3 className="text-xs font-bold text-gray-800 text-center mb-1 leading-tight">
-                          {profile.profile.name}
-                        </h3>
-                        
-                        {count > 0 && (
-                          <div className="text-center">
-                            <span className="text-xs text-green-600 font-semibold">
-                              {count} consultation{count > 1 ? 's' : ''}
-                            </span>
-                          </div>
-                        )}
                       </div>
                     );
                   })}
@@ -1632,7 +1638,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {professions.map((profession, index) => {
                     const count = getConsultationCount(profession.id);
                     const popularity = getProfessionPopularity(profession.id, sectorName);
@@ -1644,7 +1650,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         key={profession.id}
                         onClick={() => selectProfession(profession)}
                         onMouseEnter={() => playSound('hover')}
-                        className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 relative group overflow-hidden ${
+                        className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-5 hover:scale-105 border-2 relative group overflow-hidden ${
                           isTop3 
                             ? 'border-gradient-to-r from-yellow-400 to-orange-400 bg-gradient-to-br from-yellow-50 to-orange-50' 
                             : isPopular 
@@ -1671,55 +1677,61 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           </div>
                         )}
                         
-                        {/* Avatar de métier en overlay */}
-                        {PROFESSION_AVATARS[profession.id] && (
-                          <div className="absolute top-2 right-2 w-20 h-20 rounded-full overflow-hidden border-3 border-white shadow-lg z-5">
-                            <img 
-                              src={`/images/metier/${PROFESSION_AVATARS[profession.id]}`}
-                              alt={`Avatar ${profession.name}`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
-                            />
-                          </div>
-                        )}
-                        
-                        <div className="text-4xl mb-3 text-center group-hover:scale-110 transition-transform">
-                          {profession.icon}
-                        </div>
-                        <h3 className="text-sm font-bold text-gray-800 text-center mb-2 leading-tight">
-                          {profession.name}
-                        </h3>
-                        
-                        {/* Barre de popularité visuelle */}
-                        <div className="w-full bg-gray-200 rounded-full h-1 mb-2">
-                          <div 
-                            className={`h-1 rounded-full transition-all ${
-                              isTop3 
-                                ? 'bg-gradient-to-r from-yellow-400 to-orange-400' 
-                                : isPopular 
-                                ? 'bg-indigo-500' 
-                                : 'bg-gray-400'
-                            }`}
-                            style={{ 
-                              width: `${Math.max(20, 100 - (popularity * 10))}%` 
-                            }}
-                          ></div>
-                        </div>
-                        
-                        {/* Statistiques */}
-                        <div className="flex justify-between items-center text-xs text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <TrendingUp size={12} />
-                            #{popularity + 1}
-                          </span>
-                          {count > 0 && (
-                            <span className="flex items-center gap-1 text-green-600">
-                              <Clock size={12} />
-                              {count}
-                            </span>
+                        {/* Layout horizontal avec avatar et nom */}
+                        <div className="flex items-center gap-3 sm:gap-4">
+                          {/* Avatar de métier */}
+                          {PROFESSION_AVATARS[profession.id] && (
+                            <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full overflow-hidden border-3 border-white shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                              <img 
+                                src={`/images/metier/${PROFESSION_AVATARS[profession.id]}`}
+                                alt={`Avatar ${profession.name}`}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                }}
+                              />
+                            </div>
                           )}
+                          
+                          {/* Contenu à droite de l'avatar */}
+                          <div className="flex-1 min-w-0">
+                            <div className="text-2xl sm:text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform">
+                              {profession.icon}
+                            </div>
+                            <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-800 leading-tight font-['Inter']">
+                              {profession.name}
+                            </h3>
+                            
+                            {/* Barre de popularité visuelle */}
+                            <div className="w-full bg-gray-200 rounded-full h-1 mb-2 mt-2">
+                              <div 
+                                className={`h-1 rounded-full transition-all ${
+                                  isTop3 
+                                    ? 'bg-gradient-to-r from-yellow-400 to-orange-400' 
+                                    : isPopular 
+                                    ? 'bg-indigo-500' 
+                                    : 'bg-gray-400'
+                                }`}
+                                style={{ 
+                                  width: `${Math.max(20, 100 - (popularity * 10))}%` 
+                                }}
+                              ></div>
+                            </div>
+                            
+                            {/* Statistiques */}
+                            <div className="flex justify-between items-center text-xs text-gray-500">
+                              <span className="flex items-center gap-1">
+                                <TrendingUp size={12} />
+                                #{popularity + 1}
+                              </span>
+                              {count > 0 && (
+                                <span className="flex items-center gap-1 text-green-600">
+                                  <Clock size={12} />
+                                  {count} consultation{count > 1 ? 's' : ''}
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );
