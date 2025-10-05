@@ -50,6 +50,366 @@ body {
   }
 }
 
+/* Animation de présentation d'Emma avec arrière-plan blanc */
+.emma-intro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: emmaIntroFadeOut 0.8s ease-in-out 4s forwards;
+  overflow: hidden;
+}
+
+/* Conteneur principal pour le logo et l'image */
+.emma-intro-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  gap: 60px;
+  padding: 0 40px;
+}
+
+/* Section gauche - Logo Mes Pros */
+.emma-intro-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: logoSlideIn 1.2s ease-out 0.3s both;
+}
+
+/* Section droite - Image et texte Emma */
+.emma-intro-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Styles pour le logo Mes Pros */
+.mes-pros-logo {
+  text-align: center;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  animation: logoGlow 3s ease-in-out infinite;
+}
+
+.logo-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-mes-pros {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #1e3a8a;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  animation: logoTextSlide 0.8s ease-out 0.8s both;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.logo-presents {
+  font-size: 1.5rem;
+  color: #6b7280;
+  font-weight: 400;
+  margin: 0;
+  animation: logoTextSlide 0.8s ease-out 1.0s both;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  opacity: 0.9;
+}
+
+.logo-emma {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #7c3aed;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  animation: logoTextSlide 0.8s ease-out 1.2s both;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Animations pour le logo */
+@keyframes logoSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes logoTextSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logoGlow {
+  0%, 100% {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 0, 0, 0.05);
+  }
+  50% {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 30px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Styles pour le message marketing dans l'intro */
+.emma-intro-marketing {
+  margin: 15px 0;
+  animation: marketingSlide 0.8s ease-out 1.8s both;
+}
+
+.emma-intro-marketing-text {
+  font-size: 1.1rem;
+  color: #10b981;
+  font-weight: 600;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+  padding: 12px 20px;
+  border-radius: 15px;
+  border: 2px solid rgba(16, 185, 129, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+  max-width: 400px;
+  margin: 0 auto;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.emma-intro-marketing-text strong {
+  color: #059669;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes marketingSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes emmaIntroFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+    visibility: hidden;
+  }
+}
+
+.emma-intro-avatar {
+  width: 400px;
+  height: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+  animation: emmaAvatarZoom 3s ease-in-out;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  margin-bottom: 20px;
+}
+
+.emma-intro-avatar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.3));
+  z-index: 1;
+}
+
+@keyframes emmaAvatarZoom {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.emma-intro-name {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #1f2937;
+  animation: emmaNameSlide 0.8s ease-out 1.4s both;
+  text-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  text-align: center;
+  margin: 0 0 10px 0;
+}
+
+@keyframes emmaNameSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.emma-intro-subtitle {
+  font-size: 1.2rem;
+  color: #6b7280;
+  animation: emmaSubtitleSlide 0.8s ease-out 1.6s both;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.4;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 10px 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  margin: 0 0 15px 0;
+}
+
+@keyframes emmaSubtitleSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.emma-intro-introduction {
+  font-size: 1.1rem;
+  color: #4f46e5;
+  font-weight: 600;
+  animation: emmaIntroductionSlide 0.8s ease-out 2.0s both;
+  text-align: center;
+  z-index: 2;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.1));
+  padding: 12px 24px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  max-width: 400px;
+  border: 2px solid rgba(79, 70, 229, 0.2);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.1);
+  margin: 0;
+}
+
+@keyframes emmaIntroductionSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.emma-intro-sparkles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #4f46e5;
+  border-radius: 50%;
+  animation: sparkleFloat 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(79, 70, 229, 0.6);
+}
+
+.sparkle:nth-child(1) {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.sparkle:nth-child(2) {
+  top: 30%;
+  right: 25%;
+  animation-delay: 0.5s;
+}
+
+.sparkle:nth-child(3) {
+  bottom: 30%;
+  left: 30%;
+  animation-delay: 1s;
+}
+
+.sparkle:nth-child(4) {
+  bottom: 20%;
+  right: 20%;
+  animation-delay: 1.5s;
+}
+
+.sparkle:nth-child(5) {
+  top: 50%;
+  left: 10%;
+  animation-delay: 0.8s;
+}
+
+.sparkle:nth-child(6) {
+  top: 60%;
+  right: 15%;
+  animation-delay: 1.2s;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1);
+  }
+}
+
 /* Animation fade-in plus douce pour les éléments */
 .fade-in-soft {
   opacity: 0;
