@@ -38,7 +38,7 @@ const EmmaExpertChatbot = () => {
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [keyPoints, setKeyPoints] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
-  const [introStep, setIntroStep] = useState(0); // 0: logo, 1: avatar, 2: nom, 3: description, 4: marketing, 5: final
+  const [introStep, setIntroStep] = useState(0);
   const messagesEndRef = useRef(null);
 
   const sectors = getSectors();
@@ -64,27 +64,76 @@ const EmmaExpertChatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Gérer l'animation séquentielle de l'intro
+  // Gérer l'animation dynamique d'Emma
   useEffect(() => {
     const timers = [];
     
-    // Séquence d'animation : chaque élément apparaît avec un délai
-    timers.push(setTimeout(() => setIntroStep(1), 1000));   // Avatar (fixe)
-    timers.push(setTimeout(() => setIntroStep(2), 2000));  // Nom et Description ensemble
-    timers.push(setTimeout(() => setIntroStep(3), 2000));  // Nom et Description ensemble
-    timers.push(setTimeout(() => setIntroStep(4), 3000));  // Marketing
-    timers.push(setTimeout(() => setIntroStep(5), 4000));  // Final
+    // Séquence d'animation dynamique
+    timers.push(setTimeout(() => setIntroStep(1), 500));   // Emma apparaît
+    timers.push(setTimeout(() => setIntroStep(2), 1500));  // Titre principal
+    timers.push(setTimeout(() => setIntroStep(3), 2500));  // Description experte
+    timers.push(setTimeout(() => setIntroStep(4), 3500));  // Métriques
+    timers.push(setTimeout(() => setIntroStep(5), 4500));  // Call to action
     
-    // Masquer l'intro après 7 secondes (plus longtemps)
-    timers.push(setTimeout(() => setShowIntro(false), 7000));
+    // Masquer l'intro après 6 secondes
+    timers.push(setTimeout(() => setShowIntro(false), 6000));
     
     return () => timers.forEach(clearTimeout);
   }, []);
 
-  const saveApiKey = () => {
+  const testApiConnection = async () => {
+    console.log('Test de connexion API...');
+    console.log('Clé API présente:', !!apiKey);
+    console.log('Longueur de la clé:', apiKey.length);
+    console.log('Variable d\'environnement VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY ? 'PRÉSENTE' : 'ABSENTE');
+    console.log('Toutes les variables d\'environnement:', import.meta.env);
+    
+    try {
+      console.log('Envoi de la requête de test...');
+      const response = await fetch(
+        'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent',
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey
+          },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: 'Test de connexion' }] }],
+            generationConfig: { temperature: 0.1, maxOutputTokens: 10 }
+          })
+        }
+      );
+      
+      console.log('Statut de la réponse:', response.status);
+      console.log('Headers de la réponse:', Object.fromEntries(response.headers.entries()));
+      
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Erreur API:', errorData);
+        throw new Error(`Erreur API (${response.status}): ${errorData}`);
+      }
+      
+      const data = await response.json();
+      console.log('Réponse API réussie:', data);
+      return true;
+    } catch (error) {
+      console.error('Erreur de test API:', error);
+      return false;
+    }
+  };
+
+  const saveApiKey = async () => {
     if (apiKey.trim()) {
       localStorage.setItem('gemini_api_key', apiKey.trim());
-      setShowApiInput(false);
+      
+      // Test de la connexion avant de continuer
+      const isWorking = await testApiConnection();
+      if (isWorking) {
+        setShowApiInput(false);
+      } else {
+        alert('La clé API ne fonctionne pas. Veuillez vérifier votre clé.');
+      }
     }
   };
 
@@ -178,7 +227,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }));
 
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-exp:generateContent',
         {
           method: "POST",
           headers: {
@@ -193,7 +242,14 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         }
       );
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Erreur API Response:', errorData);
+        throw new Error(`Erreur API (${response.status}): ${errorData.error?.message || 'Erreur inconnue'}`);
+      }
+
       const data = await response.json();
+      console.log('Gemini Response:', data);
       
       if (data.candidates?.[0]?.content) {
         const responseText = data.candidates[0].content.parts[0].text;
@@ -212,9 +268,22 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             setKeyPoints(prev => [...prev, ...sentences.map(s => s.trim())].slice(-5));
           }
         }
+      } else {
+        console.error('Aucune réponse valide reçue:', data);
+        setMessages(prev => [...prev, {
+          role: 'model',
+          parts: [{ text: 'Désolé, je n\'ai pas pu traiter votre demande. Veuillez réessayer.' }]
+        }]);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error details:', error);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      
+      setMessages(prev => [...prev, {
+        role: 'model',
+        parts: [{ text: `Erreur de connexion: ${error.message}. Veuillez vérifier votre clé API.` }]
+      }]);
     } finally {
       setIsLoading(false);
     }
@@ -238,7 +307,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl">
               👋
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-purple-600">
               Emma
             </h1>
             <p className="text-gray-600 text-sm">Exploration Multi-Métiers et Assistance</p>
@@ -269,74 +338,75 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   }
 
   // ========================================
-  // COMPOSANT LOGO MES PROS
-  // ========================================
-  const MesProsLogo = () => (
-    <div className="mes-pros-logo">
-      <div className="logo-text-container">
-        <h1 className="logo-mes-pros">Mes Pros</h1>
-        <p className="logo-presents">présente</p>
-        <h1 className="logo-emma">Emma</h1>
-      </div>
-    </div>
-  );
-
-  // ========================================
-  // ANIMATION DE PRÉSENTATION EMMA SÉQUENTIELLE
+  // ANIMATION DYNAMIQUE D'EMMA
   // ========================================
   if (showIntro) {
     return (
-      <div className="emma-intro">
-        <div className="emma-intro-sparkles">
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
+      <div className="emma-dynamic-intro">
+        <div className="emma-dynamic-background">
+          <div className="floating-elements">
+            <div className="floating-element element-1">💼</div>
+            <div className="floating-element element-2">🔬</div>
+            <div className="floating-element element-3">⚖️</div>
+            <div className="floating-element element-4">🏥</div>
+            <div className="floating-element element-5">💻</div>
+            <div className="floating-element element-6">🏗️</div>
+            <div className="floating-element element-7">📚</div>
+            <div className="floating-element element-8">🏠</div>
+          </div>
         </div>
         
-        <div className="emma-intro-content">
-          <div className="emma-intro-left">
-            <MesProsLogo />
-          </div>
+        <div className="emma-dynamic-content">
+          {/* Emma - Étape 1 */}
+          {introStep >= 1 && (
+            <div className="emma-dynamic-avatar">
+              <img src="/emma-avatar.png" alt="Emma" className="emma-avatar-image" />
+              <div className="emma-glow-effect"></div>
+            </div>
+          )}
           
-          <div className="emma-intro-right">
-            {/* Avatar - Étape 1 */}
-            {introStep >= 1 && (
-              <div className="emma-intro-avatar animate-fade-in-up">
-                <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
-              </div>
-            )}
-            
-            {/* Nom et Description - Étape 2 (ensemble) */}
-            {introStep >= 2 && (
-              <>
-                <h1 className="emma-intro-name animate-fade-in-up">Emma</h1>
-                <p className="emma-intro-subtitle animate-fade-in-up">
-                  Votre assistante virtuelle spécialisée<br />
-                  en expertise professionnelle
-                </p>
-              </>
-            )}
-            
-            {/* Marketing - Étape 4 */}
-            {introStep >= 4 && (
-              <div className="emma-intro-marketing animate-fade-in-up">
-                <p className="emma-intro-marketing-text">
-                  Consultez-la gratuitement dans <strong>50+ métiers</strong><br />
-                  de <strong>8 domaines</strong> différents !
-                </p>
-              </div>
-            )}
-            
-            {/* Final - Étape 5 */}
-            {introStep >= 5 && (
-              <p className="emma-intro-introduction animate-fade-in-up">
-                Propulsé par l'IA
+          {/* Titre principal - Étape 2 */}
+          {introStep >= 2 && (
+            <h1 className="emma-dynamic-title">
+              Emma
+            </h1>
+          )}
+          
+          {/* Description experte - Étape 3 */}
+          {introStep >= 3 && (
+            <div className="emma-dynamic-description">
+              <p className="emma-expert-text">
+                Votre assistante experte et curieuse
               </p>
-            )}
-          </div>
+              <p className="emma-specialty-text">
+                Spécialisée dans l'expertise professionnelle
+              </p>
+            </div>
+          )}
+          
+          {/* Métriques - Étape 4 */}
+          {introStep >= 4 && (
+            <div className="emma-dynamic-metrics">
+              <div className="metric-item">
+                <span className="metric-number">50+</span>
+                <span className="metric-label">Métiers</span>
+              </div>
+              <div className="metric-divider"></div>
+              <div className="metric-item">
+                <span className="metric-number">8</span>
+                <span className="metric-label">Domaines</span>
+              </div>
+            </div>
+          )}
+          
+          {/* Call to action - Étape 5 */}
+          {introStep >= 5 && (
+            <div className="emma-dynamic-cta">
+              <p className="emma-cta-text">
+                Découvrez l'expertise à votre service
+              </p>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -356,7 +426,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   👋
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  <h1 className="text-2xl font-bold text-purple-600">
                     Emma
                   </h1>
                   <p className="text-sm text-gray-600">Exploration Multi-Métiers et Assistance</p>
@@ -448,7 +518,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowAbout(false)}>
             <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">À propos d'Emma</h2>
+                <h2 className="text-2xl font-bold text-gray-800">À propos d'<span className="text-purple-600">Emma</span></h2>
                 <button onClick={() => setShowAbout(false)} className="text-gray-500 hover:text-gray-700">
                   <X size={24} />
                 </button>
@@ -460,13 +530,13 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                     👋
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold">Emma</h3>
+                    <h3 className="text-xl font-bold text-purple-600">Emma</h3>
                     <p className="text-sm text-gray-600">Exploration Multi-Métiers et Assistance</p>
                   </div>
                 </div>
 
                 <p className="font-semibold text-lg">Mission universelle</p>
-                <p>Explorer, comprendre et relier les savoirs de tous les métiers du monde. Emma agit comme une intelligence de soutien professionnel global.</p>
+                <p>Explorer, comprendre et relier les savoirs de tous les métiers du monde. <span className="text-purple-600 font-semibold">Emma</span> agit comme une intelligence de soutien professionnel global.</p>
 
                 <p className="italic text-indigo-600">"De la science au geste, de la théorie à la pratique — je relie les mondes du savoir."</p>
 
@@ -484,7 +554,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 <p className="font-semibold">Profils Professionnels Détaillés</p>
                 <p>Couvrant 8 secteurs d'activité : Santé, Juridique, Finance, Technologie, Construction, Affaires, Immobilier et Éducation.</p>
 
-                <p className="text-sm text-gray-600 mt-4">Propulsé par Emma - Intelligence Artificielle au service des professionnels.</p>
+                <p className="text-sm text-gray-600 mt-4">Propulsé par <span className="text-purple-600 font-semibold">Emma</span> - Intelligence Artificielle au service des professionnels.</p>
               </div>
             </div>
           </div>
@@ -504,12 +574,12 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               <div className="space-y-4 text-gray-700 text-sm">
                 <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                   <p className="font-bold text-yellow-800">⚠️ AVERTISSEMENT IMPORTANT</p>
-                  <p className="text-yellow-700 mt-2">Emma est une assistante virtuelle utilisant l'intelligence artificielle. Elle ne remplace en AUCUN cas une consultation avec un professionnel qualifié.</p>
+                  <p className="text-yellow-700 mt-2"><span className="text-purple-600 font-semibold">Emma</span> est une assistante virtuelle utilisant l'intelligence artificielle. Elle ne remplace en AUCUN cas une consultation avec un professionnel qualifié.</p>
                 </div>
 
                 <div>
                   <p className="font-semibold mb-2">1. Nature du service</p>
-                  <p>Emma fournit des informations générales à caractère éducatif et informatif uniquement. Les réponses ne constituent pas des conseils professionnels personnalisés.</p>
+                  <p><span className="text-purple-600 font-semibold">Emma</span> fournit des informations générales à caractère éducatif et informatif uniquement. Les réponses ne constituent pas des conseils professionnels personnalisés.</p>
                 </div>
 
                 <div>
@@ -517,7 +587,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li>Aucune garantie d'exactitude, d'exhaustivité ou d'actualité des informations</li>
                     <li>Les informations ne remplacent pas l'avis d'un professionnel qualifié</li>
-                    <li>Emma décline toute responsabilité pour les décisions prises sur la base des informations fournies</li>
+                    <li><span className="text-purple-600 font-semibold">Emma</span> décline toute responsabilité pour les décisions prises sur la base des informations fournies</li>
                     <li>En cas de doute, consultez toujours un professionnel certifié</li>
                   </ul>
                 </div>
@@ -525,13 +595,13 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 <div>
                   <p className="font-semibold mb-2">3. Domaines spécifiques</p>
                   <p className="font-semibold text-red-600">Santé :</p>
-                  <p className="ml-4 mb-2">Emma ne pose pas de diagnostic médical et ne prescrit pas de traitement. En cas d'urgence médicale, composez le 911 ou contactez Info-Santé 811.</p>
+                  <p className="ml-4 mb-2"><span className="text-purple-600 font-semibold">Emma</span> ne pose pas de diagnostic médical et ne prescrit pas de traitement. En cas d'urgence médicale, composez le 911 ou contactez Info-Santé 811.</p>
                   
                   <p className="font-semibold text-red-600">Juridique :</p>
-                  <p className="ml-4 mb-2">Emma ne fournit pas de conseils juridiques personnalisés. Pour toute question légale, consultez un avocat membre du Barreau du Québec.</p>
+                  <p className="ml-4 mb-2"><span className="text-purple-600 font-semibold">Emma</span> ne fournit pas de conseils juridiques personnalisés. Pour toute question légale, consultez un avocat membre du Barreau du Québec.</p>
                   
                   <p className="font-semibold text-red-600">Finance :</p>
-                  <p className="ml-4">Emma ne donne pas de conseils en placement. Consultez un planificateur financier ou conseiller agréé pour des recommandations personnalisées.</p>
+                  <p className="ml-4"><span className="text-purple-600 font-semibold">Emma</span> ne donne pas de conseils en placement. Consultez un planificateur financier ou conseiller agréé pour des recommandations personnalisées.</p>
                 </div>
 
                 <div>
@@ -541,7 +611,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
 
                 <div>
                   <p className="font-semibold mb-2">5. Utilisation à vos risques</p>
-                  <p>En utilisant Emma, vous reconnaissez et acceptez que :</p>
+                  <p>En utilisant <span className="text-purple-600 font-semibold">Emma</span>, vous reconnaissez et acceptez que :</p>
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li>Vous utilisez ce service à vos propres risques</li>
                     <li>Vous ne vous fiez pas uniquement aux informations fournies</li>
@@ -551,7 +621,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
 
                 <div className="bg-indigo-50 p-4 rounded-lg mt-4">
                   <p className="font-semibold text-indigo-800">Recommandation</p>
-                  <p className="text-indigo-700">Utilisez Emma comme point de départ pour vos recherches, puis consultez toujours un expert qualifié du domaine concerné pour des conseils personnalisés et professionnels.</p>
+                  <p className="text-indigo-700">Utilisez <span className="text-purple-600 font-semibold">Emma</span> comme point de départ pour vos recherches, puis consultez toujours un expert qualifié du domaine concerné pour des conseils personnalisés et professionnels.</p>
                 </div>
 
                 <p className="text-xs text-gray-500 mt-4">Dernière mise à jour : Octobre 2025</p>
@@ -579,7 +649,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               👋
             </div>
             <div>
-              <h1 className="text-xl font-bold">Emma</h1>
+              <h1 className="text-xl font-bold text-purple-600">Emma</h1>
               <p className="text-xs opacity-90">Assistante Virtuelle</p>
             </div>
           </div>
@@ -658,7 +728,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Niveau :</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Niveau de profondeur des réponses :</label>
                 <select
                   value={expertiseLevel}
                   onChange={(e) => setExpertiseLevel(e.target.value)}
@@ -672,7 +742,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1">Ton Emma :</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Ton <span className="text-purple-600">Emma</span> :</label>
                 <select
                   value={emmaPersonality}
                   onChange={(e) => setEmmaPersonality(e.target.value)}
@@ -761,7 +831,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
-                    Consultation avec Emma
+                    Consultation avec <span className="text-purple-600">Emma</span>
                   </h2>
                   <p className="text-sm text-gray-600">{profile.profile.name}</p>
                 </div>
