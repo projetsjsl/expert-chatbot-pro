@@ -1311,24 +1311,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 >
                   ⚙️ Admin
                 </button>
-                <button
-                  onClick={() => {
-                    playSound('click');
-                    setShowAbout(true);
-                  }}
-                  className="text-indigo-600 hover:underline text-sm flex items-center gap-1"
-                >
-                  <span>ℹ️</span> À propos
-                </button>
-                <button
-                  onClick={() => {
-                    playSound('click');
-                    setShowDisclaimer(true);
-                  }}
-                  className="text-gray-600 hover:underline text-sm flex items-center gap-1"
-                >
-                  <span>⚖️</span> Avis légal
-                </button>
               </div>
             </div>
 
@@ -1418,111 +1400,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               </div>
             </div>
 
-            {/* Section Admin */}
-            {showAdminPanel && (
-              <div className="admin-panel bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                    <span className="text-lg">⚙️</span>
-                    <span>Panneau d'administration</span>
-                  </h3>
-                  <button
-                    onClick={() => setShowAdminPanel(false)}
-                    className="text-gray-500 hover:text-gray-700 text-sm"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <div className="space-y-4">
-                  {/* Statut API */}
-                  <div className="bg-white p-3 rounded-lg border border-gray-200">
-                    <h4 className="text-xs font-semibold text-gray-700 mb-2">Statut API</h4>
-                    <div className="flex items-center gap-2">
-                      <div className={`text-xs flex items-center gap-1 px-2 py-1 rounded ${
-                        apiStatus === 'connected' 
-                          ? 'text-green-600 bg-green-50 border border-green-200' 
-                          : apiStatus === 'error'
-                          ? 'text-red-600 bg-red-50 border border-red-200'
-                          : 'text-yellow-600 bg-yellow-50 border border-yellow-200'
-                      }`}>
-                        <span>{apiStatus === 'connected' ? '🟢' : apiStatus === 'error' ? '🔴' : '🟡'}</span>
-                        {apiStatus === 'connected' ? 'API OK' : apiStatus === 'error' ? 'API Erreur' : 'API Test...'}
-                      </div>
-                      <button
-                        onClick={() => {
-                          playSound('click');
-                          testApiConnection();
-                        }}
-                        className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded transition-colors border border-blue-200"
-                        title="Tester la connexion API"
-                      >
-                        🔄 Tester
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Outils de diagnostic */}
-                  <div className="bg-white p-3 rounded-lg border border-gray-200">
-                    <h4 className="text-xs font-semibold text-gray-700 mb-2">Outils de diagnostic</h4>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={async () => {
-                          playSound('click');
-                          console.log('🔍 DIAGNOSTIC COMPLET:');
-                          console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
-                          console.log('📋 Toutes les variables env:', import.meta.env);
-                          console.log('📋 Mode:', import.meta.env.MODE);
-                          console.log('📋 Base URL:', import.meta.env.BASE_URL);
-                          console.log('📋 Clé API actuelle:', apiKey ? `${apiKey.substring(0, 10)}...` : 'AUCUNE');
-                          console.log('📋 Longueur de la clé:', apiKey?.length || 0);
-                          alert('Diagnostic envoyé dans la console (F12)');
-                        }}
-                        className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
-                        title="Diagnostic complet"
-                      >
-                        🔍 Diagnostic complet
-                      </button>
-                      <button
-                        onClick={() => {
-                          playSound('click');
-                          console.log('🔍 DIAGNOSTIC VERCEL:');
-                          console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
-                          console.log('📋 Toutes les variables env:', import.meta.env);
-                          console.log('📋 Mode:', import.meta.env.MODE);
-                          console.log('📋 Base URL:', import.meta.env.BASE_URL);
-                          alert('Diagnostic Vercel envoyé dans la console (F12)');
-                        }}
-                        className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
-                        title="Diagnostic Vercel"
-                      >
-                        🔍 Diagnostic Vercel
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Contrôles audio */}
-                  <div className="bg-white p-3 rounded-lg border border-gray-200">
-                    <h4 className="text-xs font-semibold text-gray-700 mb-2">Contrôles audio</h4>
-                    <button
-                      onClick={() => {
-                        playSound('click');
-                        setSoundEnabled(!soundEnabled);
-                      }}
-                      className={`text-xs flex items-center gap-1 px-2 py-1 rounded transition-colors ${
-                        soundEnabled 
-                          ? 'text-green-600 hover:text-green-800 bg-green-50' 
-                          : 'text-gray-400 hover:text-gray-600 bg-gray-50'
-                      }`}
-                      title={soundEnabled ? 'Désactiver les sons' : 'Activer les sons'}
-                    >
-                      <span>{soundEnabled ? '🔊' : '🔇'}</span>
-                      {soundEnabled ? 'Son activé' : 'Son désactivé'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -2965,6 +2842,140 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     Ouvrir le client email
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Section Footer avec liens légaux - Déplacée en bas de page */}
+      <div className="fixed bottom-4 left-4 z-30">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              playSound('click');
+              setShowAbout(true);
+            }}
+            className="text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-2 rounded-lg transition-colors border border-indigo-200 flex items-center gap-1"
+            title="À propos d'Emma"
+          >
+            <span>ℹ️</span> À propos
+          </button>
+          <button
+            onClick={() => {
+              playSound('click');
+              setShowDisclaimer(true);
+            }}
+            className="text-xs text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors border border-gray-200 flex items-center gap-1"
+            title="Avis légal et disclaimer"
+          >
+            <span>⚖️</span> Avis légal
+          </button>
+        </div>
+      </div>
+
+      {/* Section Admin - Déplacée en bas de page */}
+      {showAdminPanel && (
+        <div className="fixed bottom-4 right-4 z-40 max-w-md">
+          <div className="admin-panel bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-lg">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <span className="text-lg">⚙️</span>
+                <span>Panneau d'administration</span>
+              </h3>
+              <button
+                onClick={() => setShowAdminPanel(false)}
+                className="text-gray-500 hover:text-gray-700 text-sm"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Statut API */}
+              <div className="bg-white p-3 rounded-lg border border-gray-200">
+                <h4 className="text-xs font-semibold text-gray-700 mb-2">Statut API</h4>
+                <div className="flex items-center gap-2">
+                  <div className={`text-xs flex items-center gap-1 px-2 py-1 rounded ${
+                    apiStatus === 'connected' 
+                      ? 'text-green-600 bg-green-50 border border-green-200' 
+                      : apiStatus === 'error'
+                      ? 'text-red-600 bg-red-50 border border-red-200'
+                      : 'text-yellow-600 bg-yellow-50 border border-yellow-200'
+                  }`}>
+                    <span>{apiStatus === 'connected' ? '🟢' : apiStatus === 'error' ? '🔴' : '🟡'}</span>
+                    {apiStatus === 'connected' ? 'API OK' : apiStatus === 'error' ? 'API Erreur' : 'API Test...'}
+                  </div>
+                  <button
+                    onClick={() => {
+                      playSound('click');
+                      testApiConnection();
+                    }}
+                    className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded transition-colors border border-blue-200"
+                    title="Tester la connexion API"
+                  >
+                    🔄 Tester
+                  </button>
+                </div>
+              </div>
+
+              {/* Outils de diagnostic */}
+              <div className="bg-white p-3 rounded-lg border border-gray-200">
+                <h4 className="text-xs font-semibold text-gray-700 mb-2">Outils de diagnostic</h4>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={async () => {
+                      playSound('click');
+                      console.log('🔍 DIAGNOSTIC COMPLET:');
+                      console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
+                      console.log('📋 Toutes les variables env:', import.meta.env);
+                      console.log('📋 Mode:', import.meta.env.MODE);
+                      console.log('📋 Base URL:', import.meta.env.BASE_URL);
+                      console.log('📋 Clé API actuelle:', apiKey ? `${apiKey.substring(0, 10)}...` : 'AUCUNE');
+                      console.log('📋 Longueur de la clé:', apiKey?.length || 0);
+                      alert('Diagnostic envoyé dans la console (F12)');
+                    }}
+                    className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
+                    title="Diagnostic complet"
+                  >
+                    🔍 Diagnostic complet
+                  </button>
+                  <button
+                    onClick={() => {
+                      playSound('click');
+                      console.log('🔍 DIAGNOSTIC VERCEL:');
+                      console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
+                      console.log('📋 Toutes les variables env:', import.meta.env);
+                      console.log('📋 Mode:', import.meta.env.MODE);
+                      console.log('📋 Base URL:', import.meta.env.BASE_URL);
+                      alert('Diagnostic Vercel envoyé dans la console (F12)');
+                    }}
+                    className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
+                    title="Diagnostic Vercel"
+                  >
+                    🔍 Diagnostic Vercel
+                  </button>
+                </div>
+              </div>
+
+              {/* Contrôles audio */}
+              <div className="bg-white p-3 rounded-lg border border-gray-200">
+                <h4 className="text-xs font-semibold text-gray-700 mb-2">Contrôles audio</h4>
+                <button
+                  onClick={() => {
+                    playSound('click');
+                    setSoundEnabled(!soundEnabled);
+                  }}
+                  className={`text-xs flex items-center gap-1 px-2 py-1 rounded transition-colors ${
+                    soundEnabled 
+                      ? 'text-green-600 hover:text-green-800 bg-green-50' 
+                      : 'text-gray-400 hover:text-gray-600 bg-gray-50'
+                  }`}
+                  title={soundEnabled ? 'Désactiver les sons' : 'Activer les sons'}
+                >
+                  <span>{soundEnabled ? '🔊' : '🔇'}</span>
+                  {soundEnabled ? 'Son activé' : 'Son désactivé'}
+                </button>
               </div>
             </div>
           </div>
