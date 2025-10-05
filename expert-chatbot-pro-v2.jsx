@@ -1067,7 +1067,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
             <img 
-              src="/images/mespros-presente-emma-bleu-fonce.png" 
+              src="/images/mespros-presente-emma-bleu-fonce.jpg" 
               alt="Mes Pros présente Emma - Assistante Professionnelle" 
               className="emma-main-image"
             />
@@ -1166,7 +1166,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
       <div className="emma-transition-screen">
         <div className="transition-content">
           <img 
-            src="/images/mespros-presente-emma-bleu-fonce.png" 
+            src="/images/mespros-presente-emma-bleu-fonce.jpg" 
             alt="Mes Pros présente Emma" 
             className="transition-image"
           />
@@ -1186,7 +1186,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full overflow-hidden emma-avatar">
-                  <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+                  <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                 </div>
                 <div className="welcome-animation">
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -1707,7 +1707,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               <div className="space-y-6 text-gray-700">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
-                    <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+                    <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">Emma</h3>
@@ -2340,7 +2340,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+                    <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h1 className="text-xl font-bold">Emma</h1>
@@ -2522,7 +2522,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               </button>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden">
-                  <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+                  <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
@@ -2599,7 +2599,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               >
                 {message.role === 'model' && (
                   <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0 shadow-md">
-                    <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+                    <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                   </div>
                 )}
                 <div
@@ -2629,7 +2629,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             {isLoading && (
               <div className="chat-message flex justify-start">
                 <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0 shadow-md">
-                  <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+                  <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                 </div>
                 <div className="typing-indicator">
                   <div className="typing-dot"></div>
