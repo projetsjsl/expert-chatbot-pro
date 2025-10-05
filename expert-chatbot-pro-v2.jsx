@@ -1277,7 +1277,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Exploratrice Multi-Métiers Autonome</p>
                   <div className="marketing-banner">
                     <p className="text-sm sm:text-base font-semibold text-green-700 bg-green-50 px-3 sm:px-4 py-2 rounded-lg border border-green-200">
-                      ✨ Consultez-la gratuitement dans <strong>50+ métiers</strong> de <strong>8 domaines</strong> différents !
+                      ✨ Consultations en direct avec Emma dans <strong>50+ métiers</strong> de <strong>8 domaines</strong> différents !
                     </p>
                   </div>
                 </div>
@@ -1320,7 +1320,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             <div className="personalization-section bg-white sm:bg-gradient-to-r sm:from-indigo-50 sm:to-purple-50 rounded-xl p-4 sm:p-6 border border-gray-200 sm:border-indigo-200 mb-6 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
                 <h3 className="text-sm sm:text-base font-bold text-gray-800 flex items-center gap-2">
-                  <Settings size={16} className="text-purple-600 flex-shrink-0" />
+                  <Settings size={16} className="text-purple-500 flex-shrink-0" />
                   <span className="personalization-title">Personnalisez votre expérience</span>
                 </h3>
                 <button
@@ -2265,7 +2265,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           <div className="sidebar-personalization bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
               <h3 className="text-xs sm:text-sm font-bold text-gray-800 flex items-center gap-2">
-                <Settings size={14} className="text-purple-600 flex-shrink-0" />
+                <Settings size={14} className="text-purple-500 flex-shrink-0" />
                 <span className="sidebar-personalization-title">Personnalisation</span>
               </h3>
               <button
@@ -2516,7 +2516,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
 
             <div className="p-6">
               <h4 className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
-                <Settings size={16} className="text-purple-600" />
+                <Settings size={16} className="text-purple-500" />
                 Personnalisation
               </h4>
               
@@ -2596,9 +2596,9 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   setSessionStartTime(null);
                   setKeyPoints([]);
                 }}
-                className="text-gray-600 hover:text-gray-800"
+                className="text-red-500 hover:text-red-700"
               >
-                <ArrowLeft size={24} className="text-red-600" />
+                <ArrowLeft size={24} />
               </button>
               
               {/* Bouton sidebar mobile */}
@@ -2607,9 +2607,9 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   playSound('click');
                   setShowMobileSidebar(!showMobileSidebar);
                 }}
-                className="lg:hidden text-gray-600 hover:text-gray-800 p-2 rounded-lg hover:bg-gray-100"
+                className="lg:hidden text-purple-500 hover:text-purple-700 p-2 rounded-lg hover:bg-purple-100"
               >
-                <Settings size={20} className="text-purple-600" />
+                <Settings size={20} />
               </button>
               <div className="flex items-center gap-3">
                 <div className="w-16 h-16 rounded-full overflow-hidden shadow-lg">
@@ -2635,7 +2635,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
-                    Consultation avec Emma
+                    Consultations en direct avec Emma
                   </h2>
                   <p className="text-sm text-gray-600">{profile.profile.name}</p>
                 </div>
