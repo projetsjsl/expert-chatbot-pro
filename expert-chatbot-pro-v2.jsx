@@ -205,8 +205,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   // ========================================
   if (!selectedProfession) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-        <div className="bg-white shadow-lg border-b-2 border-indigo-200">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in">
+        <div className="bg-white shadow-lg border-b-2 border-indigo-200 fade-in-soft">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
@@ -258,7 +258,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="max-w-7xl mx-auto px-6 py-8 fade-in-soft">
           {filteredSectors.map(sectorName => {
             const professions = sectors[sectorName].filter(prof =>
               searchTerm === '' ||
@@ -428,7 +428,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   const consultationCount = getConsultationCount(selectedProfession.id);
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+    <div className="flex h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 fade-in">
       {/* Sidebar */}
       <div className="w-80 bg-white shadow-xl border-r-2 border-indigo-200 overflow-y-auto">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
