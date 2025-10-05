@@ -430,15 +430,38 @@ const EmmaExpertChatbot = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('✅ Test API réussi:', data);
-        setApiStatus('connected');
-        return true;
+        
+        // Vérifier que la réponse contient bien du contenu
+        if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+          console.log('✅ Contenu de réponse valide détecté');
+          setApiStatus('connected');
+          return true;
+        } else {
+          console.error('⚠️ Réponse API vide ou incomplète lors du test');
+          console.error('Structure de la réponse de test:', JSON.stringify(data, null, 2));
+          setApiStatus('error');
+          return false;
+        }
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error('❌ Erreur API:', {
           status: response.status,
           statusText: response.statusText,
-          data: errorData
+          data: errorData,
+          headers: Object.fromEntries(response.headers.entries())
         });
+        
+        // Messages d'erreur plus spécifiques
+        if (response.status === 400) {
+          console.error('🔍 Erreur 400: Vérifiez le format de votre requête');
+        } else if (response.status === 401) {
+          console.error('🔍 Erreur 401: Clé API invalide ou manquante');
+        } else if (response.status === 403) {
+          console.error('🔍 Erreur 403: Permissions insuffisantes pour cette clé API');
+        } else if (response.status === 429) {
+          console.error('🔍 Erreur 429: Limite de requêtes dépassée');
+        }
+        
         setApiStatus('error');
         return false;
       }
@@ -758,7 +781,9 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           firstCandidate: data.candidates?.[0],
           hasContent: !!data.candidates?.[0]?.content,
           hasParts: !!data.candidates?.[0]?.content?.parts,
-          partsLength: data.candidates?.[0]?.content?.parts?.length
+          partsLength: data.candidates?.[0]?.content?.parts?.length,
+          firstPartText: data.candidates?.[0]?.content?.parts?.[0]?.text,
+          fullResponse: JSON.stringify(data, null, 2)
         });
         
         let errorMessage = 'Désolé, je n\'ai pas pu traiter votre demande.';
@@ -767,7 +792,17 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         } else if (!data.candidates || data.candidates.length === 0) {
           errorMessage = 'Aucune réponse reçue de l\'API. Vérifiez votre clé API.';
         } else if (!data.candidates[0]?.content?.parts?.[0]?.text) {
-          errorMessage = 'Réponse API incomplète. Vérifiez votre clé API.';
+          // Diagnostic plus détaillé
+          const candidate = data.candidates[0];
+          if (candidate?.finishReason === 'SAFETY') {
+            errorMessage = '⚠️ Contenu bloqué par les filtres de sécurité Gemini. Reformulez votre question.';
+          } else if (candidate?.finishReason === 'RECITATION') {
+            errorMessage = '⚠️ Contenu détecté comme récitation. Reformulez votre question.';
+          } else if (candidate?.finishReason === 'OTHER') {
+            errorMessage = '⚠️ Réponse interrompue par l\'API. Réessayez votre question.';
+          } else {
+            errorMessage = `🔍 Réponse API incomplète (raison: ${candidate?.finishReason || 'inconnue'}). Vérifiez votre clé API et réessayez.`;
+          }
         }
         
         setMessages(prev => [...prev, {
@@ -837,125 +872,189 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   );
 
   // ========================================
-  // ANIMATION FUTURISTE EMMA IA
+  // ANIMATION CORPORATE EMMA SERVICE CLIENT
   // ========================================
   if (showIntro) {
     return (
-      <div className="emma-futuristic-intro">
-        {/* Effets de particules futuristes */}
-        <div className="ai-particles">
-          <div className="particle particle-1"></div>
-          <div className="particle particle-2"></div>
-          <div className="particle particle-3"></div>
-          <div className="particle particle-4"></div>
-          <div className="particle particle-5"></div>
-          <div className="particle particle-6"></div>
+      <div className="emma-corporate-intro">
+        {/* Fond corporate avec dégradé professionnel */}
+        <div className="corporate-background">
+          <div className="corporate-pattern"></div>
+          <div className="corporate-grid"></div>
         </div>
-        
-        {/* Grille de fond futuriste */}
-        <div className="ai-grid"></div>
         
         {/* Contenu principal */}
-        <div className="emma-futuristic-content">
-          {/* Image principale avec effet futuriste */}
+        <div className="emma-corporate-content">
+          {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
-            <div className="ai-glow-effect"></div>
-            <div className="ai-scan-line"></div>
-            <img 
-              src="/images/mes-pros-presente-emma.png" 
-              alt="Emma - Assistante IA" 
-              className="emma-main-image"
-            />
-            <div className="ai-frame-border"></div>
+            <div className="corporate-frame">
+              <div className="corporate-glow"></div>
+              <img 
+                src="/images/mes-pros-presente-emma.png" 
+                alt="Emma - Service Client Professionnel" 
+                className="emma-main-image"
+              />
+              <div className="corporate-border"></div>
+            </div>
           </div>
           
-          {/* Icône IA de consultation */}
+          {/* Icônes professionnelles flottantes */}
           {introStep >= 1 && (
-            <div className="ai-consultation-icon animate-futuristic-fade">
-              <div className="ai-icon-container">
-                <div className="ai-icon-glow"></div>
-                <div className="ai-icon">
-                  <svg viewBox="0 0 24 24" fill="none" className="ai-icon-svg">
-                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
-                    <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.3"/>
-                  </svg>
-                </div>
-                <div className="ai-pulse-ring"></div>
-                <div className="ai-pulse-ring delay-1"></div>
-                <div className="ai-pulse-ring delay-2"></div>
+            <div className="professional-icons-container animate-corporate-fade">
+              {/* Stéthoscope - Santé */}
+              <div className="professional-icon icon-stethoscope">
+                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
+                  <path d="M8 3C8 1.89543 8.89543 1 10 1H14C15.1046 1 16 1.89543 16 3V5H18C19.1046 5 20 5.89543 20 7V9C20 10.1046 19.1046 11 18 11H16V13C16 14.1046 15.1046 15 14 15H10C8.89543 15 8 14.1046 8 13V11H6C4.89543 11 4 10.1046 4 9V7C4 5.89543 4.89543 5 6 5H8V3Z" fill="currentColor"/>
+                  <circle cx="6" cy="9" r="2" fill="currentColor"/>
+                  <circle cx="18" cy="9" r="2" fill="currentColor"/>
+                </svg>
+              </div>
+              
+              {/* Livres - Éducation */}
+              <div className="professional-icon icon-books">
+                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
+                  <path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6ZM20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H8V4H20V16Z" fill="currentColor"/>
+                  <path d="M10 6H18V8H10V6ZM10 10H18V12H10V10ZM10 14H16V16H10V14Z" fill="currentColor"/>
+                </svg>
+              </div>
+              
+              {/* Outils - Construction */}
+              <div className="professional-icon icon-tools">
+                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
+                  <path d="M22.7 19L13.6 9.9C14.5 7.6 14 4.9 12.1 3C10.1 1 7.1 1 5.1 3L3.5 4.6C3.1 5 3.1 5.6 3.5 6L6.5 9C6.9 9.4 7.5 9.4 7.9 9L9.4 7.5C9.8 7.1 10.4 7.1 10.8 7.5C11.2 7.9 11.2 8.5 10.8 8.9L9.3 10.4C8.9 10.8 8.9 11.4 9.3 11.8L12.3 14.8C12.7 15.2 13.3 15.2 13.7 14.8L15.2 13.3C15.6 12.9 16.2 12.9 16.6 13.3C17 13.7 17 14.3 16.6 14.7L15.1 16.2C14.7 16.6 14.7 17.2 15.1 17.6L18.1 20.6C18.5 21 19.1 21 19.5 20.6L21 19.1C21.4 18.7 21.4 18.1 21 17.7L22.7 19Z" fill="currentColor"/>
+                </svg>
+              </div>
+              
+              {/* Ordinateur - Technologie */}
+              <div className="professional-icon icon-computer">
+                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
+                  <path d="M20 18C21.1 18 21.99 17.1 21.99 16L22 6C22 4.89 21.1 4 20 4H4C2.89 4 2 4.89 2 6V16C2 17.1 2.89 18 4 18H0V20H24V18H20ZM4 6H20V16H4V6Z" fill="currentColor"/>
+                </svg>
+              </div>
+              
+              {/* Balance - Justice */}
+              <div className="professional-icon icon-balance">
+                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H9L3 7V9H21ZM5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11H5ZM7 20V13H17V20H7Z" fill="currentColor"/>
+                </svg>
+              </div>
+              
+              {/* Microscope - Science */}
+              <div className="professional-icon icon-microscope">
+                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
+                  <path d="M9.5 12.8L5.8 9.1C5.4 8.7 5.4 8.1 5.8 7.7L7.2 6.3C7.6 5.9 8.2 5.9 8.6 6.3L12.3 10C12.7 10.4 12.7 11 12.3 11.4L10.9 12.8C10.5 13.2 9.9 13.2 9.5 12.8ZM15.5 4.5L14.1 5.9C13.7 6.3 13.7 6.9 14.1 7.3L15.5 8.7C15.9 9.1 16.5 9.1 16.9 8.7L18.3 7.3C18.7 6.9 18.7 6.3 18.3 5.9L16.9 4.5C16.5 4.1 15.9 4.1 15.5 4.5Z" fill="currentColor"/>
+                  <circle cx="12" cy="16" r="3" fill="currentColor"/>
+                </svg>
               </div>
             </div>
           )}
           
-          {/* Titre futuriste */}
+          {/* Titre corporate */}
           {introStep >= 2 && (
-            <h1 className="emma-futuristic-title animate-futuristic-slide">
-              <span className="title-main">EMMA</span>
-              <span className="title-sub">Intelligence Artificielle</span>
-            </h1>
+            <div className="emma-corporate-title animate-corporate-slide">
+              <div className="corporate-logo">
+                <span className="logo-main">MES PROS</span>
+                <span className="logo-presents">présente</span>
+              </div>
+              <h1 className="emma-name">EMMA</h1>
+              <div className="corporate-tagline">
+                <span className="tagline-main">Service Client Professionnel</span>
+                <span className="tagline-sub">Expertise Multi-Métiers</span>
+              </div>
+            </div>
           )}
           
-          {/* Description avec effet de frappe */}
+          {/* Description corporate */}
           {introStep >= 3 && (
-            <div className="emma-futuristic-description animate-futuristic-type">
-              <p className="description-line">
-                <span className="text-ai">[IA]</span> Assistante virtuelle spécialisée
-              </p>
-              <p className="description-line">
-                en expertise professionnelle multi-métiers
-              </p>
+            <div className="emma-corporate-description animate-corporate-type">
+              <div className="description-card">
+                <div className="card-header">
+                  <div className="service-icon">🎯</div>
+                  <h3>Consultation Professionnelle</h3>
+                </div>
+                <p className="description-text">
+                  Votre assistante virtuelle spécialisée dans l'expertise professionnelle
+                </p>
+                <p className="description-text">
+                  Accès instantané à des conseils d'experts dans 50+ métiers
+                </p>
+              </div>
             </div>
           )}
           
-          {/* Statistiques futuristes */}
+          {/* Statistiques corporate */}
           {introStep >= 4 && (
-            <div className="emma-futuristic-stats animate-futuristic-stats">
-              <div className="stat-item">
-                <div className="stat-number">50+</div>
-                <div className="stat-label">Métiers</div>
-                <div className="stat-bar">
-                  <div className="stat-progress"></div>
+            <div className="emma-corporate-stats animate-corporate-stats">
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <div className="stat-icon">👥</div>
+                  <div className="stat-number">50+</div>
+                  <div className="stat-label">Métiers Experts</div>
+                  <div className="stat-description">Professionnels qualifiés</div>
                 </div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">8</div>
-                <div className="stat-label">Domaines</div>
-                <div className="stat-bar">
-                  <div className="stat-progress delay-1"></div>
+                <div className="stat-card">
+                  <div className="stat-icon">🏢</div>
+                  <div className="stat-number">8</div>
+                  <div className="stat-label">Domaines</div>
+                  <div className="stat-description">Secteurs d'activité</div>
                 </div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">∞</div>
-                <div className="stat-label">Expertise</div>
-                <div className="stat-bar">
-                  <div className="stat-progress delay-2"></div>
+                <div className="stat-card">
+                  <div className="stat-icon">⚡</div>
+                  <div className="stat-number">24/7</div>
+                  <div className="stat-label">Disponibilité</div>
+                  <div className="stat-description">Service continu</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">🎯</div>
+                  <div className="stat-number">100%</div>
+                  <div className="stat-label">Gratuit</div>
+                  <div className="stat-description">Consultation libre</div>
                 </div>
               </div>
             </div>
           )}
           
-          {/* Call to action futuriste */}
+          {/* Call to action corporate */}
           {introStep >= 5 && (
-            <div className="emma-futuristic-cta animate-futuristic-cta">
+            <div className="emma-corporate-cta animate-corporate-cta">
               <div className="cta-container">
-                <div className="cta-glow"></div>
-                <p className="cta-text">
-                  <span className="cta-highlight">CONSULTATION GRATUITE</span>
-                </p>
-                <p className="cta-subtext">
-                  Démarrez votre exploration professionnelle
-                </p>
+                <div className="cta-card">
+                  <div className="cta-header">
+                    <div className="cta-icon">🚀</div>
+                    <h3>Prêt à commencer ?</h3>
+                  </div>
+                  <div className="cta-content">
+                    <p className="cta-main-text">
+                      <span className="highlight">Consultation Professionnelle Gratuite</span>
+                    </p>
+                    <p className="cta-sub-text">
+                      Accédez instantanément à l'expertise de professionnels qualifiés
+                    </p>
+                    <div className="cta-benefits">
+                      <div className="benefit">✓ Réponse immédiate</div>
+                      <div className="benefit">✓ Expertise vérifiée</div>
+                      <div className="benefit">✓ 100% gratuit</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
         </div>
         
-        {/* Indicateur de chargement futuriste */}
-        <div className="ai-loading-indicator">
-          <div className="loading-bar">
-            <div className="loading-progress"></div>
+        {/* Indicateur de chargement corporate */}
+        <div className="corporate-loading-indicator">
+          <div className="loading-container">
+            <div className="loading-spinner">
+              <div className="spinner-ring"></div>
+              <div className="spinner-ring delay-1"></div>
+              <div className="spinner-ring delay-2"></div>
+            </div>
+            <div className="loading-text">
+              <span className="loading-main">Initialisation du Service Client</span>
+              <span className="loading-sub">Connexion aux experts professionnels...</span>
+            </div>
           </div>
-          <div className="loading-text">Initialisation IA...</div>
         </div>
       </div>
     );
@@ -1012,6 +1111,47 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                         title="Retester la connexion API"
                       >
                         🔄 Retester
+                      </button>
+                      <button
+                        onClick={async () => {
+                          playSound('click');
+                          console.log('🔍 DIAGNOSTIC COMPLET:');
+                          console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
+                          console.log('📋 Toutes les variables env:', import.meta.env);
+                          console.log('📋 Mode:', import.meta.env.MODE);
+                          console.log('📋 Base URL:', import.meta.env.BASE_URL);
+                          console.log('📋 Clé API actuelle:', apiKey ? `${apiKey.substring(0, 10)}...` : 'AUCUNE');
+                          console.log('📋 Longueur de la clé:', apiKey?.length || 0);
+                          
+                          // Test de connectivité avancé
+                          console.log('🧪 Test de connectivité avancé...');
+                          try {
+                            const testResponse = await fetch('https://generativelanguage.googleapis.com/v1/models', {
+                              headers: {
+                                'x-goog-api-key': apiKey || import.meta.env.VITE_GEMINI_API_KEY || ''
+                              }
+                            });
+                            console.log('📊 Test de liste des modèles:', {
+                              status: testResponse.status,
+                              ok: testResponse.ok,
+                              headers: Object.fromEntries(testResponse.headers.entries())
+                            });
+                            
+                            if (testResponse.ok) {
+                              const models = await testResponse.json();
+                              console.log('📋 Modèles disponibles:', models);
+                            } else {
+                              const error = await testResponse.text();
+                              console.error('❌ Erreur lors du test:', error);
+                            }
+                          } catch (err) {
+                            console.error('❌ Erreur de test:', err);
+                          }
+                        }}
+                        className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
+                        title="Diagnostic avancé dans la console"
+                      >
+                        🔍 Diagnostic
                       </button>
                       <div className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded border border-red-200 max-w-xs">
                         <details className="cursor-help">
