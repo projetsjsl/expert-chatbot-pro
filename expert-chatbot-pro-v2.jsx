@@ -186,10 +186,10 @@ Comment puis-je vous aider ?`;
     if (!inputMessage.trim() || isLoading) return;
 
     // Vérifier la clé API
-    if (!apiKey) {
+    if (!apiKey || apiKey.trim() === '') {
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: "Erreur: Clé API Gemini manquante. Veuillez vérifier la configuration." }]
+        parts: [{ text: "Erreur: Clé API Gemini manquante ou invalide. Veuillez vérifier la configuration de votre environnement." }]
       }]);
       return;
     }
@@ -247,7 +247,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         throw new Error(`API Error: ${response.status} - ${data.error?.message || 'Unknown error'}`);
       }
       
-      if (data.candidates?.[0]?.content) {
+      // Vérification robuste de la structure de la réponse
+      if (data.candidates && 
+          data.candidates.length > 0 && 
+          data.candidates[0] && 
+          data.candidates[0].content && 
+          data.candidates[0].content.parts && 
+          data.candidates[0].content.parts.length > 0 && 
+          data.candidates[0].content.parts[0] && 
+          data.candidates[0].content.parts[0].text) {
+        
         const responseText = data.candidates[0].content.parts[0].text;
         console.log('Response text:', responseText); // Debug log
         
@@ -267,17 +276,39 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           }
         }
       } else {
-        console.error('No candidates in response:', data);
+        console.error('Invalid response structure:', data);
+        console.error('Candidates:', data.candidates);
+        console.error('First candidate:', data.candidates?.[0]);
+        console.error('Content:', data.candidates?.[0]?.content);
+        console.error('Parts:', data.candidates?.[0]?.content?.parts);
+        
         setMessages(prev => [...prev, {
           role: 'model',
-          parts: [{ text: "Désolée, je n'ai pas pu générer de réponse. Veuillez réessayer." }]
+          parts: [{ text: "Désolée, je n'ai pas pu générer de réponse valide. La structure de la réponse API est inattendue. Veuillez réessayer." }]
         }]);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error details:', error);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      
+      let errorMessage = "Désolée, une erreur s'est produite. ";
+      
+      if (error.message.includes('API Error')) {
+        errorMessage += "Problème avec l'API Gemini. ";
+      } else if (error.message.includes('fetch')) {
+        errorMessage += "Problème de connexion réseau. ";
+      } else if (error.message.includes('JSON')) {
+        errorMessage += "Erreur de format de données. ";
+      } else {
+        errorMessage += "Erreur inattendue. ";
+      }
+      
+      errorMessage += "Veuillez vérifier votre connexion et réessayer.";
+      
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: `Désolée, une erreur s'est produite: ${error.message}. Veuillez vérifier votre connexion et réessayer.` }]
+        parts: [{ text: errorMessage }]
       }]);
     } finally {
       setIsLoading(false);
@@ -354,24 +385,99 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     Emma
                   </h1>
-                  <p className="text-sm text-gray-600">Exploratrice Multi-Métiers Autonome</p>
+                  <p className="text-sm text-gray-600">🎯 Exploratrice Multi-Métiers Autonome</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setShowAbout(true)}
-                  className="text-indigo-600 hover:underline text-sm"
+                  className="text-indigo-600 hover:underline text-sm flex items-center gap-1"
                 >
-                  À propos
+                  <span>ℹ️</span> À propos
                 </button>
                 <button
                   onClick={() => setShowDisclaimer(true)}
-                  className="text-gray-600 hover:underline text-sm"
+                  className="text-gray-600 hover:underline text-sm flex items-center gap-1"
                 >
-                  Avis légal
+                  <span>⚖️</span> Avis légal
                 </button>
               </div>
+            </div>
+
+            {/* Options de personnalisation épurées */}
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-200 mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                  <Settings size={16} className="text-indigo-600" />
+                  Personnalisez votre expérience
+                </h3>
+                <button
+                  onClick={() => setShowSettings(!showSettings)}
+                  className="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                >
+                  {showSettings ? 'Masquer ▼' : 'Afficher ▶'}
+                </button>
+              </div>
+              
+              {showSettings && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Style utilisateur */}
+                  <div>
+                    <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
+                      <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                      Votre style
+                    </label>
+                    <select
+                      value={userPersonality}
+                      onChange={(e) => setUserPersonality(e.target.value)}
+                      className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
+                    >
+                      <option value="standard">⚖️ Standard</option>
+                      <option value="analytique">📊 Analytique</option>
+                      <option value="créatif">🎨 Créatif</option>
+                      <option value="pragmatique">🎯 Pragmatique</option>
+                      <option value="empathique">💝 Empathique</option>
+                    </select>
+                  </div>
+
+                  {/* Niveau d'expertise */}
+                  <div>
+                    <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
+                      <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                      Votre niveau
+                    </label>
+                    <select
+                      value={expertiseLevel}
+                      onChange={(e) => setExpertiseLevel(e.target.value)}
+                      className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 bg-white"
+                    >
+                      <option value="débutant">🌱 Débutant</option>
+                      <option value="intermediaire">📚 Intermédiaire</option>
+                      <option value="avancé">🎓 Avancé</option>
+                      <option value="expert">🏆 Expert</option>
+                    </select>
+                  </div>
+
+                  {/* Ton d'Emma */}
+                  <div>
+                    <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
+                      <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
+                      Ton d'Emma
+                    </label>
+                    <select
+                      value={emmaPersonality}
+                      onChange={(e) => setEmmaPersonality(e.target.value)}
+                      className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-pink-500 bg-white"
+                    >
+                      <option value="professionnelle">👔 Professionnelle</option>
+                      <option value="amicale">😊 Amicale</option>
+                      <option value="pédagogue">👩‍🏫 Pédagogue</option>
+                      <option value="directe">⚡ Directe</option>
+                    </select>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="relative">
@@ -946,151 +1052,97 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         )}
 
         <div className="p-6 border-b border-gray-200">
-          <button
-            onClick={() => setShowSettings(!showSettings)}
-            className="flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-indigo-600 mb-4 w-full transition-colors"
-          >
-            <Settings size={16} /> Personnaliser les réponses
-            {showSettings ? ' ▼' : ' ▶'}
-          </button>
-          
-          {showSettings && (
-            <div className="space-y-6">
-              {/* Style utilisateur */}
-              <div>
-                <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
-                  Votre style de communication
-                </h4>
-                <div className="grid grid-cols-1 gap-2">
-                  {[
-                    { value: 'standard', label: 'Standard', desc: 'Équilibré et adaptatif', icon: '⚖️' },
-                    { value: 'analytique', label: 'Analytique', desc: 'Données précises et structurées', icon: '📊' },
-                    { value: 'créatif', label: 'Créatif', desc: 'Explications imagées et analogies', icon: '🎨' },
-                    { value: 'pragmatique', label: 'Pragmatique', desc: 'Solutions concrètes et directes', icon: '🎯' },
-                    { value: 'empathique', label: 'Empathique', desc: 'Ton chaleureux et compréhensif', icon: '💝' }
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setUserPersonality(option.value)}
-                      className={`p-3 rounded-lg border-2 text-left transition-all ${
-                        userPersonality === option.value
-                          ? 'border-indigo-500 bg-indigo-50 text-indigo-800'
-                          : 'border-gray-200 bg-white hover:border-indigo-300 hover:bg-indigo-25'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">{option.icon}</span>
-                        <div>
-                          <div className="font-semibold text-sm">{option.label}</div>
-                          <div className="text-xs text-gray-600">{option.desc}</div>
-                        </div>
-                        {userPersonality === option.value && (
-                          <div className="ml-auto w-2 h-2 bg-indigo-500 rounded-full"></div>
-                        )}
-                      </div>
-                    </button>
-                  ))}
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-200">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <Settings size={16} className="text-indigo-600" />
+                Personnalisation des réponses
+              </h3>
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+              >
+                {showSettings ? 'Masquer ▼' : 'Afficher ▶'}
+              </button>
+            </div>
+            
+            {showSettings && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Style utilisateur */}
+                <div>
+                  <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
+                    <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                    Votre style
+                  </label>
+                  <select
+                    value={userPersonality}
+                    onChange={(e) => setUserPersonality(e.target.value)}
+                    className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
+                  >
+                    <option value="standard">⚖️ Standard</option>
+                    <option value="analytique">📊 Analytique</option>
+                    <option value="créatif">🎨 Créatif</option>
+                    <option value="pragmatique">🎯 Pragmatique</option>
+                    <option value="empathique">💝 Empathique</option>
+                  </select>
+                </div>
+
+                {/* Niveau d'expertise */}
+                <div>
+                  <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
+                    <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                    Votre niveau
+                  </label>
+                  <select
+                    value={expertiseLevel}
+                    onChange={(e) => setExpertiseLevel(e.target.value)}
+                    className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 bg-white"
+                  >
+                    <option value="débutant">🌱 Débutant</option>
+                    <option value="intermediaire">📚 Intermédiaire</option>
+                    <option value="avancé">🎓 Avancé</option>
+                    <option value="expert">🏆 Expert</option>
+                  </select>
+                </div>
+
+                {/* Ton d'Emma */}
+                <div>
+                  <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
+                    <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
+                    Ton d'Emma
+                  </label>
+                  <select
+                    value={emmaPersonality}
+                    onChange={(e) => setEmmaPersonality(e.target.value)}
+                    className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-pink-500 bg-white"
+                  >
+                    <option value="professionnelle">👔 Professionnelle</option>
+                    <option value="amicale">😊 Amicale</option>
+                    <option value="pédagogue">👩‍🏫 Pédagogue</option>
+                    <option value="directe">⚡ Directe</option>
+                  </select>
                 </div>
               </div>
+            )}
 
-              {/* Niveau d'expertise */}
-              <div>
-                <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                  Votre niveau d'expertise
-                </h4>
-                <div className="grid grid-cols-1 gap-2">
-                  {[
-                    { value: 'débutant', label: 'Débutant', desc: 'Je découvre le sujet', icon: '🌱' },
-                    { value: 'intermediaire', label: 'Intermédiaire', desc: 'J\'ai quelques connaissances', icon: '📚' },
-                    { value: 'avancé', label: 'Avancé', desc: 'Je maîtrise les bases', icon: '🎓' },
-                    { value: 'expert', label: 'Expert', desc: 'Je suis spécialiste', icon: '🏆' }
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setExpertiseLevel(option.value)}
-                      className={`p-3 rounded-lg border-2 text-left transition-all ${
-                        expertiseLevel === option.value
-                          ? 'border-purple-500 bg-purple-50 text-purple-800'
-                          : 'border-gray-200 bg-white hover:border-purple-300 hover:bg-purple-25'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">{option.icon}</span>
-                        <div>
-                          <div className="font-semibold text-sm">{option.label}</div>
-                          <div className="text-xs text-gray-600">{option.desc}</div>
-                        </div>
-                        {expertiseLevel === option.value && (
-                          <div className="ml-auto w-2 h-2 bg-purple-500 rounded-full"></div>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Ton d'Emma */}
-              <div>
-                <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
-                  Le ton d'Emma
-                </h4>
-                <div className="grid grid-cols-1 gap-2">
-                  {[
-                    { value: 'professionnelle', label: 'Professionnelle', desc: 'Formel mais accessible', icon: '👔' },
-                    { value: 'amicale', label: 'Amicale', desc: 'Chaleureux et naturel', icon: '😊' },
-                    { value: 'pédagogue', label: 'Pédagogue', desc: 'Explicatif et patient', icon: '👩‍🏫' },
-                    { value: 'directe', label: 'Directe', desc: 'Concis et efficace', icon: '⚡' }
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setEmmaPersonality(option.value)}
-                      className={`p-3 rounded-lg border-2 text-left transition-all ${
-                        emmaPersonality === option.value
-                          ? 'border-pink-500 bg-pink-50 text-pink-800'
-                          : 'border-gray-200 bg-white hover:border-pink-300 hover:bg-pink-25'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">{option.icon}</span>
-                        <div>
-                          <div className="font-semibold text-sm">{option.label}</div>
-                          <div className="text-xs text-gray-600">{option.desc}</div>
-                        </div>
-                        {emmaPersonality === option.value && (
-                          <div className="ml-auto w-2 h-2 bg-pink-500 rounded-full"></div>
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Résumé actuel */}
-              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-lg border border-indigo-200">
-                <h5 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
-                  Configuration actuelle
-                </h5>
-                <div className="space-y-1 text-xs text-gray-700">
-                  <div className="flex items-center gap-2">
-                    <span className="text-indigo-500">•</span>
-                    <span><strong>Style:</strong> {userPersonality}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-purple-500">•</span>
-                    <span><strong>Niveau:</strong> {expertiseLevel}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-pink-500">•</span>
-                    <span><strong>Ton Emma:</strong> {emmaPersonality}</span>
-                  </div>
-                </div>
+            {/* Résumé actuel compact */}
+            <div className="mt-3 pt-3 border-t border-indigo-200">
+              <div className="flex items-center justify-between text-xs text-gray-600">
+                <span className="flex items-center gap-1">
+                  <span className="text-indigo-500">⚖️</span>
+                  <span className="font-medium">{userPersonality}</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="text-purple-500">📚</span>
+                  <span className="font-medium">{expertiseLevel}</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="text-pink-500">😊</span>
+                  <span className="font-medium">{emmaPersonality}</span>
+                </span>
               </div>
             </div>
-          )}
+          </div>
         </div>
 
         <div className="p-6 border-b border-gray-200">
