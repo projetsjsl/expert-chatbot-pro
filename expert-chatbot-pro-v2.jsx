@@ -78,6 +78,17 @@ const PROFESSION_AVATARS = {
   'ecrivain_auteur': 'ecrivain auteur.png',
   'traducteur': 'traducteur.png',
   
+  // Métiers supplémentaires
+  'formateur_adultes': 'professeur universitaire.png',
+  'artiste_visuel': 'artiste.png',
+  'musicien': 'musicien.png',
+  'ecrivain': 'ecrivain auteur.png',
+  'comedien': 'artiste.png',
+  'danseur': 'artiste.png',
+  'agent_immobilier': 'entrepreneur.png',
+  'evaluateur_immobilier': 'entrepreneur.png',
+  'gestionnaire_immeuble': 'gestionnaire projet.png',
+  
   // Mappings alternatifs pour compatibilité
   'developpeur': 'fullstack.png',
   'analyste': 'analyste financier.png',
@@ -1141,7 +1152,11 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
   const MesProsLogo = () => (
     <div className="mes-pros-logo">
       <div className="logo-text-container">
-        <h1 className="logo-emma">Emma</h1>
+        <div className="flex items-center justify-center gap-3">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Flag_of_Quebec.svg/1200px-Flag_of_Quebec.svg.png" alt="Québec" className="w-8 h-6 object-cover rounded" />
+          <h1 className="logo-emma">Emma</h1>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/1200px-Flag_of_Canada_%28Pantone%29.svg.png" alt="Canada" className="w-8 h-6 object-cover rounded" />
+        </div>
       </div>
     </div>
   );
@@ -1284,9 +1299,13 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   )}
                 </div>
                 <div className="welcome-animation flex-1 min-w-0">
-                  <h1 className="text-2xl sm:text-3xl font-bold text-purple-600 leading-tight mb-1">
-                    Emma
-                  </h1>
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Flag_of_Quebec.svg/1200px-Flag_of_Quebec.svg.png" alt="Québec" className="w-6 h-4 object-cover rounded" />
+                    <h1 className="text-2xl sm:text-3xl font-bold text-purple-600 leading-tight">
+                      Emma
+                    </h1>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/1200px-Flag_of_Canada_%28Pantone%29.svg.png" alt="Canada" className="w-6 h-4 object-cover rounded" />
+                  </div>
                   <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Consultations Gratuites - 50+ Métiers</p>
                   <div className="marketing-banner">
                     <p className="text-xs sm:text-sm font-semibold text-green-700 bg-green-50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-green-200 leading-tight">
@@ -1683,7 +1702,11 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             <div className="min-h-full flex items-center justify-center py-8">
               <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">À propos d'Emma</h2>
+                <div className="flex items-center gap-3">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Flag_of_Quebec.svg/1200px-Flag_of_Quebec.svg.png" alt="Québec" className="w-6 h-5 object-cover rounded" />
+                  <h2 className="text-2xl font-bold text-gray-800">À propos d'Emma</h2>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/1200px-Flag_of_Canada_%28Pantone%29.svg.png" alt="Canada" className="w-6 h-5 object-cover rounded" />
+                </div>
                 <button onClick={() => setShowAbout(false)} className="text-gray-500 hover:text-gray-700">
                   <X size={24} />
                 </button>
@@ -2128,7 +2151,11 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               )}
             </div>
             <div>
-              <h1 className="text-xl font-bold">Emma</h1>
+              <div className="flex items-center gap-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Flag_of_Quebec.svg/1200px-Flag_of_Quebec.svg.png" alt="Québec" className="w-5 h-4 object-cover rounded" />
+                <h1 className="text-xl font-bold">Emma</h1>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/1200px-Flag_of_Canada_%28Pantone%29.svg.png" alt="Canada" className="w-5 h-4 object-cover rounded" />
+              </div>
               <p className="text-xs opacity-90">Assistante Virtuelle</p>
             </div>
           </div>
@@ -2390,7 +2417,11 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     )}
                   </div>
                   <div>
-                    <h1 className="text-xl font-bold">Emma</h1>
+                    <div className="flex items-center gap-2">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Flag_of_Quebec.svg/1200px-Flag_of_Quebec.svg.png" alt="Québec" className="w-5 h-4 object-cover rounded" />
+                <h1 className="text-xl font-bold">Emma</h1>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/1200px-Flag_of_Canada_%28Pantone%29.svg.png" alt="Canada" className="w-5 h-4 object-cover rounded" />
+              </div>
                     <p className="text-xs opacity-90">Assistante Virtuelle</p>
                   </div>
                 </div>
@@ -2838,41 +2869,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         </div>
       )}
 
-      {/* Section Footer avec liens légaux et admin - Déplacée en bas de page */}
-      <div className="fixed bottom-4 left-4 z-30">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              playSound('click');
-              setShowAbout(true);
-            }}
-            className="text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-2 rounded-lg transition-colors border border-indigo-200 flex items-center gap-1"
-            title="À propos d'Emma"
-          >
-            <span>ℹ️</span> À propos
-          </button>
-          <button
-            onClick={() => {
-              playSound('click');
-              setShowDisclaimer(true);
-            }}
-            className="text-xs text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors border border-gray-200 flex items-center gap-1"
-            title="Avis légal et disclaimer"
-          >
-            <span>⚖️</span> Avis légal
-          </button>
-          <button
-            onClick={() => {
-              playSound('click');
-              setShowAdminPanel(!showAdminPanel);
-            }}
-            className="text-xs text-gray-500 hover:text-gray-700 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors border border-gray-200 flex items-center gap-1"
-            title="Panneau d'administration"
-          >
-            <span>⚙️</span> Admin
-          </button>
-        </div>
-      </div>
 
       {/* Section Admin - Déplacée en bas de page */}
       {showAdminPanel && (
@@ -2981,6 +2977,44 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           </div>
         </div>
       )}
+
+      {/* Footer avec liens légaux et admin - Complètement en bas de page */}
+      <div className="w-full bg-gray-50 border-t border-gray-200 py-4 px-6 mt-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <button
+              onClick={() => {
+                playSound('click');
+                setShowAbout(true);
+              }}
+              className="text-sm text-indigo-600 hover:text-indigo-800 bg-white hover:bg-indigo-50 px-4 py-2 rounded-lg transition-colors border border-indigo-200 flex items-center gap-2 shadow-sm"
+              title="À propos d'Emma"
+            >
+              <span>ℹ️</span> À propos
+            </button>
+            <button
+              onClick={() => {
+                playSound('click');
+                setShowDisclaimer(true);
+              }}
+              className="text-sm text-gray-600 hover:text-gray-800 bg-white hover:bg-gray-50 px-4 py-2 rounded-lg transition-colors border border-gray-200 flex items-center gap-2 shadow-sm"
+              title="Avis légal et disclaimer"
+            >
+              <span>⚖️</span> Avis légal
+            </button>
+            <button
+              onClick={() => {
+                playSound('click');
+                setShowAdminPanel(!showAdminPanel);
+              }}
+              className="text-sm text-gray-500 hover:text-gray-700 bg-white hover:bg-gray-50 px-4 py-2 rounded-lg transition-colors border border-gray-200 flex items-center gap-2 shadow-sm"
+              title="Panneau d'administration"
+            >
+              <span>⚙️</span> Admin
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     </>
   );
