@@ -477,9 +477,9 @@ const EmmaExpertChatbot = () => {
     summary += `==========================\n\n`;
     
     messages.forEach((message, index) => {
-      if (message.role === 'user') {
+      if (message.role === 'user' && message.parts?.[0]?.text) {
         summary += `👤 Vous : ${message.parts[0].text}\n\n`;
-      } else if (message.role === 'model') {
+      } else if (message.role === 'model' && message.parts?.[0]?.text) {
         summary += `🤖 Emma : ${message.parts[0].text}\n\n`;
       }
     });
@@ -518,13 +518,26 @@ const EmmaExpertChatbot = () => {
   };
 
   const formatMessageText = (text) => {
-    // Vérifier que le texte existe
+    // Vérifier que le texte existe et est valide
     if (!text || typeof text !== 'string') {
       return '';
     }
     
-    // Améliorer le formatage du texte
-    let formattedText = text
+    // Échapper les caractères HTML dangereux d'abord
+    const escapeHtml = (unsafe) => {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
+    
+    // Échapper le texte de base
+    let safeText = escapeHtml(text);
+    
+    // Améliorer le formatage du texte de manière sécurisée
+    let formattedText = safeText
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Gras
       .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italique
       .replace(/\n\n/g, '<br><br>') // Paragraphes
@@ -642,6 +655,11 @@ Comment puis-je vous aider ?`;
     setIsLoading(true);
 
     try {
+      // Validation du message utilisateur
+      if (!userMessage || !userMessage.parts || !userMessage.parts[0] || !userMessage.parts[0].text) {
+        throw new Error('Message utilisateur invalide ou vide');
+      }
+      
       const profile = professionalProfiles[selectedProfession.id];
       
       // Vérifier que le profil existe
@@ -692,7 +710,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             contents: [
               {
                 role: 'user',
-                parts: [{ text: `${enhancedPrompt}\n\n${userMessage.parts[0].text}` }]
+                parts: [{ text: `${enhancedPrompt}\n\n${userMessage.parts?.[0]?.text || 'Message vide'}` }]
               }
             ],
             generationConfig: { 
@@ -714,7 +732,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       const data = await response.json();
       console.log('Gemini Response:', data);
       
-      if (data.candidates?.[0]?.content) {
+      if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
         const responseText = data.candidates[0].content.parts[0].text;
         setMessages(prev => [...prev, {
           role: 'model',
@@ -734,9 +752,27 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         }
       } else {
         console.error('Aucune réponse valide reçue:', data);
+        console.error('Structure de la réponse:', {
+          hasCandidates: !!data.candidates,
+          candidatesLength: data.candidates?.length,
+          firstCandidate: data.candidates?.[0],
+          hasContent: !!data.candidates?.[0]?.content,
+          hasParts: !!data.candidates?.[0]?.content?.parts,
+          partsLength: data.candidates?.[0]?.content?.parts?.length
+        });
+        
+        let errorMessage = 'Désolé, je n\'ai pas pu traiter votre demande.';
+        if (data.error) {
+          errorMessage = `Erreur API: ${data.error.message || 'Erreur inconnue'}`;
+        } else if (!data.candidates || data.candidates.length === 0) {
+          errorMessage = 'Aucune réponse reçue de l\'API. Vérifiez votre clé API.';
+        } else if (!data.candidates[0]?.content?.parts?.[0]?.text) {
+          errorMessage = 'Réponse API incomplète. Vérifiez votre clé API.';
+        }
+        
         setMessages(prev => [...prev, {
           role: 'model',
-          parts: [{ text: 'Désolé, je n\'ai pas pu traiter votre demande. Veuillez réessayer.' }]
+          parts: [{ text: errorMessage }]
         }]);
       }
     } catch (error) {
@@ -744,9 +780,23 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       console.error('Error message:', error.message);
       console.error('Error stack:', error.stack);
       
+      let errorMessage = 'Erreur de connexion. Veuillez vérifier votre clé API.';
+      
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        errorMessage = 'Erreur de réseau. Vérifiez votre connexion internet.';
+      } else if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+        errorMessage = 'Clé API invalide. Veuillez vérifier votre clé API Gemini.';
+      } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
+        errorMessage = 'Accès refusé. Vérifiez les permissions de votre clé API.';
+      } else if (error.message.includes('429') || error.message.includes('Too Many Requests')) {
+        errorMessage = 'Limite de requêtes atteinte. Veuillez réessayer plus tard.';
+      } else if (error.message.includes('Cannot read properties of undefined')) {
+        errorMessage = 'Erreur de traitement de la réponse API. Vérifiez votre clé API.';
+      }
+      
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: `Erreur de connexion: ${error.message}. Veuillez vérifier votre clé API.` }]
+        parts: [{ text: errorMessage }]
       }]);
     } finally {
       setIsLoading(false);
@@ -787,63 +837,125 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   );
 
   // ========================================
-  // ANIMATION DE PRÉSENTATION EMMA SÉQUENTIELLE
+  // ANIMATION FUTURISTE EMMA IA
   // ========================================
   if (showIntro) {
     return (
-      <div className="emma-intro">
-        <div className="emma-intro-sparkles">
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
-          <div className="sparkle"></div>
+      <div className="emma-futuristic-intro">
+        {/* Effets de particules futuristes */}
+        <div className="ai-particles">
+          <div className="particle particle-1"></div>
+          <div className="particle particle-2"></div>
+          <div className="particle particle-3"></div>
+          <div className="particle particle-4"></div>
+          <div className="particle particle-5"></div>
+          <div className="particle particle-6"></div>
         </div>
         
-        <div className="emma-intro-content">
-          <div className="emma-intro-left">
-            <MesProsLogo />
+        {/* Grille de fond futuriste */}
+        <div className="ai-grid"></div>
+        
+        {/* Contenu principal */}
+        <div className="emma-futuristic-content">
+          {/* Image principale avec effet futuriste */}
+          <div className="emma-main-image-container">
+            <div className="ai-glow-effect"></div>
+            <div className="ai-scan-line"></div>
+            <img 
+              src="/images/mes-pros-presente-emma.png" 
+              alt="Emma - Assistante IA" 
+              className="emma-main-image"
+            />
+            <div className="ai-frame-border"></div>
           </div>
           
-          <div className="emma-intro-right">
-            {/* Avatar - Étape 1 */}
-            {introStep >= 1 && (
-              <div className="emma-intro-avatar animate-fade-in-up">
-                <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+          {/* Icône IA de consultation */}
+          {introStep >= 1 && (
+            <div className="ai-consultation-icon animate-futuristic-fade">
+              <div className="ai-icon-container">
+                <div className="ai-icon-glow"></div>
+                <div className="ai-icon">
+                  <svg viewBox="0 0 24 24" fill="none" className="ai-icon-svg">
+                    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                    <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.3"/>
+                  </svg>
+                </div>
+                <div className="ai-pulse-ring"></div>
+                <div className="ai-pulse-ring delay-1"></div>
+                <div className="ai-pulse-ring delay-2"></div>
               </div>
-            )}
-            
-            {/* Nom - Étape 2 */}
-            {introStep >= 2 && (
-              <h1 className="emma-intro-name animate-fade-in-up">Emma</h1>
-            )}
-            
-            {/* Description - Étape 3 */}
-            {introStep >= 3 && (
-              <p className="emma-intro-subtitle animate-fade-in-up">
-                Votre assistante virtuelle spécialisée<br />
-                en expertise professionnelle
+            </div>
+          )}
+          
+          {/* Titre futuriste */}
+          {introStep >= 2 && (
+            <h1 className="emma-futuristic-title animate-futuristic-slide">
+              <span className="title-main">EMMA</span>
+              <span className="title-sub">Intelligence Artificielle</span>
+            </h1>
+          )}
+          
+          {/* Description avec effet de frappe */}
+          {introStep >= 3 && (
+            <div className="emma-futuristic-description animate-futuristic-type">
+              <p className="description-line">
+                <span className="text-ai">[IA]</span> Assistante virtuelle spécialisée
               </p>
-            )}
-            
-            {/* Marketing - Étape 4 */}
-            {introStep >= 4 && (
-              <div className="emma-intro-marketing animate-fade-in-up">
-                <p className="emma-intro-marketing-text">
-                  Consultez-la gratuitement dans <strong>50+ métiers</strong><br />
-                  de <strong>8 domaines</strong> différents !
+              <p className="description-line">
+                en expertise professionnelle multi-métiers
+              </p>
+            </div>
+          )}
+          
+          {/* Statistiques futuristes */}
+          {introStep >= 4 && (
+            <div className="emma-futuristic-stats animate-futuristic-stats">
+              <div className="stat-item">
+                <div className="stat-number">50+</div>
+                <div className="stat-label">Métiers</div>
+                <div className="stat-bar">
+                  <div className="stat-progress"></div>
+                </div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">8</div>
+                <div className="stat-label">Domaines</div>
+                <div className="stat-bar">
+                  <div className="stat-progress delay-1"></div>
+                </div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">∞</div>
+                <div className="stat-label">Expertise</div>
+                <div className="stat-bar">
+                  <div className="stat-progress delay-2"></div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Call to action futuriste */}
+          {introStep >= 5 && (
+            <div className="emma-futuristic-cta animate-futuristic-cta">
+              <div className="cta-container">
+                <div className="cta-glow"></div>
+                <p className="cta-text">
+                  <span className="cta-highlight">CONSULTATION GRATUITE</span>
+                </p>
+                <p className="cta-subtext">
+                  Démarrez votre exploration professionnelle
                 </p>
               </div>
-            )}
-            
-            {/* Final - Étape 5 */}
-            {introStep >= 5 && (
-              <p className="emma-intro-introduction animate-fade-in-up">
-                Propulsé par l'IA
-              </p>
-            )}
+            </div>
+          )}
+        </div>
+        
+        {/* Indicateur de chargement futuriste */}
+        <div className="ai-loading-indicator">
+          <div className="loading-bar">
+            <div className="loading-progress"></div>
           </div>
+          <div className="loading-text">Initialisation IA...</div>
         </div>
       </div>
     );
