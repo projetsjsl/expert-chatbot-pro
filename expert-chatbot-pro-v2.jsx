@@ -1287,17 +1287,17 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               <div className={`personalization-options transition-all duration-300 ease-in-out overflow-hidden ${
                 showSettings ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
               }`}>
-                <div className="personalization-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div className="personalization-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                   {/* Style utilisateur */}
                   <div className="personalization-option">
-                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-2 block flex items-center gap-2">
+                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-1 block flex items-center gap-2">
                       <span className="personalization-indicator w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></span>
                       <span>Votre style</span>
                     </label>
                     <select
                       value={userPersonality}
                       onChange={(e) => setUserPersonality(e.target.value)}
-                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-2 sm:py-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white transition-all duration-200 hover:border-indigo-400"
+                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-1.5 sm:py-2 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white transition-all duration-200 hover:border-indigo-400"
                       aria-label="Sélectionner votre style de communication"
                     >
                       <option value="standard">⚖️ Standard</option>
@@ -1310,14 +1310,14 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
 
                   {/* Niveau d'expertise */}
                   <div className="personalization-option">
-                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-2 block flex items-center gap-2">
+                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-1 block flex items-center gap-2">
                       <span className="personalization-indicator w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></span>
                       <span>Votre niveau</span>
                     </label>
                     <select
                       value={expertiseLevel}
                       onChange={(e) => setExpertiseLevel(e.target.value)}
-                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-2 sm:py-3 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 bg-white transition-all duration-200 hover:border-purple-400"
+                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-1.5 sm:py-2 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 bg-white transition-all duration-200 hover:border-purple-400"
                       aria-label="Sélectionner votre niveau de profondeur"
                     >
                       <option value="débutant">🌱 Débutant</option>
@@ -1329,14 +1329,14 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
 
                   {/* Ton d'Emma */}
                   <div className="personalization-option sm:col-span-2 lg:col-span-1">
-                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-2 block flex items-center gap-2">
+                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-1 block flex items-center gap-2">
                       <span className="personalization-indicator w-2 h-2 bg-pink-500 rounded-full flex-shrink-0"></span>
                       <span>Ton d'Emma</span>
                     </label>
                     <select
                       value={emmaPersonality}
                       onChange={(e) => setEmmaPersonality(e.target.value)}
-                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-2 sm:py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 bg-white transition-all duration-200 hover:border-pink-400"
+                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-1.5 sm:py-2 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 bg-white transition-all duration-200 hover:border-pink-400"
                       aria-label="Sélectionner le ton de communication d'Emma"
                     >
                       <option value="professionnelle">👔 Professionnelle</option>
