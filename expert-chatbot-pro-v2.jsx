@@ -381,12 +381,11 @@ const EmmaExpertChatbot = () => {
     try {
       console.log('📡 Envoi de la requête de test...');
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": apiKey
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             contents: [{ role: 'user', parts: [{ text: 'Test de connexion' }] }],
@@ -655,12 +654,11 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }));
 
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": apiKey
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             contents: [...history, userMessage],
