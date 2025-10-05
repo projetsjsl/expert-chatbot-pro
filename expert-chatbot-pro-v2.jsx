@@ -1274,10 +1274,11 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   <h1 className="text-2xl sm:text-3xl font-bold text-purple-600 leading-tight mb-1">
                     Emma
                   </h1>
-                  <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Exploratrice Multi-Métiers Autonome</p>
+                  <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Assistante Professionnelle - Expertise Multi-Métiers</p>
                   <div className="marketing-banner">
                     <p className="text-sm sm:text-base font-semibold text-green-700 bg-green-50 px-3 sm:px-4 py-2 rounded-lg border border-green-200">
-                      ✨ Consultations en direct avec Emma dans <strong>50+ métiers</strong> de <strong>8 domaines</strong> différents !
+                      ✨ Votre assistante virtuelle spécialisée dans l'expertise professionnelle<br/>
+                      Accès instantané à des conseils d'experts dans <strong>50+ métiers</strong>
                     </p>
                   </div>
                 </div>
