@@ -285,8 +285,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           en expertise professionnelle
         </p>
         
-        <p className="emma-intro-tagline">
-          "De la science au geste, de la théorie à la pratique — je relie les mondes du savoir."
+        <p className="emma-intro-introduction">
+          Mes Pros Propulsé par l'IA vous présente Emma !
         </p>
       </div>
     );
