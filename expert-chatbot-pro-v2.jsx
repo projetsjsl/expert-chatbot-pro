@@ -277,6 +277,18 @@ const EmmaExpertChatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Fonction pour normaliser les accents et caractères spéciaux
+  const normalizeText = (text) => {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Supprime les accents
+      .replace(/[''-]/g, ' ') // Remplace apostrophes et tirets par des espaces
+      .replace(/[^\w\s]/g, '') // Supprime la ponctuation restante
+      .replace(/\s+/g, ' ') // Normalise les espaces multiples
+      .trim();
+  };
   const [showSettings, setShowSettings] = useState(true);
   const [userPersonality, setUserPersonality] = useState('standard');
   const [expertiseLevel, setExpertiseLevel] = useState('intermediaire');
@@ -1057,9 +1069,9 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
   };
 
   const filteredSectors = Object.keys(sectors).filter(sector => 
-    sector.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    normalizeText(sector).includes(normalizeText(searchTerm)) ||
     sectors[sector].some(prof => 
-      prof.name.toLowerCase().includes(searchTerm.toLowerCase())
+      normalizeText(prof.name).includes(normalizeText(searchTerm))
     )
   ).sort((a, b) => {
     // Tri par popularité d'abord, puis alphabétique
@@ -1119,6 +1131,10 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Titre minimaliste */}
           {introStep >= 2 && (
             <div className="emma-minimalist-title animate-minimalist-slide">
+              <div className="minimalist-logo">
+                <span className="logo-main">EMMA</span>
+              </div>
+              <h1 className="emma-name">EMMA</h1>
               <div className="minimalist-tagline">
                 <span className="tagline-main">Assistante Professionnelle</span>
                 <span className="tagline-sub">Expertise Multi-Métiers</span>
@@ -1210,17 +1226,17 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         <div className="bg-white shadow-lg border-b-2 border-indigo-200 fade-in-soft">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden emma-avatar">
+              <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden emma-avatar">
                   <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                 </div>
-                <div className="welcome-animation">
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    Emma
+                <div className="welcome-animation flex-1 min-w-0">
+                  <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+                    Consultations en direct avec Emma
                   </h1>
-                  <p className="text-sm text-gray-600">🎯 Exploratrice Multi-Métiers Autonome</p>
-                  <div className="marketing-banner">
-                    <p className="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">🎯 Exploratrice Multi-Métiers Autonome</p>
+                  <div className="marketing-banner mt-2">
+                    <p className="text-xs font-semibold text-green-600 bg-green-50 px-2 sm:px-3 py-1 rounded-full border border-green-200">
                       ✨ Consultez-la gratuitement dans <strong>50+ métiers</strong> de <strong>8 domaines</strong> différents !
                     </p>
                   </div>
@@ -1458,7 +1474,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Rechercher un secteur ou un métier..."
+                placeholder="Rechercher un domaine ou un métier..."
                 className="w-full pl-10 pr-10 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               />
               {searchTerm && (
@@ -1515,14 +1531,14 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         key={profile.id}
                         onClick={() => selectProfession({ id: profile.id, ...profile.profile })}
                         onMouseEnter={() => playSound('hover')}
-                        className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 relative group overflow-hidden ${
+                        className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-4 pt-6 hover:scale-105 border-2 relative group overflow-hidden ${
                           isTop3 
                             ? 'border-yellow-300 bg-gradient-to-br from-yellow-50 to-orange-50' 
                             : 'border-transparent hover:border-indigo-400'
                         }`}
                       >
                         {isTop3 && (
-                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
+                          <div className="absolute top-1 right-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
                             🔥 Top {popularity + 1}
                           </div>
                         )}
@@ -1545,7 +1561,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           
                           {/* Contenu à droite de l'avatar */}
                           <div className="flex-1 min-w-0">
-                            <div className="text-lg sm:text-xl mb-1 group-hover:scale-110 transition-transform">
+                            <div className="text-lg sm:text-xl mb-1">
                               {profile.profile.icon}
                             </div>
                             <h3 className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-tight font-['Inter']">
@@ -1571,8 +1587,8 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {filteredSectors.map(sectorName => {
             const professions = sectors[sectorName].filter(prof =>
               searchTerm === '' ||
-              prof.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              sectorName.toLowerCase().includes(searchTerm.toLowerCase())
+              normalizeText(prof.name).includes(normalizeText(searchTerm)) ||
+              normalizeText(sectorName).includes(normalizeText(searchTerm))
             ).sort((a, b) => {
               // Tri par popularité d'abord, puis par nombre de consultations, puis alphabétique
               const popularityA = getProfessionPopularity(a.id, sectorName);
@@ -1606,7 +1622,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
                       {sectorName}
                       {isTopSector && (
-                        <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white">
+                        <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white">
                           🔥 Top {sectorPopularity + 1}
                         </span>
                       )}
@@ -1646,7 +1662,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         key={profession.id}
                         onClick={() => selectProfession(profession)}
                         onMouseEnter={() => playSound('hover')}
-                        className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-5 hover:scale-105 border-2 relative group overflow-hidden ${
+                        className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-5 pt-7 hover:scale-105 border-2 relative group overflow-hidden ${
                           isTop3 
                             ? 'border-gradient-to-r from-yellow-400 to-orange-400 bg-gradient-to-br from-yellow-50 to-orange-50' 
                             : isPopular 
@@ -1656,19 +1672,19 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                       >
                         {/* Badge de popularité */}
                         {isTop3 && (
-                          <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
+                          <div className="absolute top-1 right-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
                             🔥 Top {popularity + 1}
                           </div>
                         )}
                         {isPopular && !isTop3 && (
-                          <div className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
+                          <div className="absolute top-1 right-1 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border-2 border-white z-10">
                             ⭐ Populaire
                           </div>
                         )}
                         
                         {/* Indicateur de consultations récentes */}
                         {count > 0 && (
-                          <div className="absolute -top-2 -left-2 bg-green-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">
+                          <div className="absolute top-1 left-1 bg-green-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">
                             {count}
                           </div>
                         )}
@@ -1691,7 +1707,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           
                           {/* Contenu à droite de l'avatar */}
                           <div className="flex-1 min-w-0">
-                            <div className="text-2xl sm:text-3xl md:text-4xl mb-2 group-hover:scale-110 transition-transform">
+                            <div className="text-2xl sm:text-3xl md:text-4xl mb-2">
                               {profession.icon}
                             </div>
                             <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-800 leading-tight font-['Inter']">
@@ -2548,8 +2564,19 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 <Settings size={20} />
               </button>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden">
-                  <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+                <div className="w-16 h-16 rounded-full overflow-hidden shadow-lg">
+                  {PROFESSION_AVATARS[selectedProfession.id] ? (
+                    <img 
+                      src={`/images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                      alt={`Avatar ${profile.profile.name}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = "/images/emma-avatar.jpg";
+                      }}
+                    />
+                  ) : (
+                    <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+                  )}
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
@@ -2603,8 +2630,25 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 className={`chat-message flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'model' && (
-                  <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0 shadow-md">
-                    <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+                  <div className="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0 shadow-lg">
+                    {PROFESSION_AVATARS[selectedProfession.id] ? (
+                      <img 
+                        src={`/images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                        alt={`Avatar ${profile.profile.name}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.log('Erreur avatar loading:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id]);
+                          e.target.src = "/images/emma-avatar.jpg";
+                        }}
+                      />
+                    ) : (
+                      <img 
+                        src="/images/emma-avatar.jpg" 
+                        alt="Emma" 
+                        className="w-full h-full object-cover"
+                        onLoad={() => console.log('Avatar par défaut loading pour:', selectedProfession.id)}
+                      />
+                    )}
                   </div>
                 )}
                 <div
@@ -2633,8 +2677,25 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             })}
             {isLoading && (
               <div className="chat-message flex justify-start">
-                <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0 shadow-md">
-                  <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+                <div className="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0 shadow-lg">
+                  {PROFESSION_AVATARS[selectedProfession.id] ? (
+                    <img 
+                      src={`/images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                      alt={`Avatar ${profile.profile.name}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.log('Erreur avatar loading:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id]);
+                        e.target.src = "/images/emma-avatar.jpg";
+                      }}
+                    />
+                  ) : (
+                    <img 
+                      src="/images/emma-avatar.jpg" 
+                      alt="Emma" 
+                      className="w-full h-full object-cover"
+                      onLoad={() => console.log('Avatar par défaut loading pour:', selectedProfession.id)}
+                    />
+                  )}
                 </div>
                 <div className="typing-indicator">
                   <div className="typing-dot"></div>
