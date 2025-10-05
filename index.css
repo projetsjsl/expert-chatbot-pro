@@ -2369,17 +2369,17 @@ body {
 }
 
 /* ========================================
-   ANIMATION CORPORATE EMMA SERVICE CLIENT
+   ANIMATION MINIMALISTE EMMA
    ======================================== */
 
-/* Animation corporate principale */
-.emma-corporate-intro {
+/* Animation minimaliste principale */
+.emma-minimalist-intro {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e40af 100%);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2387,406 +2387,180 @@ body {
   overflow: hidden;
 }
 
-/* Fond corporate */
-.corporate-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.1;
-}
-
-.corporate-pattern {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px);
-  background-size: 60px 60px;
-  animation: corporate-pattern-move 20s linear infinite;
-}
-
-.corporate-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: corporate-grid-move 15s linear infinite;
-}
-
-@keyframes corporate-pattern-move {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(60px, 60px); }
-}
-
-@keyframes corporate-grid-move {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(40px, 40px); }
-}
-
 /* Contenu principal */
-.emma-corporate-content {
+.emma-minimalist-content {
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 1200px;
+  max-width: 800px;
   padding: 2rem;
 }
 
 /* Image principale */
 .emma-main-image-container {
   position: relative;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   display: flex;
   justify-content: center;
-}
-
-.corporate-frame {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 
-    0 20px 40px rgba(0,0,0,0.3),
-    0 0 0 4px rgba(255,255,255,0.1),
-    inset 0 0 0 1px rgba(255,255,255,0.2);
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-  backdrop-filter: blur(10px);
-}
-
-.corporate-glow {
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #3b82f6, #1e40af, #1e3a8a, #3b82f6);
-  border-radius: 22px;
-  z-index: -1;
-  animation: corporate-glow-pulse 3s ease-in-out infinite;
-}
-
-.corporate-border {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 20px;
-  pointer-events: none;
-}
-
-@keyframes corporate-glow-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.8; }
 }
 
 .emma-main-image {
-  width: 300px;
-  height: 300px;
+  width: 280px;
+  height: 280px;
   object-fit: cover;
-  border-radius: 18px;
+  border-radius: 12px;
   display: block;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
 }
 
-/* Icônes professionnelles */
-.professional-icons-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+.emma-main-image:hover {
+  transform: scale(1.02);
 }
 
-.professional-icon {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
+/* Icônes minimalistes */
+.minimalist-icons-container {
   display: flex;
-  align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255,255,255,0.2);
-  animation: professional-icon-float 6s ease-in-out infinite;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
-.professional-icon .icon-svg {
-  width: 30px;
-  height: 30px;
-  color: white;
+.minimalist-icon {
+  font-size: 1.5rem;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
 
-.icon-stethoscope {
-  top: 10%;
-  left: 15%;
-  animation-delay: 0s;
+.minimalist-icon:hover {
+  opacity: 1;
 }
 
-.icon-books {
-  top: 20%;
-  right: 20%;
-  animation-delay: 1s;
-}
-
-.icon-tools {
-  bottom: 30%;
-  left: 10%;
-  animation-delay: 2s;
-}
-
-.icon-computer {
-  top: 60%;
-  right: 15%;
-  animation-delay: 3s;
-}
-
-.icon-balance {
-  bottom: 15%;
-  right: 25%;
-  animation-delay: 4s;
-}
-
-.icon-microscope {
-  top: 40%;
-  left: 5%;
-  animation-delay: 5s;
-}
-
-@keyframes professional-icon-float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
-}
-
-/* Titre corporate */
-.emma-corporate-title {
+/* Titre minimaliste */
+.emma-minimalist-title {
   margin-bottom: 2rem;
 }
 
-.corporate-logo {
+.minimalist-logo {
   margin-bottom: 1rem;
 }
 
 .logo-main {
   display: block;
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  letter-spacing: 2px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 1px;
 }
 
 .logo-presents {
   display: block;
-  font-size: 1rem;
-  color: rgba(255,255,255,0.8);
+  font-size: 0.9rem;
+  color: #6b7280;
   font-weight: 300;
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
 }
 
 .emma-name {
-  font-size: 4rem;
-  font-weight: 900;
-  color: white;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1f2937;
   margin: 1rem 0;
-  text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  background: linear-gradient(45deg, #ffffff, #e0e7ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
-.corporate-tagline {
+.minimalist-tagline {
   margin-top: 1rem;
 }
 
 .tagline-main {
   display: block;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.9);
-  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.3rem;
 }
 
 .tagline-sub {
   display: block;
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  color: #6b7280;
   font-weight: 300;
 }
 
-/* Description corporate */
-.emma-corporate-description {
-  margin-bottom: 3rem;
-}
-
-.description-card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 2rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.service-icon {
-  font-size: 2rem;
-}
-
-.card-header h3 {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.description-text {
-  color: rgba(255,255,255,0.9);
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-/* Statistiques corporate */
-.emma-corporate-stats {
-  margin-bottom: 3rem;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.stat-card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-5px);
-}
-
-.stat-icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: white;
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.9);
-  margin-bottom: 0.5rem;
-}
-
-.stat-description {
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.7);
-}
-
-/* Call to action corporate */
-.emma-corporate-cta {
+/* Description minimaliste */
+.emma-minimalist-description {
   margin-bottom: 2rem;
 }
 
-.cta-card {
-  background: rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 2.5rem;
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(255,255,255,0.3);
+.description-text {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
   max-width: 500px;
-  margin: 0 auto;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.cta-header {
+/* Statistiques minimalistes */
+.emma-minimalist-stats {
+  margin-bottom: 2rem;
+}
+
+.stats-simple {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
   justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
-.cta-icon {
-  font-size: 2.5rem;
-}
-
-.cta-header h3 {
-  color: white;
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 0;
-}
-
-.cta-main-text {
-  font-size: 1.3rem;
-  color: white;
-  margin-bottom: 1rem;
-}
-
-.highlight {
-  background: linear-gradient(45deg, #fbbf24, #f59e0b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 800;
-}
-
-.cta-sub-text {
-  color: rgba(255,255,255,0.8);
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.cta-benefits {
+.stat-item {
+  text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.3rem;
 }
 
-.benefit {
-  color: rgba(255,255,255,0.9);
-  font-size: 1rem;
-  font-weight: 500;
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937;
 }
 
-/* Indicateur de chargement corporate */
-.corporate-loading-indicator {
+.stat-label {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+/* Call to action minimaliste */
+.emma-minimalist-cta {
+  margin-bottom: 2rem;
+}
+
+.cta-simple {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.cta-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.cta-subtext {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 300;
+}
+
+/* Indicateur de chargement minimaliste */
+.minimalist-loading-indicator {
   position: absolute;
   bottom: 2rem;
   left: 50%;
@@ -2794,146 +2568,120 @@ body {
   z-index: 3;
 }
 
-.loading-container {
+.loading-simple {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.loading-spinner {
-  position: relative;
-  width: 60px;
-  height: 60px;
-}
-
-.spinner-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 3px solid transparent;
-  border-top: 3px solid rgba(255,255,255,0.8);
+.loading-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #9ca3af;
   border-radius: 50%;
-  animation: corporate-spin 1.5s linear infinite;
+  animation: minimalist-bounce 1.4s ease-in-out infinite both;
 }
 
-.spinner-ring.delay-1 {
-  animation-delay: 0.5s;
-  border-top-color: rgba(255,255,255,0.6);
+.loading-dot.delay-1 {
+  animation-delay: -0.32s;
 }
 
-.spinner-ring.delay-2 {
-  animation-delay: 1s;
-  border-top-color: rgba(255,255,255,0.4);
+.loading-dot.delay-2 {
+  animation-delay: -0.16s;
 }
 
-@keyframes corporate-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes minimalist-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
 }
 
 .loading-text {
   text-align: center;
-}
-
-.loading-main {
-  display: block;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.loading-sub {
-  display: block;
-  color: rgba(255,255,255,0.7);
+  color: #6b7280;
   font-size: 0.9rem;
+  font-weight: 300;
 }
 
-/* Animations corporate */
-.animate-corporate-fade {
-  animation: corporate-fade-in 1s ease-out;
+/* Animations minimalistes */
+.animate-minimalist-fade {
+  animation: minimalist-fade-in 0.8s ease-out;
 }
 
-.animate-corporate-slide {
-  animation: corporate-slide-in 1s ease-out;
+.animate-minimalist-slide {
+  animation: minimalist-slide-in 0.8s ease-out;
 }
 
-.animate-corporate-type {
-  animation: corporate-type-in 1s ease-out;
+.animate-minimalist-type {
+  animation: minimalist-type-in 0.8s ease-out;
 }
 
-.animate-corporate-stats {
-  animation: corporate-stats-in 1s ease-out;
+.animate-minimalist-stats {
+  animation: minimalist-stats-in 0.8s ease-out;
 }
 
-.animate-corporate-cta {
-  animation: corporate-cta-in 1s ease-out;
+.animate-minimalist-cta {
+  animation: minimalist-cta-in 0.8s ease-out;
 }
 
-@keyframes corporate-fade-in {
-  0% { opacity: 0; transform: scale(0.8); }
-  100% { opacity: 1; transform: scale(1); }
+@keyframes minimalist-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-@keyframes corporate-slide-in {
-  0% { opacity: 0; transform: translateY(50px); }
+@keyframes minimalist-slide-in {
+  0% { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes corporate-type-in {
-  0% { opacity: 0; transform: translateX(-50px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes corporate-stats-in {
-  0% { opacity: 0; transform: translateY(30px); }
+@keyframes minimalist-type-in {
+  0% { opacity: 0; transform: translateY(15px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes corporate-cta-in {
-  0% { opacity: 0; transform: scale(0.8); }
-  100% { opacity: 1; transform: scale(1); }
+@keyframes minimalist-stats-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes minimalist-cta-in {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .emma-main-image {
-    width: 250px;
-    height: 250px;
+    width: 220px;
+    height: 220px;
   }
   
   .emma-name {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
   
   .logo-main {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
   
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .stats-simple {
+    gap: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .minimalist-icons-container {
     gap: 1rem;
   }
   
-  .stat-card {
-    padding: 1rem;
-  }
-  
-  .cta-card {
-    padding: 1.5rem;
-  }
-  
-  .professional-icon {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .professional-icon .icon-svg {
-    width: 25px;
-    height: 25px;
+  .minimalist-icon {
+    font-size: 1.2rem;
   }
 }
 

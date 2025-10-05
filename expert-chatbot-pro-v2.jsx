@@ -961,189 +961,102 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   );
 
   // ========================================
-  // ANIMATION CORPORATE EMMA SERVICE CLIENT
+  // ANIMATION MINIMALISTE EMMA
   // ========================================
   if (showIntro) {
     return (
-      <div className="emma-corporate-intro">
-        {/* Fond corporate avec dégradé professionnel */}
-        <div className="corporate-background">
-          <div className="corporate-pattern"></div>
-          <div className="corporate-grid"></div>
-        </div>
-        
+      <div className="emma-minimalist-intro">
         {/* Contenu principal */}
-        <div className="emma-corporate-content">
+        <div className="emma-minimalist-content">
           {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
-            <div className="corporate-frame">
-              <div className="corporate-glow"></div>
-              <img 
-                src="/images/mes-pros-presente-emma.png" 
-                alt="Emma - Service Client Professionnel" 
-                className="emma-main-image"
-              />
-              <div className="corporate-border"></div>
-            </div>
+            <img 
+              src="/images/mes-pros-presente-emma.png" 
+              alt="Emma - Assistante Professionnelle" 
+              className="emma-main-image"
+            />
           </div>
           
-          {/* Icônes professionnelles flottantes */}
+          {/* Icônes minimalistes */}
           {introStep >= 1 && (
-            <div className="professional-icons-container animate-corporate-fade">
-              {/* Stéthoscope - Santé */}
-              <div className="professional-icon icon-stethoscope">
-                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
-                  <path d="M8 3C8 1.89543 8.89543 1 10 1H14C15.1046 1 16 1.89543 16 3V5H18C19.1046 5 20 5.89543 20 7V9C20 10.1046 19.1046 11 18 11H16V13C16 14.1046 15.1046 15 14 15H10C8.89543 15 8 14.1046 8 13V11H6C4.89543 11 4 10.1046 4 9V7C4 5.89543 4.89543 5 6 5H8V3Z" fill="currentColor"/>
-                  <circle cx="6" cy="9" r="2" fill="currentColor"/>
-                  <circle cx="18" cy="9" r="2" fill="currentColor"/>
-                </svg>
-              </div>
-              
-              {/* Livres - Éducation */}
-              <div className="professional-icon icon-books">
-                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
-                  <path d="M4 6H2V20C2 21.1 2.9 22 4 22H18V20H4V6ZM20 2H8C6.9 2 6 2.9 6 4V16C6 17.1 6.9 18 8 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H8V4H20V16Z" fill="currentColor"/>
-                  <path d="M10 6H18V8H10V6ZM10 10H18V12H10V10ZM10 14H16V16H10V14Z" fill="currentColor"/>
-                </svg>
-              </div>
-              
-              {/* Outils - Construction */}
-              <div className="professional-icon icon-tools">
-                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
-                  <path d="M22.7 19L13.6 9.9C14.5 7.6 14 4.9 12.1 3C10.1 1 7.1 1 5.1 3L3.5 4.6C3.1 5 3.1 5.6 3.5 6L6.5 9C6.9 9.4 7.5 9.4 7.9 9L9.4 7.5C9.8 7.1 10.4 7.1 10.8 7.5C11.2 7.9 11.2 8.5 10.8 8.9L9.3 10.4C8.9 10.8 8.9 11.4 9.3 11.8L12.3 14.8C12.7 15.2 13.3 15.2 13.7 14.8L15.2 13.3C15.6 12.9 16.2 12.9 16.6 13.3C17 13.7 17 14.3 16.6 14.7L15.1 16.2C14.7 16.6 14.7 17.2 15.1 17.6L18.1 20.6C18.5 21 19.1 21 19.5 20.6L21 19.1C21.4 18.7 21.4 18.1 21 17.7L22.7 19Z" fill="currentColor"/>
-                </svg>
-              </div>
-              
-              {/* Ordinateur - Technologie */}
-              <div className="professional-icon icon-computer">
-                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
-                  <path d="M20 18C21.1 18 21.99 17.1 21.99 16L22 6C22 4.89 21.1 4 20 4H4C2.89 4 2 4.89 2 6V16C2 17.1 2.89 18 4 18H0V20H24V18H20ZM4 6H20V16H4V6Z" fill="currentColor"/>
-                </svg>
-              </div>
-              
-              {/* Balance - Justice */}
-              <div className="professional-icon icon-balance">
-                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
-                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H9L3 7V9H21ZM5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11H5ZM7 20V13H17V20H7Z" fill="currentColor"/>
-                </svg>
-              </div>
-              
-              {/* Microscope - Science */}
-              <div className="professional-icon icon-microscope">
-                <svg viewBox="0 0 24 24" fill="none" className="icon-svg">
-                  <path d="M9.5 12.8L5.8 9.1C5.4 8.7 5.4 8.1 5.8 7.7L7.2 6.3C7.6 5.9 8.2 5.9 8.6 6.3L12.3 10C12.7 10.4 12.7 11 12.3 11.4L10.9 12.8C10.5 13.2 9.9 13.2 9.5 12.8ZM15.5 4.5L14.1 5.9C13.7 6.3 13.7 6.9 14.1 7.3L15.5 8.7C15.9 9.1 16.5 9.1 16.9 8.7L18.3 7.3C18.7 6.9 18.7 6.3 18.3 5.9L16.9 4.5C16.5 4.1 15.9 4.1 15.5 4.5Z" fill="currentColor"/>
-                  <circle cx="12" cy="16" r="3" fill="currentColor"/>
-                </svg>
-              </div>
+            <div className="minimalist-icons-container animate-minimalist-fade">
+              <div className="minimalist-icon">👩‍⚕️</div>
+              <div className="minimalist-icon">📚</div>
+              <div className="minimalist-icon">🔧</div>
+              <div className="minimalist-icon">💻</div>
+              <div className="minimalist-icon">⚖️</div>
+              <div className="minimalist-icon">🔬</div>
             </div>
           )}
           
-          {/* Titre corporate */}
+          {/* Titre minimaliste */}
           {introStep >= 2 && (
-            <div className="emma-corporate-title animate-corporate-slide">
-              <div className="corporate-logo">
+            <div className="emma-minimalist-title animate-minimalist-slide">
+              <div className="minimalist-logo">
                 <span className="logo-main">MES PROS</span>
                 <span className="logo-presents">présente</span>
               </div>
               <h1 className="emma-name">EMMA</h1>
-              <div className="corporate-tagline">
-                <span className="tagline-main">Service Client Professionnel</span>
+              <div className="minimalist-tagline">
+                <span className="tagline-main">Assistante Professionnelle</span>
                 <span className="tagline-sub">Expertise Multi-Métiers</span>
               </div>
             </div>
           )}
           
-          {/* Description corporate */}
+          {/* Description minimaliste */}
           {introStep >= 3 && (
-            <div className="emma-corporate-description animate-corporate-type">
-              <div className="description-card">
-                <div className="card-header">
-                  <div className="service-icon">🎯</div>
-                  <h3>Consultation Professionnelle</h3>
-                </div>
-                <p className="description-text">
-                  Votre assistante virtuelle spécialisée dans l'expertise professionnelle
-                </p>
-                <p className="description-text">
-                  Accès instantané à des conseils d'experts dans 50+ métiers
-                </p>
+            <div className="emma-minimalist-description animate-minimalist-type">
+              <div className="description-text">
+                <p>Votre assistante virtuelle spécialisée dans l'expertise professionnelle</p>
+                <p>Accès instantané à des conseils d'experts dans 50+ métiers</p>
               </div>
             </div>
           )}
           
-          {/* Statistiques corporate */}
+          {/* Statistiques minimalistes */}
           {introStep >= 4 && (
-            <div className="emma-corporate-stats animate-corporate-stats">
-              <div className="stats-grid">
-                <div className="stat-card">
-                  <div className="stat-icon">👥</div>
-                  <div className="stat-number">50+</div>
-                  <div className="stat-label">Métiers Experts</div>
-                  <div className="stat-description">Professionnels qualifiés</div>
+            <div className="emma-minimalist-stats animate-minimalist-stats">
+              <div className="stats-simple">
+                <div className="stat-item">
+                  <span className="stat-number">50+</span>
+                  <span className="stat-label">Métiers</span>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">🏢</div>
-                  <div className="stat-number">8</div>
-                  <div className="stat-label">Domaines</div>
-                  <div className="stat-description">Secteurs d'activité</div>
+                <div className="stat-item">
+                  <span className="stat-number">8</span>
+                  <span className="stat-label">Domaines</span>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">⚡</div>
-                  <div className="stat-number">24/7</div>
-                  <div className="stat-label">Disponibilité</div>
-                  <div className="stat-description">Service continu</div>
+                <div className="stat-item">
+                  <span className="stat-number">24/7</span>
+                  <span className="stat-label">Disponible</span>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">🎯</div>
-                  <div className="stat-number">100%</div>
-                  <div className="stat-label">Gratuit</div>
-                  <div className="stat-description">Consultation libre</div>
+                <div className="stat-item">
+                  <span className="stat-number">100%</span>
+                  <span className="stat-label">Gratuit</span>
                 </div>
               </div>
             </div>
           )}
           
-          {/* Call to action corporate */}
+          {/* Call to action minimaliste */}
           {introStep >= 5 && (
-            <div className="emma-corporate-cta animate-corporate-cta">
-              <div className="cta-container">
-                <div className="cta-card">
-                  <div className="cta-header">
-                    <div className="cta-icon">🚀</div>
-                    <h3>Prêt à commencer ?</h3>
-                  </div>
-                  <div className="cta-content">
-                    <p className="cta-main-text">
-                      <span className="highlight">Consultation Professionnelle Gratuite</span>
-                    </p>
-                    <p className="cta-sub-text">
-                      Accédez instantanément à l'expertise de professionnels qualifiés
-                    </p>
-                    <div className="cta-benefits">
-                      <div className="benefit">✓ Réponse immédiate</div>
-                      <div className="benefit">✓ Expertise vérifiée</div>
-                      <div className="benefit">✓ 100% gratuit</div>
-                    </div>
-                  </div>
-                </div>
+            <div className="emma-minimalist-cta animate-minimalist-cta">
+              <div className="cta-simple">
+                <p className="cta-text">Consultation Professionnelle Gratuite</p>
+                <p className="cta-subtext">Accédez à l'expertise de professionnels qualifiés</p>
               </div>
             </div>
           )}
         </div>
         
-        {/* Indicateur de chargement corporate */}
-        <div className="corporate-loading-indicator">
-          <div className="loading-container">
-            <div className="loading-spinner">
-              <div className="spinner-ring"></div>
-              <div className="spinner-ring delay-1"></div>
-              <div className="spinner-ring delay-2"></div>
-            </div>
-            <div className="loading-text">
-              <span className="loading-main">Initialisation du Service Client</span>
-              <span className="loading-sub">Connexion aux experts professionnels...</span>
-            </div>
+        {/* Indicateur de chargement minimaliste */}
+        <div className="minimalist-loading-indicator">
+          <div className="loading-simple">
+            <div className="loading-dot"></div>
+            <div className="loading-dot delay-1"></div>
+            <div className="loading-dot delay-2"></div>
           </div>
+          <div className="loading-text">Initialisation...</div>
         </div>
       </div>
     );
