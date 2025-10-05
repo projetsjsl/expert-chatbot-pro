@@ -2485,7 +2485,7 @@ html {
 
 /* Titre minimaliste */
 .emma-minimalist-title {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .minimalist-logo {
@@ -2536,7 +2536,7 @@ html {
 
 /* Description minimaliste */
 .emma-minimalist-description {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .description-text {
@@ -2551,7 +2551,7 @@ html {
 
 /* Statistiques minimalistes */
 .emma-minimalist-stats {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .stats-simple {
@@ -2583,7 +2583,7 @@ html {
 
 /* Call to action minimaliste */
 .emma-minimalist-cta {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .cta-simple {
@@ -2767,7 +2767,7 @@ html {
   }
   
   .emma-minimalist-title {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.8rem;
   }
   
   .emma-name {
@@ -2809,7 +2809,7 @@ html {
   }
   
   .emma-minimalist-description {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.8rem;
   }
   
   .description-text {
@@ -2820,7 +2820,7 @@ html {
   }
   
   .emma-minimalist-stats {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.8rem;
   }
   
   .stats-simple {
@@ -2842,7 +2842,7 @@ html {
   }
   
   .emma-minimalist-cta {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.8rem;
   }
   
   .cta-simple {

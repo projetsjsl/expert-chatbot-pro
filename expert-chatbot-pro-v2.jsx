@@ -1119,10 +1119,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Titre minimaliste */}
           {introStep >= 2 && (
             <div className="emma-minimalist-title animate-minimalist-slide">
-              <div className="minimalist-logo">
-                <span className="logo-main">EMMA</span>
-              </div>
-              <h1 className="emma-name">EMMA</h1>
               <div className="minimalist-tagline">
                 <span className="tagline-main">Assistante Professionnelle</span>
                 <span className="tagline-sub">Expertise Multi-Métiers</span>
