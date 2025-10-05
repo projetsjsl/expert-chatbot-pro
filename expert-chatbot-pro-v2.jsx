@@ -1533,7 +1533,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         
                         {/* Avatar de métier en overlay */}
                         {PROFESSION_AVATARS[profile.id] && (
-                          <div className="absolute top-1 right-1 w-8 h-8 rounded-full overflow-hidden border-2 border-white shadow-md z-5">
+                          <div className="absolute top-1 right-1 w-16 h-16 rounded-full overflow-hidden border-3 border-white shadow-lg z-5">
                             <img 
                               src={`/images/metier/${PROFESSION_AVATARS[profile.id]}`}
                               alt={`Avatar ${profile.profile.name}`}
@@ -1673,7 +1673,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                         
                         {/* Avatar de métier en overlay */}
                         {PROFESSION_AVATARS[profession.id] && (
-                          <div className="absolute top-2 right-2 w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-md z-5">
+                          <div className="absolute top-2 right-2 w-20 h-20 rounded-full overflow-hidden border-3 border-white shadow-lg z-5">
                             <img 
                               src={`/images/metier/${PROFESSION_AVATARS[profession.id]}`}
                               alt={`Avatar ${profession.name}`}
