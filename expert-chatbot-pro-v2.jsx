@@ -564,7 +564,16 @@ Comment puis-je vous aider ?`;
     if (!apiKey || apiKey.trim() === '') {
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: "Erreur: Clé API Gemini manquante ou invalide. Veuillez vérifier la configuration de votre environnement. La clé API doit être définie dans les variables d'environnement Vercel." }]
+        parts: [{ text: "❌ Erreur de configuration : Clé API Gemini manquante ou invalide.\n\n🔧 Solutions possibles :\n• Vérifiez que la variable d'environnement VITE_GEMINI_API_KEY est définie\n• Redémarrez l'application après avoir configuré la clé\n• Contactez l'administrateur pour la configuration de l'API\n\n💡 La clé API doit être définie dans les variables d'environnement Vercel." }]
+      }]);
+      return;
+    }
+
+    // Vérifier que la profession est sélectionnée
+    if (!selectedProfession || !selectedProfession.id) {
+      setMessages(prev => [...prev, {
+        role: 'model',
+        parts: [{ text: "❌ Erreur : Aucune profession sélectionnée. Veuillez d'abord choisir un métier dans la liste." }]
       }]);
       return;
     }
@@ -580,6 +589,12 @@ Comment puis-je vous aider ?`;
 
     try {
       const profile = professionalProfiles[selectedProfession.id];
+      
+      // Vérifier que le profil existe
+      if (!profile) {
+        throw new Error(`Profil professionnel non trouvé pour l'ID: ${selectedProfession.id}`);
+      }
+      
       const personalityPrompt = getPersonalityPrompt();
       
       // Générer les sources avec liens pour le prompt
@@ -754,17 +769,26 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       
       let errorMessage = "Désolée, une erreur s'est produite. ";
       
+      // Gestion d'erreurs plus spécifique
       if (error.message.includes('API Error')) {
         errorMessage += "Problème avec l'API Gemini. ";
       } else if (error.message.includes('fetch')) {
         errorMessage += "Problème de connexion réseau. ";
       } else if (error.message.includes('JSON')) {
         errorMessage += "Erreur de format de données. ";
+      } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+        errorMessage += "Problème de connexion internet. ";
+      } else if (error.message.includes('timeout')) {
+        errorMessage += "Délai d'attente dépassé. ";
+      } else if (error.message.includes('CORS')) {
+        errorMessage += "Problème de configuration CORS. ";
+      } else if (error.message.includes('quota') || error.message.includes('limit')) {
+        errorMessage += "Limite d'utilisation atteinte. ";
       } else {
-        errorMessage += "Erreur inattendue. ";
+        errorMessage += "Erreur technique. ";
       }
       
-      errorMessage += "Veuillez vérifier votre connexion et réessayer.";
+      errorMessage += "Veuillez vérifier votre connexion et réessayer. Si le problème persiste, contactez le support technique.";
       
       setMessages(prev => [...prev, {
         role: 'model',
@@ -1631,7 +1655,6 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               <h3 className="text-xs sm:text-sm font-bold text-gray-800 flex items-center gap-2">
                 <Settings size={14} className="text-indigo-600 flex-shrink-0" />
                 <span className="sidebar-personalization-title">Personnalisation</span>
-                <span className="text-xs text-indigo-500 hidden sm:inline">← Ajustez ici</span>
               </h3>
               <button
                 onClick={() => setShowSettings(!showSettings)}
