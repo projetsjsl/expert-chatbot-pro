@@ -6,6 +6,7 @@ import { professionalProfiles, getSectors } from './professionnalProfiles.js';
 // MAPPING DES AVATARS DE MÉTIERS
 // ========================================
 const PROFESSION_AVATARS = {
+  // Santé
   'medecin': 'md.png',
   'psychologue': 'psycho.png',
   'nutritionniste': 'nutri.png',
@@ -22,19 +23,57 @@ const PROFESSION_AVATARS = {
   'massotherapeute': 'masso.png',
   'naturopathe': 'naturo.png',
   'technologue_medical': 'tech medicale.png',
+  
+  // Juridique
   'avocat': 'avocat.png',
   'notaire': 'notaire.png',
+  
+  // Finance
   'comptable': 'comptable.png',
+  'analyste_financier': 'analyste financier.png',
+  'conseiller_financier': 'conseiller financier.png',
+  
+  // Technologie
   'dev_fullstack': 'fullstack.png',
   'designer_ux': 'ux.png',
+  'dev_mobile': 'mobile.png',
+  'devops': 'devops.png',
+  'data_scientist': 'data.png',
+  'cybersecurite': 'cyber.png',
+  'intelligence_artificielle': 'ia.png',
+  'cloud_architect': 'cloud.png',
+  
+  // Construction
   'architecte': 'architecte.png',
   'electricien': 'electr.png',
+  'charpentier': 'charpentier.png',
+  'couvreur': 'couvreur.png',
+  'menuisier': 'menuisier.png',
+  'peintre': 'peintre.png',
+  'plombier': 'plombier.png',
+  'ingenieur_civil': 'ing civil.png',
+  
+  // Affaires
+  'entrepreneur': 'entrepreneur.png',
+  'gestionnaire_rh': 'rh.png',
+  'marketing_digital': 'marketing.png',
+  'gestionnaire_projet': 'gestionnaire projet.png',
+  'consultant_management': 'management consultant.png',
+  
+  // Éducation
+  'enseignante_primaire': 'enseignante primaire.png',
+  'educatrice_specialisee': 'ux.png',
+  'psychoeducatrice': 'psycho.png',
+  'orthopedagogue': 'psycho.png',
+  'conseiller_orientation': 'psycho.png',
+  'bibliothecaire': 'ux.png',
+  'professeur_universitaire': 'professeur universitaire.png',
+  
+  // Mappings alternatifs pour compatibilité
   'developpeur': 'fullstack.png',
   'analyste': 'data.png',
   'designer': 'ux.png',
-  'cybersecurite': 'cyber.png',
   'data-scientist': 'data.png',
-  'devops': 'devops.png',
   'product-manager': 'ux.png',
   'ux-designer': 'ux.png',
   'testeur': 'fullstack.png',
@@ -1146,8 +1185,9 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {introStep >= 3 && (
             <div className="emma-minimalist-description animate-minimalist-type">
               <div className="description-text">
-                <p>Votre assistante virtuelle spécialisée dans l'expertise professionnelle</p>
-                <p>Accès instantané à des conseils d'experts dans 50+ métiers</p>
+                <p className="text-sm text-gray-500 mb-2">Expertise Multi-Métiers</p>
+                <p className="text-lg font-semibold text-gray-800 mb-2">Consultation Gratuite</p>
+                <p className="text-sm text-gray-500">Votre assistante virtuelle spécialisée</p>
               </div>
             </div>
           )}
@@ -1157,20 +1197,20 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             <div className="emma-minimalist-stats animate-minimalist-stats">
               <div className="stats-simple">
                 <div className="stat-item">
-                  <span className="stat-number">50+</span>
-                  <span className="stat-label">Métiers</span>
+                  <span className="stat-number text-3xl font-bold text-cyan-500">50+</span>
+                  <span className="stat-label text-sm text-gray-500">Métiers</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-number">8</span>
-                  <span className="stat-label">Domaines</span>
+                  <span className="stat-number text-3xl font-bold text-cyan-500">8</span>
+                  <span className="stat-label text-sm text-gray-500">Domaines</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-number">24/7</span>
-                  <span className="stat-label">Disponible</span>
+                  <span className="stat-number text-3xl font-bold text-cyan-500">24/7</span>
+                  <span className="stat-label text-sm text-gray-500">Disponible</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-number">100%</span>
-                  <span className="stat-label">Gratuit</span>
+                  <span className="stat-number text-3xl font-bold text-cyan-500">100%</span>
+                  <span className="stat-label text-sm text-gray-500">Gratuit</span>
                 </div>
               </div>
             </div>
@@ -1226,17 +1266,17 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         <div className="bg-white shadow-lg border-b-2 border-indigo-200 fade-in-soft">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden emma-avatar">
+              <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden emma-avatar flex-shrink-0">
                   <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
                 </div>
                 <div className="welcome-animation flex-1 min-w-0">
-                  <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent leading-tight">
-                    Consultations en direct avec Emma
+                  <h1 className="text-2xl sm:text-3xl font-bold text-purple-600 leading-tight mb-1">
+                    Emma
                   </h1>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1">🎯 Exploratrice Multi-Métiers Autonome</p>
-                  <div className="marketing-banner mt-2">
-                    <p className="text-xs font-semibold text-green-600 bg-green-50 px-2 sm:px-3 py-1 rounded-full border border-green-200">
+                  <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Exploratrice Multi-Métiers Autonome</p>
+                  <div className="marketing-banner">
+                    <p className="text-sm sm:text-base font-semibold text-green-700 bg-green-50 px-3 sm:px-4 py-2 rounded-lg border border-green-200">
                       ✨ Consultez-la gratuitement dans <strong>50+ métiers</strong> de <strong>8 domaines</strong> différents !
                     </p>
                   </div>
