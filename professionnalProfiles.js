@@ -14,7 +14,12 @@ export const professionalProfiles = {
       sector: "Santé",
       credentials: "Assistant virtuel expert - Médecine générale et soins de santé",
       specialties: ["Médecine familiale", "Soins préventifs", "Gestion maladies chroniques"],
-      sources: ["INESSS", "INSPQ", "Collège des médecins du Québec", "Guides de pratique clinique"]
+      sources: [
+        "INESSS (https://www.inesss.qc.ca/)",
+        "INSPQ (https://www.inspq.qc.ca/)",
+        "Collège des médecins du Québec (https://www.cmq.org/)",
+        "Guides de pratique clinique"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en médecine familiale québécoise avec une connaissance approfondie du système de santé.
 
@@ -93,7 +98,11 @@ Tu es professionnelle, empathique, rassurante et très détaillée dans tes expl
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Santé mentale et bien-être",
       specialties: ["Santé mentale", "Gestion stress", "Anxiété", "Dépression"],
-      sources: ["OPQ", "Recherches en psychologie clinique", "Guides de pratique"]
+      sources: [
+        "OPQ (https://www.ordrepsy.qc.ca/)",
+        "Recherches en psychologie clinique",
+        "Guides de pratique"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en psychologie clinique québécoise avec une connaissance approfondie de la santé mentale.
 
@@ -172,7 +181,11 @@ Tu es empathique, rassurante, respectueuse et très détaillée dans tes conseil
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Alimentation et santé nutritionnelle",
       specialties: ["Nutrition santé", "Perte de poids", "Allergies alimentaires", "Nutrition sportive"],
-      sources: ["Guide alimentaire canadien", "OPDQ", "Recherches en nutrition"]
+      sources: [
+        "Guide alimentaire canadien (https://guide-alimentaire.canada.ca/)",
+        "OPDQ (https://www.opdq.org/)",
+        "Recherches en nutrition"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en nutrition et diététique québécoise avec une connaissance approfondie de l'alimentation et de la santé.
 
@@ -232,7 +245,10 @@ IMPORTANT - TON RÔLE:
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Réadaptation physique et mouvement",
       specialties: ["Réadaptation", "Douleurs musculaires", "Posture", "Mobilité"],
-      sources: ["OPPQ", "Recherches en réadaptation physique"]
+      sources: [
+        "OPPQ (https://www.oppq.qc.ca/)",
+        "Recherches en réadaptation physique"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en kinésithérapie québécoise avec une connaissance approfondie de la réadaptation physique et du mouvement.
 
@@ -292,7 +308,11 @@ IMPORTANT - TON RÔLE:
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Médicaments et pharmacothérapie",
       specialties: ["Pharmacothérapie", "Médicaments", "Interactions", "Santé conseil"],
-      sources: ["OPQ", "Santé Canada", "Compendium des produits pharmaceutiques"]
+      sources: [
+        "OPQ (https://www.ordrepsy.qc.ca/)",
+        "Santé Canada (https://www.canada.ca/fr/sante-canada.html)",
+        "Compendium des produits pharmaceutiques (https://www.canada.ca/fr/sante-canada/services/medicaments-produits-sante/medicaments/compendium-produits-pharmaceutiques.html)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en pharmacie québécoise avec une connaissance approfondie de la pharmacothérapie et des médicaments.
 
@@ -352,7 +372,11 @@ IMPORTANT - TON RÔLE:
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Communication et langage",
       specialties: ["Troubles du langage", "Articulation", "Dyslexie", "Bégaiement"],
-      sources: ["OOAQ", "MEES", "Recherches en sciences de la communication"]
+      sources: [
+        "OOAQ (https://www.ooaq.qc.ca/)",
+        "MEES (https://www.education.gouv.qc.ca/)",
+        "Recherches en sciences de la communication"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en orthophonie québécoise.
 
@@ -404,7 +428,9 @@ Tu es rassurant, pédagogue et patient.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Santé buccodentaire",
       specialties: ["Hygiène dentaire", "Prévention caries", "Orthodontie"],
-      sources: ["Ordre des dentistes du Québec"]
+      sources: [
+        "Ordre des dentistes du Québec (https://www.odq.qc.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en santé dentaire québécoise.
 
@@ -451,7 +477,10 @@ Tu es pédagogue et préventif.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Soins infirmiers",
       specialties: ["Soins généraux", "Prévention", "Premiers soins"],
-      sources: ["OIIQ", "Protocoles de soins"]
+      sources: [
+        "OIIQ (https://www.oiiq.org/)",
+        "Protocoles de soins"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en soins infirmiers québécois.
 
@@ -498,7 +527,9 @@ Tu es bienveillant et professionnel.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Santé visuelle",
       specialties: ["Santé des yeux", "Vision", "Lunettes", "Lentilles"],
-      sources: ["Ordre des optométristes du Québec"]
+      sources: [
+        "Ordre des optométristes du Québec (https://www.ooq.org/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en optométrie québécoise.
 
@@ -545,7 +576,11 @@ Tu es attentif et préventif.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Réadaptation et autonomie fonctionnelle",
       specialties: ["Réadaptation", "Autonomie", "Adaptation domicile", "Rééducation"],
-      sources: ["OEQ", "Recherches en ergothérapie", "CIUSSS"]
+      sources: [
+        "OEQ (https://www.oeq.org/)",
+        "Recherches en ergothérapie",
+        "CIUSSS"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en ergothérapie québécoise.
 
@@ -596,7 +631,11 @@ Tu es pratique, empathique et orienté solutions.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Réadaptation physique et thérapie manuelle",
       specialties: ["Réadaptation", "Thérapie manuelle", "Exercices thérapeutiques", "Douleurs"],
-      sources: ["OPPQ", "Recherches en physiothérapie", "Protocoles de réadaptation"]
+      sources: [
+        "OPPQ (https://www.oppq.qc.ca/)",
+        "Recherches en physiothérapie",
+        "Protocoles de réadaptation"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en physiothérapie québécoise.
 
@@ -647,7 +686,11 @@ Tu es encourageant, pratique et axé sur la récupération.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Santé auditive et communication",
       specialties: ["Audition", "Appareils auditifs", "Troubles auditifs", "Communication"],
-      sources: ["OOAQ", "Recherches en audiologie", "Protocoles d'évaluation"]
+      sources: [
+        "OOAQ (https://www.ooaq.qc.ca/)",
+        "Recherches en audiologie",
+        "Protocoles d'évaluation"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en audiologie québécoise.
 
@@ -698,7 +741,10 @@ Tu es attentif, pédagogue et rassurant.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Santé vertébrale et système nerveux",
       specialties: ["Ajustements vertébraux", "Douleurs dorsales", "Posture", "Bien-être"],
-      sources: ["Ordre des chiropraticiens du Québec", "Recherches en chiropratique"]
+      sources: [
+        "Ordre des chiropraticiens du Québec (https://www.ordredeschiropraticiens.qc.ca/)",
+        "Recherches en chiropratique"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en chiropratique québécoise.
 
@@ -749,7 +795,10 @@ Tu es bienveillant, préventif et orienté bien-être.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Thérapie par le massage et relaxation",
       specialties: ["Massage thérapeutique", "Relaxation", "Gestion stress", "Bien-être"],
-      sources: ["Fédération québécoise des massothérapeutes", "Recherches en massothérapie"]
+      sources: [
+        "Fédération québécoise des massothérapeutes (https://www.fqm.qc.ca/)",
+        "Recherches en massothérapie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en massothérapie québécoise.
 
@@ -800,7 +849,10 @@ Tu es apaisant, bienveillant et orienté bien-être.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Médecine naturelle et approche holistique",
       specialties: ["Médecine naturelle", "Nutrition", "Herboristerie", "Bien-être"],
-      sources: ["Association des naturopathes du Québec", "Recherches en naturopathie"]
+      sources: [
+        "Association des naturopathes du Québec (https://www.anq.ca/)",
+        "Recherches en naturopathie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en naturopathie québécoise.
 
@@ -851,7 +903,10 @@ Tu es holistique, préventif et orienté bien-être naturel.`,
       sector: "Santé",
       credentials: "Assistante virtuelle experte - Analyses médicales et diagnostic",
       specialties: ["Analyses de laboratoire", "Imagerie médicale", "Diagnostic", "Équipements"],
-      sources: ["Ordre des technologues médicaux du Québec", "Protocoles d'analyse"]
+      sources: [
+        "Ordre des technologues médicaux du Québec (https://www.otmq.org/)",
+        "Protocoles d'analyse"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en technologie médicale québécoise.
 
@@ -906,7 +961,12 @@ Tu es technique, précis et rassurant.`,
       sector: "Juridique",
       credentials: "Assistante virtuelle experte - Droit civil et juridique",
       specialties: ["Droit civil québécois", "Droit de la famille", "Droit du travail"],
-      sources: ["Code civil du Québec", "Légis Québec", "CanLII", "Barreau du Québec"]
+      sources: [
+        "Code civil du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-c-1991/)",
+        "Légis Québec (https://www.legisquebec.gouv.qc.ca/)",
+        "CanLII (https://www.canlii.org/fr/qc/)",
+        "Barreau du Québec (https://www.barreau.qc.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en droit québécois avec une connaissance approfondie du système juridique civil.
 
@@ -994,7 +1054,10 @@ Tu es précise, structurée, pédagogue et très détaillée dans tes explicatio
       sector: "Juridique",
       credentials: "Assistante virtuelle experte - Actes notariés et droit",
       specialties: ["Actes notariés", "Immobilier", "Testaments", "Mandats"],
-      sources: ["Chambre des notaires du Québec", "Code civil du Québec"]
+      sources: [
+        "Chambre des notaires du Québec (https://www.cdnq.org/)",
+        "Code civil du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-c-1991/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en notariat québécois avec une connaissance approfondie des actes notariés.
 
@@ -1088,7 +1151,12 @@ Tu es professionnelle, pédagogue et très détaillée dans tes explications not
       sector: "Finance",
       credentials: "Assistante virtuelle experte - Fiscalité québécoise et fédérale",
       specialties: ["Fiscalité QC/fédéral", "PME", "Déclarations", "Planification fiscale"],
-      sources: ["Revenu Québec", "ARC", "Loi sur les impôts", "CPA Québec"]
+      sources: [
+        "Revenu Québec (https://www.revenuquebec.ca/)",
+        "ARC (https://www.canada.ca/fr/agence-revenu-canada.html)",
+        "Loi sur les impôts",
+        "CPA Québec (https://www.cpaquebec.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en comptabilité et fiscalité québécoise.
 
@@ -1144,7 +1212,11 @@ Tu es rigoureux et pédagogue.`,
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - Développement web et applications",
       specialties: ["React", "Node.js", "Bases de données", "APIs"],
-      sources: ["Documentation React", "MDN Web Docs", "Bonnes pratiques industrie"]
+      sources: [
+        "Documentation React (https://react.dev/)",
+        "MDN Web Docs (https://developer.mozilla.org/)",
+        "Bonnes pratiques industrie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en développement full-stack avec une connaissance approfondie des technologies web modernes.
 
@@ -1230,7 +1302,11 @@ Tu es technique, précise, pédagogue et très détaillée dans tes explications
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - Expérience utilisateur et interfaces",
       specialties: ["Design UX", "Design UI", "Prototypage", "Tests utilisateurs"],
-      sources: ["Principes de design UX", "WCAG", "Recherches en ergonomie"]
+      sources: [
+        "Principes de design UX",
+        "WCAG (https://www.w3.org/WAI/WCAG21/quickref/)",
+        "Recherches en ergonomie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en design UX/UI.
 
@@ -1276,7 +1352,12 @@ Tu es créatif, empathique et axé utilisateur.`,
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - Applications mobiles iOS et Android",
       specialties: ["React Native", "Flutter", "iOS", "Android", "Cross-platform"],
-      sources: ["Documentation React Native", "Flutter Docs", "Apple Developer", "Android Developer"]
+      sources: [
+        "Documentation React Native (https://reactnative.dev/)",
+        "Flutter Docs (https://docs.flutter.dev/)",
+        "Apple Developer (https://developer.apple.com/)",
+        "Android Developer (https://developer.android.com/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en développement mobile.
 
@@ -1322,7 +1403,12 @@ Tu es technique, pratique et orienté performance.`,
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - Déploiement et infrastructure cloud",
       specialties: ["AWS", "Docker", "Kubernetes", "CI/CD", "Monitoring"],
-      sources: ["Documentation AWS", "Kubernetes Docs", "Docker Docs", "Best practices DevOps"]
+      sources: [
+        "Documentation AWS (https://docs.aws.amazon.com/)",
+        "Kubernetes Docs (https://kubernetes.io/docs/)",
+        "Docker Docs (https://docs.docker.com/)",
+        "Best practices DevOps"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en DevOps et infrastructure.
 
@@ -1368,7 +1454,12 @@ Tu es technique, méthodique et orienté automatisation.`,
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - Analyse de données et intelligence artificielle",
       specialties: ["Python", "Machine Learning", "Analyse statistique", "Visualisation"],
-      sources: ["Documentation Python", "Scikit-learn", "Pandas", "Recherches en data science"]
+      sources: [
+        "Documentation Python (https://docs.python.org/)",
+        "Scikit-learn (https://scikit-learn.org/)",
+        "Pandas (https://pandas.pydata.org/)",
+        "Recherches en data science"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en science des données.
 
@@ -1414,7 +1505,12 @@ Tu es analytique, méthodique et orienté résultats.`,
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - Sécurité informatique et protection des données",
       specialties: ["Sécurité réseau", "Audit sécurité", "Protection données", "Incident response"],
-      sources: ["NIST", "ISO 27001", "OWASP", "Best practices cybersécurité"]
+      sources: [
+        "NIST (https://www.nist.gov/)",
+        "ISO 27001 (https://www.iso.org/isoiec-27001-information-security.html)",
+        "OWASP (https://owasp.org/)",
+        "Best practices cybersécurité"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en cybersécurité.
 
@@ -1460,7 +1556,12 @@ Tu es vigilant, méthodique et orienté protection.`,
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - IA et automatisation intelligente",
       specialties: ["Machine Learning", "Deep Learning", "NLP", "Automatisation"],
-      sources: ["TensorFlow", "PyTorch", "OpenAI", "Recherches en IA"]
+      sources: [
+        "TensorFlow (https://www.tensorflow.org/)",
+        "PyTorch (https://pytorch.org/)",
+        "OpenAI (https://openai.com/)",
+        "Recherches en IA"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en intelligence artificielle.
 
@@ -1506,7 +1607,12 @@ Tu es innovant, technique et orienté solutions.`,
       sector: "Technologie",
       credentials: "Assistante virtuelle experte - Solutions cloud et infrastructure",
       specialties: ["AWS", "Azure", "Google Cloud", "Microservices"],
-      sources: ["Documentation AWS", "Azure Docs", "Google Cloud Docs", "Best practices cloud"]
+      sources: [
+        "Documentation AWS (https://docs.aws.amazon.com/)",
+        "Azure Docs (https://docs.microsoft.com/azure/)",
+        "Google Cloud Docs (https://cloud.google.com/docs)",
+        "Best practices cloud"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en architecture cloud.
 
@@ -1556,7 +1662,11 @@ Tu es technique, stratégique et orienté performance.`,
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Conception de bâtiments",
       specialties: ["Résidentiel", "Commercial", "Code de construction QC"],
-      sources: ["Code de construction du Québec", "RBQ", "OAQ"]
+      sources: [
+        "Code de construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "RBQ (https://www.rbq.gouv.qc.ca/)",
+        "OAQ"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en architecture québécoise avec une connaissance approfondie de la construction et du design.
 
@@ -1650,7 +1760,10 @@ Tu es créative, technique, axée sur la qualité et très détaillée dans tes 
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Installations électriques",
       specialties: ["Installations électriques", "Sécurité", "Normes québécoises"],
-      sources: ["Code construction du Québec", "RBQ"]
+      sources: [
+        "Code construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "RBQ (https://www.rbq.gouv.qc.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en électricité québécoise.
 
@@ -1700,7 +1813,11 @@ Tu es soucieux de la sécurité et pratique.`,
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Installations sanitaires et plomberie",
       specialties: ["Plomberie résidentielle", "Chauffage", "Sécurité", "Normes"],
-      sources: ["Code construction du Québec", "RBQ", "Réglementation plomberie"]
+      sources: [
+        "Code construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "RBQ (https://www.rbq.gouv.qc.ca/)",
+        "Réglementation plomberie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en plomberie québécoise.
 
@@ -1751,7 +1868,11 @@ Tu es pratique, soucieux de la sécurité et informatif.`,
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Travail du bois et charpenterie",
       specialties: ["Charpenterie", "Menuiserie", "Rénovation", "Construction"],
-      sources: ["Code construction du Québec", "RBQ", "Normes charpenterie"]
+      sources: [
+        "Code construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "RBQ (https://www.rbq.gouv.qc.ca/)",
+        "Normes charpenterie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en charpenterie québécoise.
 
@@ -1802,7 +1923,11 @@ Tu es pratique, technique et soucieux de la qualité.`,
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Ingénierie civile et infrastructure",
       specialties: ["Structures", "Infrastructure", "Calculs", "Projets"],
-      sources: ["OIQ", "Code construction du Québec", "Normes ingénierie"]
+      sources: [
+        "OIQ (https://www.oiq.qc.ca/)",
+        "Code construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "Normes ingénierie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en génie civil québécois.
 
@@ -1853,7 +1978,11 @@ Tu es technique, rigoureux et orienté sécurité.`,
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Travail du bois et finition",
       specialties: ["Menuiserie", "Ébénisterie", "Finition", "Rénovation"],
-      sources: ["Code construction du Québec", "RBQ", "Normes menuiserie"]
+      sources: [
+        "Code construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "RBQ (https://www.rbq.gouv.qc.ca/)",
+        "Normes menuiserie"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en menuiserie québécoise.
 
@@ -1904,7 +2033,11 @@ Tu es créatif, technique et soucieux de la qualité.`,
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Peinture et finitions intérieures/extérieures",
       specialties: ["Peinture résidentielle", "Finition", "Préparation", "Couleurs"],
-      sources: ["Code construction du Québec", "RBQ", "Normes peinture"]
+      sources: [
+        "Code construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "RBQ (https://www.rbq.gouv.qc.ca/)",
+        "Normes peinture"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en peinture québécoise.
 
@@ -1955,7 +2088,11 @@ Tu es créatif, pratique et soucieux de la qualité.`,
       sector: "Construction",
       credentials: "Assistante virtuelle experte - Toiture et étanchéité",
       specialties: ["Toiture", "Étanchéité", "Isolation", "Ventilation"],
-      sources: ["Code construction du Québec", "RBQ", "Normes toiture"]
+      sources: [
+        "Code construction du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-19-3/)",
+        "RBQ (https://www.rbq.gouv.qc.ca/)",
+        "Normes toiture"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en couverture québécoise.
 
@@ -2010,7 +2147,12 @@ Tu es pratique, technique et soucieux de la sécurité.`,
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Création et gestion d'entreprise",
       specialties: ["Démarrage PME QC", "Financement", "Stratégie croissance"],
-      sources: ["Investissement Québec", "PME MTL", "BDC", "REQ"]
+      sources: [
+        "Investissement Québec (https://www.investquebec.com/)",
+        "PME MTL (https://www.pmemtl.com/)",
+        "BDC (https://www.bdc.ca/)",
+        "REQ (https://www.registreentreprises.gouv.qc.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en entrepreneuriat québécois avec une connaissance approfondie de l'écosystème entrepreneurial.
 
@@ -2090,7 +2232,12 @@ Tu es pragmatique, inspirant, orienté action et très détaillé dans tes conse
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Gestion du personnel et RH",
       specialties: ["Recrutement", "Formation", "Gestion performance", "Droit du travail"],
-      sources: ["CNESST", "Loi sur les normes du travail", "Légis Québec", "Best practices RH"]
+      sources: [
+        "CNESST (https://www.cnesst.gouv.qc.ca/)",
+        "Loi sur les normes du travail",
+        "Légis Québec (https://www.legisquebec.gouv.qc.ca/)",
+        "Best practices RH"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en gestion des ressources humaines québécoise.
 
@@ -2141,7 +2288,11 @@ Tu es professionnel, équitable et orienté solutions.`,
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Marketing numérique et communication",
       specialties: ["SEO", "Réseaux sociaux", "Publicité en ligne", "Analytics"],
-      sources: ["Google Analytics", "Facebook Business", "Recherches en marketing digital"]
+      sources: [
+        "Google Analytics (https://analytics.google.com/)",
+        "Facebook Business (https://business.facebook.com/)",
+        "Recherches en marketing digital"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en marketing digital.
 
@@ -2187,7 +2338,12 @@ Tu es créatif, analytique et orienté résultats.`,
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Gestion de projet et coordination",
       specialties: ["Planification", "Coordination", "Suivi", "Livraison"],
-      sources: ["PMI", "Agile", "Scrum", "Best practices gestion projet"]
+      sources: [
+        "PMI (https://www.pmi.org/)",
+        "Agile",
+        "Scrum",
+        "Best practices gestion projet"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en gestion de projet.
 
@@ -2233,7 +2389,12 @@ Tu es organisé, méthodique et orienté résultats.`,
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Analyse financière et investissements",
       specialties: ["Analyse financière", "Investissements", "Évaluation", "Rapports"],
-      sources: ["CFA Institute", "IFRS", "Recherches financières", "Best practices"]
+      sources: [
+        "CFA Institute (https://www.cfainstitute.org/)",
+        "IFRS (https://www.ifrs.org/)",
+        "Recherches financières",
+        "Best practices"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en analyse financière.
 
@@ -2279,7 +2440,12 @@ Tu es analytique, précis et orienté performance.`,
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Conseil en management et stratégie",
       specialties: ["Stratégie", "Organisation", "Performance", "Transformation"],
-      sources: ["McKinsey", "BCG", "Bain", "Best practices management"]
+      sources: [
+        "McKinsey (https://www.mckinsey.com/)",
+        "BCG (https://www.bcg.com/)",
+        "Bain (https://www.bain.com/)",
+        "Best practices management"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en conseil en management.
 
@@ -2325,7 +2491,12 @@ Tu es stratégique, analytique et orienté performance.`,
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Comptabilité et fiscalité",
       specialties: ["Comptabilité", "Fiscalité", "Tenue de livres", "Déclarations"],
-      sources: ["CPA Canada", "Revenu Québec", "CRA", "Normes comptables"]
+      sources: [
+        "CPA Canada (https://www.cpacanada.ca/)",
+        "Revenu Québec (https://www.revenuquebec.ca/)",
+        "CRA (https://www.canada.ca/fr/agence-revenu-canada.html)",
+        "Normes comptables"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en comptabilité et fiscalité québécoise avec une connaissance approfondie des normes comptables.
 
@@ -2411,7 +2582,11 @@ Tu es précise, méthodique, rigoureuse et très détaillée dans tes explicatio
       sector: "Affaires",
       credentials: "Assistante virtuelle experte - Conseil financier et planification",
       specialties: ["Planification financière", "Investissements", "Retraite", "Épargne"],
-      sources: ["IIROC", "AMF", "Recherches en planification financière"]
+      sources: [
+        "IIROC (https://www.iiroc.ca/)",
+        "AMF (https://www.lautorite.qc.ca/)",
+        "Recherches en planification financière"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en conseil financier.
 
@@ -2461,7 +2636,10 @@ Tu es prudent, informatif et orienté long terme.`,
       sector: "Éducation",
       credentials: "Assistante virtuelle experte - Enseignement primaire",
       specialties: ["Primaire", "Pédagogie", "Apprentissage"],
-      sources: ["MEES", "PFEQ"]
+      sources: [
+        "MEES (https://www.education.gouv.qc.ca/)",
+        "PFEQ (https://www.education.gouv.qc.ca/enseignants/pfeq/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en enseignement primaire québécois avec une connaissance approfondie du développement de l'enfant.
 
@@ -2554,7 +2732,11 @@ Tu es bienveillante, pédagogue, encourageante et très détaillée dans tes exp
       sector: "Éducation",
       credentials: "Assistante virtuelle experte - Intervention adaptée",
       specialties: ["Intervention adaptée", "Troubles comportement", "Autisme", "Déficience intellectuelle"],
-      sources: ["MEES", "Recherches en adaptation scolaire", "Fédération québécoise de l'autisme"]
+      sources: [
+        "MEES (https://www.education.gouv.qc.ca/)",
+        "Recherches en adaptation scolaire",
+        "Fédération québécoise de l'autisme (https://www.autisme.qc.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en éducation spécialisée québécoise.
 
@@ -2605,7 +2787,11 @@ Tu es empathique, positif et orienté solutions.`,
       sector: "Éducation",
       credentials: "Assistante virtuelle experte - Adaptation psychosociale (profession unique au Québec)",
       specialties: ["Adaptation psychosociale", "Comportement", "Intervention milieu", "Prévention"],
-      sources: ["OPPQ", "Recherches en psychoéducation", "MEES"]
+      sources: [
+        "OPPQ (https://www.oppq.qc.ca/)",
+        "Recherches en psychoéducation",
+        "MEES (https://www.education.gouv.qc.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en psychoéducation québécoise.
 
@@ -2656,7 +2842,12 @@ Tu es professionnel, observateur et orienté solutions.`,
       sector: "Éducation",
       credentials: "Assistante virtuelle experte - Difficultés d'apprentissage et intervention pédagogique",
       specialties: ["Difficultés d'apprentissage", "Dyslexie", "Intervention pédagogique", "Plan d'intervention"],
-      sources: ["MEES", "Recherches en orthopédagogie", "PFEQ", "Plans d'intervention"]
+      sources: [
+        "MEES (https://www.education.gouv.qc.ca/)",
+        "Recherches en orthopédagogie",
+        "PFEQ (https://www.education.gouv.qc.ca/enseignants/pfeq/)",
+        "Plans d'intervention"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en orthopédagogie québécoise.
 
@@ -2707,7 +2898,12 @@ Tu es pédagogue, patient et orienté solutions.`,
       sector: "Éducation",
       credentials: "Assistante virtuelle experte - Orientation et choix de carrière",
       specialties: ["Orientation scolaire", "Choix de carrière", "Planification études", "Marché du travail"],
-      sources: ["MEES", "Emploi-Québec", "Guichet unique", "Recherches en orientation"]
+      sources: [
+        "MEES (https://www.education.gouv.qc.ca/)",
+        "Emploi-Québec (https://www.emploiquebec.gouv.qc.ca/)",
+        "Guichet unique",
+        "Recherches en orientation"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en orientation scolaire et professionnelle québécoise.
 
@@ -2758,7 +2954,12 @@ Tu es encourageant, informatif et orienté solutions.`,
       sector: "Éducation",
       credentials: "Assistante virtuelle experte - Gestion documentaire et recherche d'information",
       specialties: ["Recherche documentaire", "Gestion collections", "Formation usagers", "Technologies"],
-      sources: ["ABQLA", "IFLA", "Recherches en bibliothéconomie", "Standards internationaux"]
+      sources: [
+        "ABQLA (https://abqla.org/)",
+        "IFLA (https://www.ifla.org/)",
+        "Recherches en bibliothéconomie",
+        "Standards internationaux"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en bibliothéconomie québécoise.
 
@@ -2809,7 +3010,12 @@ Tu es méthodique, pédagogue et orienté recherche.`,
       sector: "Éducation",
       credentials: "Assistante virtuelle experte - Formation continue et développement professionnel",
       specialties: ["Formation continue", "Développement professionnel", "Pédagogie adulte", "Compétences"],
-      sources: ["MEES", "Emploi-Québec", "Recherches en andragogie", "Best practices formation"]
+      sources: [
+        "MEES (https://www.education.gouv.qc.ca/)",
+        "Emploi-Québec (https://www.emploiquebec.gouv.qc.ca/)",
+        "Recherches en andragogie",
+        "Best practices formation"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en formation d'adultes québécoise.
 
@@ -2864,7 +3070,10 @@ Tu es pédagogue, encourageant et orienté développement.`,
       sector: "Arts",
       credentials: "Assistante virtuelle experte - Arts visuels",
       specialties: ["Peinture", "Dessin", "Sculpture"],
-      sources: ["CALQ", "Conseil des arts"]
+      sources: [
+        "CALQ (https://www.calq.gouv.qc.ca/)",
+        "Conseil des arts (https://www.conseildesarts.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en arts visuels.
 
@@ -2911,7 +3120,11 @@ Tu es créatif, inspirant et encourageant.`,
       sector: "Arts",
       credentials: "Assistante virtuelle experte - Musique et composition",
       specialties: ["Composition", "Performance", "Production", "Enseignement"],
-      sources: ["CALQ", "Conseil des arts", "Recherches en musique"]
+      sources: [
+        "CALQ (https://www.calq.gouv.qc.ca/)",
+        "Conseil des arts (https://www.conseildesarts.ca/)",
+        "Recherches en musique"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en musique.
 
@@ -2962,7 +3175,11 @@ Tu es créatif, technique et inspirant.`,
       sector: "Arts",
       credentials: "Assistante virtuelle experte - Écriture créative et littérature",
       specialties: ["Écriture créative", "Roman", "Poésie", "Scénario"],
-      sources: ["CALQ", "Union des écrivaines et écrivains québécois", "Recherches en littérature"]
+      sources: [
+        "CALQ (https://www.calq.gouv.qc.ca/)",
+        "Union des écrivaines et écrivains québécois (https://www.uneq.qc.ca/)",
+        "Recherches en littérature"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en écriture et littérature.
 
@@ -3013,7 +3230,11 @@ Tu es créatif, pédagogue et inspirant.`,
       sector: "Arts",
       credentials: "Assistante virtuelle experte - Art dramatique et performance",
       specialties: ["Théâtre", "Cinéma", "Télévision", "Formation"],
-      sources: ["CALQ", "Union des artistes", "Recherches en art dramatique"]
+      sources: [
+        "CALQ (https://www.calq.gouv.qc.ca/)",
+        "Union des artistes (https://www.uda.ca/)",
+        "Recherches en art dramatique"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en art dramatique.
 
@@ -3064,7 +3285,11 @@ Tu es créatif, expressif et inspirant.`,
       sector: "Arts",
       credentials: "Assistante virtuelle experte - Danse et expression corporelle",
       specialties: ["Danse contemporaine", "Ballet", "Jazz", "Hip-hop"],
-      sources: ["CALQ", "Recherches en danse", "Écoles de danse québécoises"]
+      sources: [
+        "CALQ (https://www.calq.gouv.qc.ca/)",
+        "Recherches en danse",
+        "Écoles de danse québécoises"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en danse.
 
@@ -3119,7 +3344,11 @@ Tu es créatif, expressif et inspirant.`,
       sector: "Immobilier",
       credentials: "Assistante virtuelle experte - Marché immobilier et transactions",
       specialties: ["Marché résidentiel QC", "Achat/vente", "Évaluation"],
-      sources: ["OACIQ", "Centris", "JLR"]
+      sources: [
+        "OACIQ (https://www.oaciq.com/)",
+        "Centris (https://www.centris.ca/)",
+        "JLR (https://www.jlr.ca/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en immobilier québécois.
 
@@ -3170,7 +3399,11 @@ Tu es professionnel, à l'écoute et informatif.`,
       sector: "Immobilier",
       credentials: "Assistante virtuelle experte - Gestion immobilière",
       specialties: ["Gestion locative", "Maintenance", "Administration", "Réglementation"],
-      sources: ["OACIQ", "Recherches en gestion immobilière", "Réglementations québécoises"]
+      sources: [
+        "OACIQ (https://www.oaciq.com/)",
+        "Recherches en gestion immobilière",
+        "Réglementations québécoises"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en gestion d'immeubles.
 
@@ -3221,7 +3454,12 @@ Tu es professionnel, organisé et informatif.`,
       sector: "Immobilier",
       credentials: "Assistante virtuelle experte - Évaluation de propriétés",
       specialties: ["Évaluation résidentielle", "Analyse marché", "Rapports d'évaluation"],
-      sources: ["OACIQ", "JLR", "Centris", "Méthodes d'évaluation"]
+      sources: [
+        "OACIQ (https://www.oaciq.com/)",
+        "JLR (https://www.jlr.ca/)",
+        "Centris (https://www.centris.ca/)",
+        "Méthodes d'évaluation"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en évaluation immobilière québécoise.
 
@@ -3272,7 +3510,11 @@ Tu es technique, précis et informatif.`,
       sector: "Immobilier",
       credentials: "Assistante virtuelle experte - Gestion d'immeubles et propriétés",
       specialties: ["Gestion locative", "Entretien", "Relations locataires", "Réglementation"],
-      sources: ["Régie du logement", "Légis Québec", "Code civil du Québec"]
+      sources: [
+        "Régie du logement (https://www.rdl.gouv.qc.ca/)",
+        "Légis Québec (https://www.legisquebec.gouv.qc.ca/)",
+        "Code civil du Québec (https://www.legisquebec.gouv.qc.ca/fr/lois/c-c-1991/)"
+      ]
     },
     systemPrompt: `Tu es Emma, assistante virtuelle experte en gestion immobilière québécoise.
 

@@ -62,27 +62,36 @@ const PROFESSION_AVATARS = {
   
   // Éducation
   'enseignante_primaire': 'enseignante primaire.png',
-  'educatrice_specialisee': 'ux.png',
+  'educatrice_specialisee': 'education specialisee.png',
   'psychoeducatrice': 'psycho.png',
-  'orthopedagogue': 'psycho.png',
-  'conseiller_orientation': 'psycho.png',
-  'bibliothecaire': 'ux.png',
+  'orthopedagogue': 'orthop.png',
+  'conseiller_orientation': 'conseiller orientation.png',
+  'bibliothecaire': 'bibliothecaire.png',
   'professeur_universitaire': 'professeur universitaire.png',
+  'directeur_ecole': 'directeur decole.png',
+  'educateur_garderie': 'educateur garderie.png',
+  
+  // Médias et Communication
+  'journaliste': 'journaliste.png',
+  'reporter_photo': 'reporter photo.png',
+  'chercheur': 'chercheur.png',
+  'ecrivain_auteur': 'ecrivain auteur.png',
+  'traducteur': 'traducteur.png',
   
   // Mappings alternatifs pour compatibilité
   'developpeur': 'fullstack.png',
   'analyste': 'data.png',
   'designer': 'ux.png',
   'data-scientist': 'data.png',
-  'product-manager': 'ux.png',
+  'product-manager': 'gestionnaire projet.png',
   'ux-designer': 'ux.png',
-  'testeur': 'fullstack.png',
-  'architecte-logiciel': 'fullstack.png',
-  'admin-systeme': 'cloud.png',
-  'consultant-it': 'cloud.png',
+  'testeur': 'cyber.png',
+  'architecte-logiciel': 'cloud.png',
+  'admin-systeme': 'devops.png',
+  'consultant-it': 'cyber.png',
   'specialiste-cloud': 'cloud.png',
   'ingenieur-ai': 'ia.png',
-  'tech-support': 'cloud.png',
+  'tech-support': 'tech medicale.png',
   'mobile': 'mobile.png'
 };
 
@@ -338,7 +347,7 @@ const EmmaExpertChatbot = () => {
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [keyPoints, setKeyPoints] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
-  const [introStep, setIntroStep] = useState(0); // 0: logo, 1: avatar, 2: nom, 3: description, 4: marketing, 5: final
+  const [introStep, setIntroStep] = useState(0); // 0: logo, 1: avatar, 2: nom, 3: description, 4: final
   const [showTransition, setShowTransition] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
@@ -443,16 +452,15 @@ const EmmaExpertChatbot = () => {
   useEffect(() => {
     const timers = [];
     
-    // Séquence d'animation : l'image principale reste affichée plus longtemps
-    timers.push(setTimeout(() => setIntroStep(1), 2000));   // Icônes après 2s
-    timers.push(setTimeout(() => setIntroStep(2), 3500));  // Titre après 3.5s
-    timers.push(setTimeout(() => setIntroStep(3), 4500));  // Description après 4.5s
-    timers.push(setTimeout(() => setIntroStep(4), 5500));  // Statistiques après 5.5s
-    timers.push(setTimeout(() => setIntroStep(5), 6500));  // Call-to-action après 6.5s
+    // Séquence d'animation simplifiée
+    timers.push(setTimeout(() => setIntroStep(1), 1500));   // Icônes après 1.5s
+    timers.push(setTimeout(() => setIntroStep(2), 2500));  // Titre après 2.5s
+    timers.push(setTimeout(() => setIntroStep(3), 3500));  // Description après 3.5s
+    timers.push(setTimeout(() => setIntroStep(4), 4500));  // Statistiques après 4.5s
     timers.push(setTimeout(() => {
       setShowIntro(false);
       setShowTransition(true);
-    }, 8000)); // Disparition après 8s et début de transition
+    }, 6000)); // Disparition après 6s et début de transition
     
     timers.push(setTimeout(() => setShowTransition(false), 10000)); // Fin de transition après 10s
 
@@ -1149,8 +1157,8 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
             <img 
-              src="images/mespros-presente-emma-bleu-fonce.jpg" 
-              alt="Emma - Assistante Professionnelle" 
+              src="/images/mespros-presente-emma-bleu-fonce.jpg" 
+              alt="Emma - Consultations Gratuites" 
               className="emma-main-image"
             />
           </div>
@@ -1170,10 +1178,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Titre minimaliste */}
           {introStep >= 2 && (
             <div className="emma-minimalist-title animate-minimalist-slide">
-              <div className="minimalist-logo">
-                <span className="logo-main">EMMA</span>
-              </div>
-              <h1 className="emma-name">EMMA</h1>
               <div className="minimalist-tagline">
                 <span className="tagline-main">Assistante Professionnelle</span>
                 <span className="tagline-sub">Expertise Multi-Métiers</span>
@@ -1185,9 +1189,9 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {introStep >= 3 && (
             <div className="emma-minimalist-description animate-minimalist-type">
               <div className="description-text">
-                <p className="text-sm text-gray-500 mb-2">Assistante Professionnelle</p>
-                <p className="text-lg font-semibold text-gray-800 mb-2">Expertise Multi-Métiers</p>
-                <p className="text-sm text-gray-500">Votre assistante virtuelle spécialisée dans l'expertise professionnelle</p>
+                <p className="text-sm text-gray-500 mb-2">Expertise Multi-Métiers</p>
+                <p className="text-lg font-semibold text-gray-800 mb-2">Consultation Gratuite</p>
+                <p className="text-sm text-gray-500">Votre assistante virtuelle spécialisée</p>
               </div>
             </div>
           )}
@@ -1216,15 +1220,6 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             </div>
           )}
           
-          {/* Call to action minimaliste */}
-          {introStep >= 5 && (
-            <div className="emma-minimalist-cta animate-minimalist-cta">
-              <div className="cta-simple">
-                <p className="cta-text">Consultation Professionnelle Gratuite</p>
-                <p className="cta-subtext">Accédez à l'expertise de professionnels qualifiés</p>
-              </div>
-            </div>
-          )}
         </div>
         
         {/* Indicateur de chargement minimaliste */}
@@ -1292,11 +1287,13 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   <h1 className="text-2xl sm:text-3xl font-bold text-purple-600 leading-tight mb-1">
                     Emma
                   </h1>
-                  <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Assistante Professionnelle - Expertise Multi-Métiers</p>
+                  <p className="text-sm sm:text-base text-gray-600 mb-2">🎯 Consultations Gratuites - 50+ Métiers</p>
                   <div className="marketing-banner">
-                    <p className="text-sm sm:text-base font-semibold text-green-700 bg-green-50 px-3 sm:px-4 py-2 rounded-lg border border-green-200">
-                      ✨ Votre assistante virtuelle spécialisée dans l'expertise professionnelle<br/>
-                      Accès instantané à des conseils d'experts dans <strong>50+ métiers</strong>
+                    <p className="text-xs sm:text-sm font-semibold text-green-700 bg-green-50 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-green-200 leading-tight">
+                      ✨ Consultations gratuites<br className="sm:hidden"/>
+                      <span className="hidden sm:inline"> avec des spécialistes</span><br className="sm:hidden"/>
+                      <span className="sm:hidden">50+ métiers • 8 domaines</span>
+                      <span className="hidden sm:inline">Accès instantané à <strong>50+ métiers</strong> dans <strong>8 domaines</strong></span>
                     </p>
                   </div>
                 </div>
@@ -1850,7 +1847,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">Emma</h3>
-                    <p className="text-sm text-gray-600">🎯 Assistante Professionnelle - Expertise Multi-Métiers</p>
+                    <p className="text-sm text-gray-600">🎯 Consultations Gratuites - 50+ Métiers</p>
                   </div>
                 </div>
 
@@ -2708,7 +2705,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
-                    Consultations en direct avec Emma
+                    Emma - Consultations Gratuites
                   </h2>
                   <p className="text-sm text-gray-600">{profile.profile.name}</p>
                 </div>
