@@ -239,7 +239,7 @@ const EmmaExpertChatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showSettings, setShowSettings] = useState(false);
+  const [showSettings, setShowSettings] = useState(true);
   const [userPersonality, setUserPersonality] = useState('standard');
   const [expertiseLevel, setExpertiseLevel] = useState('intermediaire');
   const [emmaPersonality, setEmmaPersonality] = useState('professionnelle');
@@ -249,6 +249,7 @@ const EmmaExpertChatbot = () => {
   const [sessionStartTime, setSessionStartTime] = useState(null);
   const [keyPoints, setKeyPoints] = useState([]);
   const [showIntro, setShowIntro] = useState(true);
+  const [introStep, setIntroStep] = useState(0); // 0: logo, 1: avatar, 2: nom, 3: description, 4: marketing, 5: final
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -335,13 +336,19 @@ const EmmaExpertChatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Gérer la disparition de l'intro
+  // Gérer l'animation séquentielle de l'intro
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowIntro(false);
-    }, 4000);
+    const timers = [];
+    
+    // Séquence d'animation : chaque élément apparaît avec un délai
+    timers.push(setTimeout(() => setIntroStep(1), 800));   // Avatar
+    timers.push(setTimeout(() => setIntroStep(2), 1600));  // Nom
+    timers.push(setTimeout(() => setIntroStep(3), 2400));  // Description
+    timers.push(setTimeout(() => setIntroStep(4), 3200));  // Marketing
+    timers.push(setTimeout(() => setIntroStep(5), 4000));  // Final
+    timers.push(setTimeout(() => setShowIntro(false), 6000)); // Disparition totale
 
-    return () => clearTimeout(timer);
+    return () => timers.forEach(timer => clearTimeout(timer));
   }, []);
 
   // Tester la connectivité API au chargement
@@ -361,12 +368,18 @@ const EmmaExpertChatbot = () => {
 
   // Fonction pour tester la connectivité API
   const testApiConnection = async () => {
+    console.log('🔍 Test de connexion API...');
+    console.log('🔑 Clé API présente:', !!apiKey);
+    console.log('🔑 Longueur de la clé:', apiKey ? apiKey.length : 0);
+    
     if (!apiKey || apiKey.trim() === '') {
+      console.error('❌ Clé API manquante');
       setApiStatus('error');
       return false;
     }
 
     try {
+      console.log('📡 Envoi de la requête de test...');
       const response = await fetch(
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
         {
@@ -385,15 +398,30 @@ const EmmaExpertChatbot = () => {
         }
       );
 
+      console.log('📊 Statut de la réponse:', response.status);
+      console.log('📊 Headers de la réponse:', Object.fromEntries(response.headers.entries()));
+
       if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Test API réussi:', data);
         setApiStatus('connected');
         return true;
       } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Erreur API:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: errorData
+        });
         setApiStatus('error');
         return false;
       }
     } catch (error) {
-      console.error('API Test Error:', error);
+      console.error('❌ Erreur de connexion API:', {
+        message: error.message,
+        name: error.name,
+        stack: error.stack
+      });
       setApiStatus('error');
       return false;
     }
@@ -833,7 +861,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   );
 
   // ========================================
-  // ANIMATION DE PRÉSENTATION EMMA
+  // ANIMATION DE PRÉSENTATION EMMA SÉQUENTIELLE
   // ========================================
   if (showIntro) {
     return (
@@ -853,27 +881,42 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           </div>
           
           <div className="emma-intro-right">
-            <div className="emma-intro-avatar">
-              <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
-            </div>
+            {/* Avatar - Étape 1 */}
+            {introStep >= 1 && (
+              <div className="emma-intro-avatar animate-fade-in-up">
+                <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+              </div>
+            )}
             
-            <h1 className="emma-intro-name">Emma</h1>
+            {/* Nom - Étape 2 */}
+            {introStep >= 2 && (
+              <h1 className="emma-intro-name animate-fade-in-up">Emma</h1>
+            )}
             
-            <p className="emma-intro-subtitle">
-              Votre assistante virtuelle spécialisée<br />
-              en expertise professionnelle
-            </p>
-            
-            <div className="emma-intro-marketing">
-              <p className="emma-intro-marketing-text">
-                Consultez-la gratuitement dans <strong>50+ métiers</strong><br />
-                de <strong>8 domaines</strong> différents !
+            {/* Description - Étape 3 */}
+            {introStep >= 3 && (
+              <p className="emma-intro-subtitle animate-fade-in-up">
+                Votre assistante virtuelle spécialisée<br />
+                en expertise professionnelle
               </p>
-            </div>
+            )}
             
-            <p className="emma-intro-introduction">
-              Propulsé par l'IA
-            </p>
+            {/* Marketing - Étape 4 */}
+            {introStep >= 4 && (
+              <div className="emma-intro-marketing animate-fade-in-up">
+                <p className="emma-intro-marketing-text">
+                  Consultez-la gratuitement dans <strong>50+ métiers</strong><br />
+                  de <strong>8 domaines</strong> différents !
+                </p>
+              </div>
+            )}
+            
+            {/* Final - Étape 5 */}
+            {introStep >= 5 && (
+              <p className="emma-intro-introduction animate-fade-in-up">
+                Propulsé par l'IA
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -907,29 +950,54 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               </div>
               
               <div className="flex items-center gap-3">
-                {/* Indicateur de statut API */}
+                {/* Indicateur de statut API amélioré */}
                 <div className="flex items-center gap-2">
                   <div className={`text-xs flex items-center gap-1 px-2 py-1 rounded ${
                     apiStatus === 'connected' 
-                      ? 'text-green-600 bg-green-50' 
+                      ? 'text-green-600 bg-green-50 border border-green-200' 
                       : apiStatus === 'error'
-                      ? 'text-red-600 bg-red-50'
-                      : 'text-yellow-600 bg-yellow-50'
+                      ? 'text-red-600 bg-red-50 border border-red-200'
+                      : 'text-yellow-600 bg-yellow-50 border border-yellow-200'
                   }`}>
                     <span>{apiStatus === 'connected' ? '🟢' : apiStatus === 'error' ? '🔴' : '🟡'}</span>
                     {apiStatus === 'connected' ? 'API OK' : apiStatus === 'error' ? 'API Erreur' : 'API Test...'}
                   </div>
                   
                   {apiStatus === 'error' && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          playSound('click');
+                          testApiConnection();
+                        }}
+                        className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded transition-colors border border-blue-200"
+                        title="Retester la connexion API"
+                      >
+                        🔄 Retester
+                      </button>
+                      <div className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded border border-red-200 max-w-xs">
+                        <details className="cursor-help">
+                          <summary className="font-semibold">💡 Aide</summary>
+                          <div className="mt-1 text-xs space-y-1">
+                            <p>• Vérifiez la clé API Gemini</p>
+                            <p>• Vérifiez votre connexion internet</p>
+                            <p>• Consultez la console (F12) pour plus de détails</p>
+                          </div>
+                        </details>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {apiStatus === 'unknown' && (
                     <button
                       onClick={() => {
                         playSound('click');
                         testApiConnection();
                       }}
-                      className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded transition-colors"
-                      title="Retester la connexion API"
+                      className="text-xs text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-2 py-1 rounded transition-colors border border-indigo-200"
+                      title="Tester la connexion API"
                     >
-                      🔄 Retester
+                      🧪 Tester
                     </button>
                   )}
                 </div>
