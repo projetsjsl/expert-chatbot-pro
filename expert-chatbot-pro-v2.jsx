@@ -237,7 +237,7 @@ const EmmaExpertChatbot = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
+  const [apiKey, setApiKey] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showSettings, setShowSettings] = useState(true);
   const [userPersonality, setUserPersonality] = useState('standard');
@@ -322,6 +322,17 @@ const EmmaExpertChatbot = () => {
   const sectors = getSectors();
 
   // API key gérée via les variables d'environnement Vercel
+  useEffect(() => {
+    // Priorité : variable d'environnement, puis localStorage
+    const envKey = import.meta.env.VITE_GEMINI_API_KEY;
+    const saved = localStorage.getItem('gemini_api_key');
+    
+    if (envKey) {
+      setApiKey(envKey);
+    } else if (saved) {
+      setApiKey(saved);
+    }
+  }, []);
 
   useEffect(() => {
     if (sessionStartTime) {
@@ -358,7 +369,20 @@ const EmmaExpertChatbot = () => {
     }
   }, [apiKey]);
 
-  // Fonction saveApiKey supprimée - API key gérée via Vercel
+  const saveApiKey = async () => {
+    if (apiKey.trim()) {
+      localStorage.setItem('gemini_api_key', apiKey.trim());
+      
+      // Test de la connexion avant de continuer
+      const isWorking = await testApiConnection();
+      if (isWorking) {
+        console.log('✅ Clé API sauvegardée et testée avec succès');
+      } else {
+        console.error('❌ La clé API ne fonctionne pas');
+        alert('La clé API ne fonctionne pas. Veuillez vérifier votre clé.');
+      }
+    }
+  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -383,7 +407,7 @@ const EmmaExpertChatbot = () => {
     try {
       console.log('📡 Envoi de la requête de test...');
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent',
         {
           method: "POST",
           headers: {
@@ -657,7 +681,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }));
 
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent',
         {
           method: "POST",
           headers: {
