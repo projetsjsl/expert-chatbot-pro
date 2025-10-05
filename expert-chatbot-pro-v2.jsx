@@ -321,7 +321,7 @@ const EmmaExpertChatbot = () => {
 
   const sectors = getSectors();
 
-  // API key est maintenant gérée via les variables d'environnement Vercel
+  // API key gérée via les variables d'environnement Vercel
 
   useEffect(() => {
     if (sessionStartTime) {
@@ -371,6 +371,8 @@ const EmmaExpertChatbot = () => {
     console.log('🔍 Test de connexion API...');
     console.log('🔑 Clé API présente:', !!apiKey);
     console.log('🔑 Longueur de la clé:', apiKey ? apiKey.length : 0);
+    console.log('🌍 Variable d\'environnement VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY ? 'PRÉSENTE' : 'ABSENTE');
+    console.log('🌍 Toutes les variables d\'environnement:', import.meta.env);
     
     if (!apiKey || apiKey.trim() === '') {
       console.error('❌ Clé API manquante');
@@ -381,11 +383,12 @@ const EmmaExpertChatbot = () => {
     try {
       console.log('📡 Envoi de la requête de test...');
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey
           },
           body: JSON.stringify({
             contents: [{ role: 'user', parts: [{ text: 'Test de connexion' }] }],
@@ -591,7 +594,7 @@ Comment puis-je vous aider ?`;
     if (!apiKey || apiKey.trim() === '') {
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: "❌ Erreur de configuration : Clé API Gemini manquante ou invalide.\n\n🔧 Solutions possibles :\n• Vérifiez que la variable d'environnement VITE_GEMINI_API_KEY est définie\n• Redémarrez l'application après avoir configuré la clé\n• Contactez l'administrateur pour la configuration de l'API\n\n💡 La clé API doit être définie dans les variables d'environnement Vercel." }]
+        parts: [{ text: "❌ Erreur de configuration : Clé API Gemini manquante.\n\n🔧 Configuration Vercel requise :\n• Variable d'environnement : VITE_GEMINI_API_KEY\n• Valeur : Votre clé API Gemini\n• Redéployez l'application après configuration\n\n💡 Consultez la console (F12) pour plus de détails sur la configuration." }]
       }]);
       return;
     }
@@ -654,11 +657,12 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }));
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey
           },
           body: JSON.stringify({
             contents: [...history, userMessage],
@@ -998,6 +1002,23 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                       🧪 Tester
                     </button>
                   )}
+                  
+                  {/* Bouton de diagnostic pour Vercel */}
+                  <button
+                    onClick={() => {
+                      playSound('click');
+                      console.log('🔍 DIAGNOSTIC VERCEL:');
+                      console.log('📋 Variable VITE_GEMINI_API_KEY:', import.meta.env.VITE_GEMINI_API_KEY);
+                      console.log('📋 Toutes les variables env:', import.meta.env);
+                      console.log('📋 Mode:', import.meta.env.MODE);
+                      console.log('📋 Base URL:', import.meta.env.BASE_URL);
+                      alert('Diagnostic envoyé dans la console (F12)');
+                    }}
+                    className="text-xs text-purple-600 hover:text-purple-800 bg-purple-50 px-2 py-1 rounded transition-colors border border-purple-200"
+                    title="Diagnostic des variables d'environnement"
+                  >
+                    🔍 Diagnostic
+                  </button>
                 </div>
                 
                 <button
