@@ -1601,10 +1601,10 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           
                           {/* Contenu à droite de l'avatar */}
                           <div className="flex-1 min-w-0">
-                            <div className="text-lg sm:text-xl mb-1">
+                            <div className="text-xl sm:text-2xl mb-1">
                               {profile.profile.icon}
                             </div>
-                            <h3 className="text-xs sm:text-sm md:text-base font-semibold text-gray-800 leading-tight font-['Inter']">
+                            <h3 className="text-sm sm:text-base font-semibold text-gray-800 leading-tight font-['Inter']">
                               {profile.profile.name}
                             </h3>
                             
@@ -1747,10 +1747,10 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           
                           {/* Contenu à droite de l'avatar */}
                           <div className="flex-1 min-w-0">
-                            <div className="text-2xl sm:text-3xl md:text-4xl mb-2">
+                            <div className="text-xl sm:text-2xl mb-2">
                               {profession.icon}
                             </div>
-                            <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-800 leading-tight font-['Inter']">
+                            <h3 className="text-sm sm:text-base font-semibold text-gray-800 leading-tight font-['Inter']">
                               {profession.name}
                             </h3>
                             
