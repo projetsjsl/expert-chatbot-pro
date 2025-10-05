@@ -287,7 +287,7 @@ Durée : {{duration}}
 Date : {{date}}
 
 ---
-Propulsé par JSL AI
+Propulsé par Emma
 ```
 
 **C'est tout !** 🎉

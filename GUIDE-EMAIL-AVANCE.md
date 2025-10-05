@@ -122,7 +122,7 @@ Cette consultation est fournie à titre informatif uniquement.
 Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.
 
 ---
-Propulsé par JSL AI - Emma, votre assistante virtuelle spécialisée
+Propulsé par Emma - Votre assistante virtuelle spécialisée
 www.mespros.ca
 ```
 

@@ -110,7 +110,7 @@
 | **Points clés automatiques** | v2.jsx | ✅ |
 | **Questions suggérées** | v2.jsx | ✅ |
 | **Limites affichées** | v2.jsx | ✅ |
-| **Logo JSL AI** | v2.jsx | ✅ |
+| **Logo Emma** | v2.jsx | ✅ |
 | **Navigation améliorée** | v2.jsx | ✅ |
 | **Mémoire conversationnelle** | v2.jsx | ✅ |
 | **Export email résumé** | v2.jsx | ✅ |
@@ -193,7 +193,7 @@ npm run dev
 - [ ] Sidebar visible
 - [ ] Timer fonctionne
 - [ ] Points clés s'affichent
-- [ ] Logo JSL AI visible
+- [ ] Logo Emma visible
 - [ ] Navigation fluide
 - [ ] Export email opérationnel
 
@@ -211,7 +211,7 @@ npm run dev
 | Points clés | ❌ Non | ✅ Automatique |
 | Questions | ❌ Non | ✅ Suggérées |
 | Limites | ❌ Non | ✅ Affichées |
-| Logo | ❌ Non | ✅ JSL AI |
+| Logo | ❌ Non | ✅ Emma |
 | Email export | ❌ Non | ✅ Oui |
 | Design | Bon | Professionnel |
 
@@ -258,7 +258,7 @@ Lire : `GUIDE-FONCTIONNALITES.md` (section Personnalisation)
 - [ ] Version 2 testée en local
 - [ ] Toutes fonctionnalités vérifiées
 - [ ] Solution email choisie (mailto ou EmailJS)
-- [ ] Logo JSL AI visible
+- [ ] Logo Emma visible
 - [ ] Contexte québécois dans les réponses
 - [ ] Sources fiables affichées
 
@@ -398,7 +398,7 @@ git push
 
 <div align="center">
 
-**🇨🇦 Propulsé par JSL AI**
+**🇨🇦 Propulsé par Emma**
 
 Version 2.0 Québécoise | 25 Fichiers | 12 Nouvelles Fonctionnalités
 

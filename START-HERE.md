@@ -15,7 +15,7 @@
 6. ✅ Points importants extraits automatiquement
 7. ✅ Questions suggérées cliquables
 8. ✅ Limites clairement affichées
-9. ✅ Logo "Propulsé par JSL AI"
+9. ✅ Logo "Propulsé par Emma"
 10. ✅ Navigation fluide en 3 niveaux
 11. ✅ Mémoire totale de la conversation
 12. ✅ Export du résumé par email
@@ -109,11 +109,11 @@ Les experts connaissent :
 
 ## 🎨 DESIGN PROFESSIONNEL
 
-### Logo JSL AI
+### Logo Emma
 Visible partout :
 ```
 ┌─────────────────┐
-│     JSL AI      │
+│     Emma        │
 │  Intelligence   │
 │  Artificielle   │
 └─────────────────┘
@@ -212,7 +212,7 @@ Avant de déployer, vérifier que :
 
 - [ ] `expert-chatbot-pro-v2.jsx` copié dans `src/App.jsx`
 - [ ] `npm run dev` fonctionne
-- [ ] Logo JSL AI visible
+- [ ] Logo Emma visible
 - [ ] Sidebar s'affiche correctement
 - [ ] Timer compte les secondes
 - [ ] Points clés s'ajoutent
@@ -247,7 +247,7 @@ TOTAL :                  0€/mois ✨
 - ✅ Points importants en temps réel → FAIT
 - ✅ Profil professionnel → FAIT
 - ✅ Exemples et limites → FAIT
-- ✅ Logo JSL AI → FAIT
+- ✅ Logo Emma → FAIT
 - ✅ Design professionnel → FAIT
 - ✅ Navigation fluide → FAIT
 - ✅ Mémoire conversation → FAIT
@@ -308,7 +308,7 @@ git push
 ✅ **Application professionnelle complète**  
 ✅ **15+ experts québécois**  
 ✅ **12 nouvelles fonctionnalités**  
-✅ **Design moderne avec JSL AI branding**  
+✅ **Design moderne avec Emma branding**  
 ✅ **Mémoire et contexte québécois**  
 ✅ **Export email intégré**  
 ✅ **0€/mois de coût**  
@@ -337,7 +337,7 @@ git push
 
 ---
 
-**🇨🇦 Propulsé par JSL AI**
+**🇨🇦 Propulsé par Emma**
 
 Made with ❤️ for Québec
 

@@ -446,7 +446,7 @@ export default async function handler(req, res) {
 | Profil professionnel | Sidebar complète | ❌ NON |
 | Exemples questions | Boutons cliquables | ❌ NON |
 | Limites affichées | Section dédiée | ❌ NON |
-| Logo JSL AI | Intégré partout | ❌ NON |
+| Logo Emma | Intégré partout | ❌ NON |
 | Design pro grille | Navigation fluide | ❌ NON |
 | Mémoire conversation | React State + Gemini | ❌ NON |
 | Compteur temps | Timer JavaScript | ❌ NON |
@@ -537,4 +537,4 @@ git push
 ---
 
 *Créé avec ❤️ pour les professionnels québécois*  
-*Propulsé par JSL AI*
+*Propulsé par Emma*

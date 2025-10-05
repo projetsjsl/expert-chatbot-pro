@@ -391,7 +391,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 <p className="font-semibold">Profils Professionnels Détaillés</p>
                 <p>Couvrant 8 secteurs d'activité : Santé, Juridique, Finance, Technologie, Construction, Affaires, Immobilier et Éducation.</p>
 
-                <p className="text-sm text-gray-600 mt-4">Propulsé par JSL AI - Intelligence Artificielle au service des professionnels.</p>
+                <p className="text-sm text-gray-600 mt-4">Propulsé par Emma - Intelligence Artificielle au service des professionnels.</p>
               </div>
             </div>
           </div>
@@ -424,7 +424,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li>Aucune garantie d'exactitude, d'exhaustivité ou d'actualité des informations</li>
                     <li>Les informations ne remplacent pas l'avis d'un professionnel qualifié</li>
-                    <li>JSL AI décline toute responsabilité pour les décisions prises sur la base des informations fournies</li>
+                    <li>Emma décline toute responsabilité pour les décisions prises sur la base des informations fournies</li>
                     <li>En cas de doute, consultez toujours un professionnel certifié</li>
                   </ul>
                 </div>

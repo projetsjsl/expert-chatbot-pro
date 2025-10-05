@@ -62,12 +62,12 @@ Une barre latérale complète affichant :
 
 ---
 
-### 3. **Logo JSL AI** 🎨
+### 3. **Logo Emma** 🎨
 
 Logo professionnel intégré :
 ```html
 <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-  <h1 className="text-xl font-bold">JSL AI</h1>
+  <h1 className="text-xl font-bold">Emma</h1>
   <p className="text-xs opacity-90">Intelligence Artificielle</p>
 </div>
 ```
@@ -499,7 +499,7 @@ Pour utiliser la nouvelle version :
 
 ### Checklist de Vérification
 
-- [ ] Logo JSL AI visible partout
+- [ ] Logo Emma visible partout
 - [ ] Sidebar s'affiche correctement
 - [ ] Timer fonctionne
 - [ ] Points clés s'ajoutent
@@ -587,7 +587,7 @@ professions: [
 ✅ **Points clés** extraits automatiquement  
 ✅ **Questions suggérées** cliquables  
 ✅ **Limites** clairement affichées  
-✅ **Logo JSL AI** partout  
+✅ **Logo Emma** partout  
 ✅ **Navigation fluide** 3 niveaux  
 ✅ **Mémoire** conversationnelle intégrée  
 ✅ **Export email** du résumé  

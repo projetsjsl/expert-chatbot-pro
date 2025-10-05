@@ -3,6 +3,182 @@ import { Send, RefreshCw, ArrowLeft, Clock, AlertCircle, Lightbulb, Search, X, S
 import { professionalProfiles, getSectors } from './professionnalProfiles.js';
 
 // ========================================
+// BASE DE DONNÉES DES SOURCES FIABLES AVEC LIENS
+// ========================================
+const RELIABLE_SOURCES = {
+  // Santé
+  "INESSS": {
+    name: "INESSS",
+    url: "https://www.inesss.qc.ca/",
+    description: "Institut national d'excellence en santé et services sociaux"
+  },
+  "INSPQ": {
+    name: "INSPQ", 
+    url: "https://www.inspq.qc.ca/",
+    description: "Institut national de santé publique du Québec"
+  },
+  "Collège des médecins du Québec": {
+    name: "Collège des médecins du Québec",
+    url: "https://www.cmq.org/",
+    description: "Ordre professionnel des médecins du Québec"
+  },
+  "OPQ": {
+    name: "OPQ",
+    url: "https://www.ordrepsy.qc.ca/",
+    description: "Ordre des psychologues du Québec"
+  },
+  "OIIQ": {
+    name: "OIIQ",
+    url: "https://www.oiiq.org/",
+    description: "Ordre des infirmières et infirmiers du Québec"
+  },
+  "Ordre des dentistes du Québec": {
+    name: "Ordre des dentistes du Québec",
+    url: "https://www.odq.qc.ca/",
+    description: "Ordre professionnel des dentistes du Québec"
+  },
+  "Ordre des optométristes du Québec": {
+    name: "Ordre des optométristes du Québec",
+    url: "https://www.ooq.org/",
+    description: "Ordre professionnel des optométristes du Québec"
+  },
+  "OPPQ": {
+    name: "OPPQ",
+    url: "https://www.oppq.qc.ca/",
+    description: "Ordre professionnel de la physiothérapie du Québec"
+  },
+  "OEQ": {
+    name: "OEQ",
+    url: "https://www.oeq.org/",
+    description: "Ordre des ergothérapeutes du Québec"
+  },
+  "OOAQ": {
+    name: "OOAQ",
+    url: "https://www.ooaq.qc.ca/",
+    description: "Ordre des orthophonistes et audiologistes du Québec"
+  },
+  "Ordre des chiropraticiens du Québec": {
+    name: "Ordre des chiropraticiens du Québec",
+    url: "https://www.ordredeschiropraticiens.qc.ca/",
+    description: "Ordre professionnel des chiropraticiens du Québec"
+  },
+  "Fédération québécoise des massothérapeutes": {
+    name: "Fédération québécoise des massothérapeutes",
+    url: "https://www.fqm.qc.ca/",
+    description: "Organisation professionnelle des massothérapeutes"
+  },
+  "Ordre des technologues médicaux du Québec": {
+    name: "Ordre des technologues médicaux du Québec",
+    url: "https://www.otmq.org/",
+    description: "Ordre professionnel des technologues médicaux"
+  },
+  "OPDQ": {
+    name: "OPDQ",
+    url: "https://www.opdq.org/",
+    description: "Ordre professionnel des diététistes du Québec"
+  },
+  "Guide alimentaire canadien": {
+    name: "Guide alimentaire canadien",
+    url: "https://guide-alimentaire.canada.ca/",
+    description: "Guide alimentaire officiel du Canada"
+  },
+  "Santé Canada": {
+    name: "Santé Canada",
+    url: "https://www.canada.ca/fr/sante-canada.html",
+    description: "Ministère de la Santé du Canada"
+  },
+  
+  // Juridique
+  "Code civil du Québec": {
+    name: "Code civil du Québec",
+    url: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-1991",
+    description: "Code civil du Québec - Légis Québec"
+  },
+  "Légis Québec": {
+    name: "Légis Québec",
+    url: "https://www.legisquebec.gouv.qc.ca/",
+    description: "Site officiel des lois du Québec"
+  },
+  "CanLII": {
+    name: "CanLII",
+    url: "https://www.canlii.org/",
+    description: "Institut canadien d'information juridique"
+  },
+  "Barreau du Québec": {
+    name: "Barreau du Québec",
+    url: "https://www.barreau.qc.ca/",
+    description: "Ordre professionnel des avocats du Québec"
+  },
+  "Chambre des notaires du Québec": {
+    name: "Chambre des notaires du Québec",
+    url: "https://www.cdnq.org/",
+    description: "Ordre professionnel des notaires du Québec"
+  },
+  
+  // Finance
+  "Revenu Québec": {
+    name: "Revenu Québec",
+    url: "https://www.revenuquebec.ca/",
+    description: "Agence du revenu du Québec"
+  },
+  "ARC": {
+    name: "ARC",
+    url: "https://www.canada.ca/fr/agence-revenu.html",
+    description: "Agence du revenu du Canada"
+  },
+  "CPA Québec": {
+    name: "CPA Québec",
+    url: "https://www.cpaquebec.ca/",
+    description: "Ordre des comptables professionnels agréés du Québec"
+  },
+  
+  // Éducation
+  "MEES": {
+    name: "MEES",
+    url: "https://www.education.gouv.qc.ca/",
+    description: "Ministère de l'Éducation et de l'Enseignement supérieur"
+  },
+  
+  // Technologie
+  "Ordre des ingénieurs du Québec": {
+    name: "Ordre des ingénieurs du Québec",
+    url: "https://www.oiq.qc.ca/",
+    description: "Ordre professionnel des ingénieurs du Québec"
+  },
+  
+  // Construction
+  "RBQ": {
+    name: "RBQ",
+    url: "https://www.rbq.gouv.qc.ca/",
+    description: "Régie du bâtiment du Québec"
+  },
+  "CCQ": {
+    name: "CCQ",
+    url: "https://www.ccq.org/",
+    description: "Commission de la construction du Québec"
+  },
+  
+  // Immobilier
+  "OACIQ": {
+    name: "OACIQ",
+    url: "https://www.oaciq.com/",
+    description: "Organisme d'autoréglementation du courtage immobilier du Québec"
+  },
+  
+  // Affaires
+  "Chambre de commerce du Québec": {
+    name: "Chambre de commerce du Québec",
+    url: "https://www.ccmm.org/",
+    description: "Chambre de commerce du Montréal métropolitain"
+  },
+  "Investissement Québec": {
+    name: "Investissement Québec",
+    url: "https://www.investquebec.com/",
+    description: "Société de développement économique du Québec"
+  }
+};
+
+// ========================================
 // GESTION LOCALE - COMPTEURS ET POPULARITÉ
 // ========================================
 const getConsultationCount = (professionId) => {
@@ -75,7 +251,72 @@ const EmmaExpertChatbot = () => {
   const [showIntro, setShowIntro] = useState(true);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [email, setEmail] = useState('');
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [apiStatus, setApiStatus] = useState('unknown'); // 'unknown', 'connected', 'error'
   const messagesEndRef = useRef(null);
+
+  // ========================================
+  // SYSTÈME DE SONS
+  // ========================================
+  const playSound = (soundType) => {
+    if (!soundEnabled) return;
+    
+    try {
+      // Créer des sons synthétiques avec Web Audio API
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      let frequency, duration, type;
+      
+      switch (soundType) {
+        case 'click':
+          frequency = 800;
+          duration = 0.1;
+          type = 'sine';
+          break;
+        case 'hover':
+          frequency = 600;
+          duration = 0.05;
+          type = 'sine';
+          break;
+        case 'message':
+          frequency = 1000;
+          duration = 0.15;
+          type = 'triangle';
+          break;
+        case 'success':
+          frequency = 1200;
+          duration = 0.2;
+          type = 'sine';
+          break;
+        case 'notification':
+          frequency = 900;
+          duration = 0.1;
+          type = 'square';
+          break;
+        default:
+          frequency = 500;
+          duration = 0.1;
+          type = 'sine';
+      }
+      
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+      oscillator.type = type;
+      
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + duration);
+    } catch (error) {
+      console.log('Audio non supporté ou désactivé');
+    }
+  };
 
   const sectors = getSectors();
 
@@ -103,12 +344,59 @@ const EmmaExpertChatbot = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Tester la connectivité API au chargement
+  useEffect(() => {
+    if (apiKey && apiKey.trim() !== '') {
+      testApiConnection();
+    }
+  }, [apiKey]);
+
   // Fonction saveApiKey supprimée - API key gérée via Vercel
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Fonction pour tester la connectivité API
+  const testApiConnection = async () => {
+    if (!apiKey || apiKey.trim() === '') {
+      setApiStatus('error');
+      return false;
+    }
+
+    try {
+      const response = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey
+          },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: 'Test de connexion' }] }],
+            generationConfig: { 
+              temperature: 0.1, 
+              maxOutputTokens: 10
+            }
+          })
+        }
+      );
+
+      if (response.ok) {
+        setApiStatus('connected');
+        return true;
+      } else {
+        setApiStatus('error');
+        return false;
+      }
+    } catch (error) {
+      console.error('API Test Error:', error);
+      setApiStatus('error');
+      return false;
+    }
   };
 
   const generateSummary = () => {
@@ -156,10 +444,23 @@ const EmmaExpertChatbot = () => {
     summary += `Cette consultation est fournie à titre informatif uniquement. Pour des conseils personnalisés et professionnels, consultez toujours un expert qualifié du domaine.\n\n`;
     
     summary += `---\n`;
-    summary += `Propulsé par JSL AI - Emma, votre assistante virtuelle spécialisée\n`;
+    summary += `Propulsé par Emma - Votre assistante virtuelle spécialisée\n`;
     summary += `www.mespros.ca`;
     
     return summary;
+  };
+
+  // Fonction pour formater les sources avec des liens
+  const formatSourcesWithLinks = (sources) => {
+    if (!sources || !Array.isArray(sources)) return '';
+    
+    return sources.map(source => {
+      const sourceInfo = RELIABLE_SOURCES[source];
+      if (sourceInfo) {
+        return `<a href="${sourceInfo.url}" target="_blank" rel="noopener noreferrer" class="source-link" title="${sourceInfo.description}">${sourceInfo.name}</a>`;
+      }
+      return source; // Retourner le nom original si pas de lien trouvé
+    }).join(', ');
   };
 
   const formatMessageText = (text) => {
@@ -169,7 +470,7 @@ const EmmaExpertChatbot = () => {
     }
     
     // Améliorer le formatage du texte
-    return text
+    let formattedText = text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Gras
       .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italique
       .replace(/\n\n/g, '<br><br>') // Paragraphes
@@ -178,6 +479,24 @@ const EmmaExpertChatbot = () => {
       .replace(/^[-•]\s/gm, '<br>• ') // Listes à puces
       .replace(/^(\d+\.\s.*)$/gm, '<div class="list-item">$1</div>') // Items de liste
       .replace(/^•\s(.*)$/gm, '<div class="list-item">• $1</div>'); // Items à puces
+
+    // Traiter les sections de sources pour ajouter des liens
+    formattedText = formattedText.replace(
+      /Sources:\s*([^<]+)/g, 
+      (match, sourcesText) => {
+        const sources = sourcesText.split(',').map(s => s.trim()).filter(s => s);
+        const linkedSources = formatSourcesWithLinks(sources);
+        return `Sources: ${linkedSources}`;
+      }
+    );
+
+    // Traiter les liens markdown [texte](url) pour les convertir en liens HTML
+    formattedText = formattedText.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" class="source-link">$1</a>'
+    );
+
+    return formattedText;
   };
 
   const getPersonalityPrompt = () => {
@@ -212,6 +531,7 @@ const EmmaExpertChatbot = () => {
   };
 
   const selectProfession = (profession) => {
+    playSound('success');
     setSelectedProfession(profession);
     const count = incrementConsultationCount(profession.id);
     
@@ -237,12 +557,14 @@ Comment puis-je vous aider ?`;
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
+    
+    playSound('message');
 
     // Vérifier la clé API
     if (!apiKey || apiKey.trim() === '') {
       setMessages(prev => [...prev, {
         role: 'model',
-        parts: [{ text: "Erreur: Clé API Gemini manquante ou invalide. Veuillez vérifier la configuration de votre environnement." }]
+        parts: [{ text: "Erreur: Clé API Gemini manquante ou invalide. Veuillez vérifier la configuration de votre environnement. La clé API doit être définie dans les variables d'environnement Vercel." }]
       }]);
       return;
     }
@@ -260,12 +582,29 @@ Comment puis-je vous aider ?`;
       const profile = professionalProfiles[selectedProfession.id];
       const personalityPrompt = getPersonalityPrompt();
       
+      // Générer les sources avec liens pour le prompt
+      const sourcesWithLinks = profile.profile.sources.map(source => {
+        const sourceInfo = RELIABLE_SOURCES[source];
+        return sourceInfo ? `${sourceInfo.name} (${sourceInfo.url})` : source;
+      }).join(', ');
+
       const enhancedPrompt = `${profile.systemPrompt}
 
 PERSONNALISATION UTILISATEUR:
 ${personalityPrompt}
 
-RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brève 2) Infos principales 3) Appel à consulter professionnel réel.`;
+SOURCES FIABLES DISPONIBLES:
+${sourcesWithLinks}
+
+INSTRUCTIONS POUR LES SOURCES:
+- À la fin de chaque réponse, cite tes sources avec des liens vers les sites officiels
+- Utilise le format markdown: "Sources: [Nom de la source](URL), [Autre source](URL)"
+- Privilégie toujours les sources officielles et vérifiées du Québec
+- Inclus des liens vers les ordres professionnels, organismes gouvernementaux et guides officiels
+- Assure-toi que chaque source citée a un lien fonctionnel vers le site officiel
+- Limite à 2-3 sources les plus pertinentes par réponse pour éviter la surcharge
+
+RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brève 2) Infos principales 3) Appel à consulter professionnel réel 4) Sources avec liens.`;
 
       const history = messages.map(msg => ({
         role: msg.role === 'assistant' ? 'model' : msg.role,
@@ -273,7 +612,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       }));
 
       const response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
         {
           method: "POST",
           headers: {
@@ -297,26 +636,80 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       console.log('Gemini Response:', data); // Debug log
       
       if (!response.ok) {
-        throw new Error(`API Error: ${response.status} - ${data.error?.message || 'Unknown error'}`);
+        console.error('API Error Response:', data);
+        let errorMessage = `Erreur API (${response.status}): `;
+        
+        if (data.error?.message) {
+          errorMessage += data.error.message;
+        } else if (data.error?.status) {
+          errorMessage += data.error.status;
+        } else {
+          errorMessage += 'Erreur inconnue';
+        }
+        
+        // Messages d'erreur spécifiques selon le code de statut
+        if (response.status === 400) {
+          errorMessage += ". Vérifiez que votre clé API est correcte et que la requête est bien formatée.";
+        } else if (response.status === 401) {
+          errorMessage += ". Clé API invalide ou expirée.";
+        } else if (response.status === 403) {
+          errorMessage += ". Accès refusé. Vérifiez les permissions de votre clé API.";
+        } else if (response.status === 429) {
+          errorMessage += ". Limite de requêtes atteinte. Veuillez patienter avant de réessayer.";
+        } else if (response.status >= 500) {
+          errorMessage += ". Erreur serveur. Veuillez réessayer plus tard.";
+        }
+        
+        throw new Error(errorMessage);
       }
       
-      // Vérification robuste de la structure de la réponse
-      if (data.candidates && 
-          data.candidates.length > 0 && 
-          data.candidates[0] && 
-          data.candidates[0].content && 
-          data.candidates[0].content.parts && 
-          data.candidates[0].content.parts.length > 0 && 
-          data.candidates[0].content.parts[0] && 
-          data.candidates[0].content.parts[0].text) {
+      // Vérification flexible de la structure de la réponse
+      let responseText = null;
+      
+      // Essayer différentes structures de réponse possibles
+      if (data.candidates && data.candidates.length > 0) {
+        const candidate = data.candidates[0];
         
-        const responseText = data.candidates[0].content.parts[0].text;
+        // Structure standard
+        if (candidate.content?.parts?.[0]?.text) {
+          responseText = candidate.content.parts[0].text;
+        }
+        // Structure alternative 1
+        else if (candidate.text) {
+          responseText = candidate.text;
+        }
+        // Structure alternative 2
+        else if (candidate.parts?.[0]?.text) {
+          responseText = candidate.parts[0].text;
+        }
+        // Structure alternative 3 - réponse directe
+        else if (typeof candidate === 'string') {
+          responseText = candidate;
+        }
+        // Vérifier s'il y a un finishReason qui indique un problème
+        else if (candidate.finishReason) {
+          console.warn('Finish reason:', candidate.finishReason);
+          if (candidate.finishReason === 'SAFETY') {
+            responseText = "Je ne peux pas répondre à cette question pour des raisons de sécurité. Veuillez reformuler votre demande.";
+          } else if (candidate.finishReason === 'RECITATION') {
+            responseText = "Je ne peux pas répondre à cette question car elle pourrait contenir du contenu protégé par des droits d'auteur.";
+          } else {
+            responseText = "Je n'ai pas pu générer une réponse complète. Veuillez réessayer avec une question différente.";
+          }
+        }
+      }
+      
+      // Si on a trouvé du texte, l'utiliser
+      if (responseText && responseText.trim()) {
         console.log('Response text:', responseText); // Debug log
         
         setMessages(prev => [...prev, {
           role: 'model',
           parts: [{ text: responseText }]
         }]);
+        
+        // Son de notification pour la réponse d'Emma
+        setTimeout(() => playSound('notification'), 100);
         
         if (responseText.includes('important') || responseText.includes('rappel') || responseText.includes('noter')) {
           const sentences = responseText.split('.').filter(s => 
@@ -329,15 +722,29 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           }
         }
       } else {
-        console.error('Invalid response structure:', data);
+        // Log détaillé pour le debugging
+        console.error('No valid response text found. Full response:', data);
         console.error('Candidates:', data.candidates);
-        console.error('First candidate:', data.candidates?.[0]);
-        console.error('Content:', data.candidates?.[0]?.content);
-        console.error('Parts:', data.candidates?.[0]?.content?.parts);
+        if (data.candidates?.[0]) {
+          console.error('First candidate:', data.candidates[0]);
+          console.error('Candidate keys:', Object.keys(data.candidates[0]));
+        }
+        
+        // Message d'erreur plus informatif
+        let errorMessage = "Désolée, je n'ai pas pu générer de réponse valide. ";
+        
+        if (data.candidates && data.candidates.length > 0) {
+          const candidate = data.candidates[0];
+          if (candidate.finishReason) {
+            errorMessage += `Raison: ${candidate.finishReason}. `;
+          }
+        }
+        
+        errorMessage += "Veuillez réessayer avec une question différente.";
         
         setMessages(prev => [...prev, {
           role: 'model',
-          parts: [{ text: "Désolée, je n'ai pas pu générer de réponse valide. La structure de la réponse API est inattendue. Veuillez réessayer." }]
+          parts: [{ text: errorMessage }]
         }]);
       }
     } catch (error) {
@@ -389,6 +796,19 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
   // ========================================
 
   // ========================================
+  // COMPOSANT LOGO MES PROS
+  // ========================================
+  const MesProsLogo = () => (
+    <div className="mes-pros-logo">
+      <div className="logo-text-container">
+        <h1 className="logo-mes-pros">Mes Pros</h1>
+        <p className="logo-presents">présente</p>
+        <h1 className="logo-emma">Emma</h1>
+      </div>
+    </div>
+  );
+
+  // ========================================
   // ANIMATION DE PRÉSENTATION EMMA
   // ========================================
   if (showIntro) {
@@ -403,20 +823,35 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           <div className="sparkle"></div>
         </div>
         
-        <div className="emma-intro-avatar">
-          <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+        <div className="emma-intro-content">
+          <div className="emma-intro-left">
+            <MesProsLogo />
+          </div>
+          
+          <div className="emma-intro-right">
+            <div className="emma-intro-avatar">
+              <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
+            </div>
+            
+            <h1 className="emma-intro-name">Emma</h1>
+            
+            <p className="emma-intro-subtitle">
+              Votre assistante virtuelle spécialisée<br />
+              en expertise professionnelle
+            </p>
+            
+            <div className="emma-intro-marketing">
+              <p className="emma-intro-marketing-text">
+                Consultez-la gratuitement dans <strong>50+ métiers</strong><br />
+                de <strong>8 domaines</strong> différents !
+              </p>
+            </div>
+            
+            <p className="emma-intro-introduction">
+              Propulsé par l'IA
+            </p>
+          </div>
         </div>
-        
-        <h1 className="emma-intro-name">Emma</h1>
-        
-        <p className="emma-intro-subtitle">
-          Votre assistante virtuelle spécialisée<br />
-          en expertise professionnelle
-        </p>
-        
-        <p className="emma-intro-introduction">
-          Mes Pros Propulsé par l'IA vous présente Emma !
-        </p>
       </div>
     );
   }
@@ -439,18 +874,71 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                     Emma
                   </h1>
                   <p className="text-sm text-gray-600">🎯 Exploratrice Multi-Métiers Autonome</p>
+                  <div className="marketing-banner">
+                    <p className="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                      ✨ Consultez-la gratuitement dans <strong>50+ métiers</strong> de <strong>8 domaines</strong> différents !
+                    </p>
+                  </div>
                 </div>
               </div>
               
               <div className="flex items-center gap-3">
+                {/* Indicateur de statut API */}
+                <div className="flex items-center gap-2">
+                  <div className={`text-xs flex items-center gap-1 px-2 py-1 rounded ${
+                    apiStatus === 'connected' 
+                      ? 'text-green-600 bg-green-50' 
+                      : apiStatus === 'error'
+                      ? 'text-red-600 bg-red-50'
+                      : 'text-yellow-600 bg-yellow-50'
+                  }`}>
+                    <span>{apiStatus === 'connected' ? '🟢' : apiStatus === 'error' ? '🔴' : '🟡'}</span>
+                    {apiStatus === 'connected' ? 'API OK' : apiStatus === 'error' ? 'API Erreur' : 'API Test...'}
+                  </div>
+                  
+                  {apiStatus === 'error' && (
+                    <button
+                      onClick={() => {
+                        playSound('click');
+                        testApiConnection();
+                      }}
+                      className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded transition-colors"
+                      title="Retester la connexion API"
+                    >
+                      🔄 Retester
+                    </button>
+                  )}
+                </div>
+                
                 <button
-                  onClick={() => setShowAbout(true)}
+                  onClick={() => {
+                    playSound('click');
+                    setSoundEnabled(!soundEnabled);
+                  }}
+                  className={`text-sm flex items-center gap-1 px-2 py-1 rounded transition-colors ${
+                    soundEnabled 
+                      ? 'text-green-600 hover:text-green-800 bg-green-50' 
+                      : 'text-gray-400 hover:text-gray-600 bg-gray-50'
+                  }`}
+                  title={soundEnabled ? 'Désactiver les sons' : 'Activer les sons'}
+                >
+                  <span>{soundEnabled ? '🔊' : '🔇'}</span>
+                  {soundEnabled ? 'Son' : 'Muet'}
+                </button>
+                <button
+                  onClick={() => {
+                    playSound('click');
+                    setShowAbout(true);
+                  }}
                   className="text-indigo-600 hover:underline text-sm flex items-center gap-1"
                 >
                   <span>ℹ️</span> À propos
                 </button>
                 <button
-                  onClick={() => setShowDisclaimer(true)}
+                  onClick={() => {
+                    playSound('click');
+                    setShowDisclaimer(true);
+                  }}
                   className="text-gray-600 hover:underline text-sm flex items-center gap-1"
                 >
                   <span>⚖️</span> Avis légal
@@ -458,33 +946,41 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               </div>
             </div>
 
-            {/* Options de personnalisation épurées */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-200 mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                  <Settings size={16} className="text-indigo-600" />
-                  Personnalisez votre expérience
+            {/* Options de personnalisation optimisées */}
+            <div className="personalization-section bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200 mb-6 shadow-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+                <h3 className="text-sm sm:text-base font-bold text-gray-800 flex items-center gap-2">
+                  <Settings size={16} className="text-indigo-600 flex-shrink-0" />
+                  <span className="personalization-title">Personnalisez votre expérience</span>
                 </h3>
                 <button
                   onClick={() => setShowSettings(!showSettings)}
-                  className="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                  className="personalization-toggle text-xs sm:text-sm text-indigo-600 hover:text-indigo-800 font-medium px-3 py-1 rounded-lg hover:bg-indigo-50 transition-all duration-200 flex items-center gap-1 self-start sm:self-auto"
+                  aria-expanded={showSettings}
+                  aria-label={showSettings ? 'Masquer les options de personnalisation' : 'Afficher les options de personnalisation'}
                 >
-                  {showSettings ? 'Masquer ▼' : 'Afficher ▶'}
+                  <span className="toggle-icon transition-transform duration-200" style={{ transform: showSettings ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                    ▼
+                  </span>
+                  <span className="toggle-text">{showSettings ? 'Masquer' : 'Afficher'}</span>
                 </button>
               </div>
               
-              {showSettings && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className={`personalization-options transition-all duration-300 ease-in-out overflow-hidden ${
+                showSettings ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+              }`}>
+                <div className="personalization-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {/* Style utilisateur */}
-                  <div>
-                    <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
-                      <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
-                      Votre style
+                  <div className="personalization-option">
+                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-2 block flex items-center gap-2">
+                      <span className="personalization-indicator w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></span>
+                      <span>Votre style</span>
                     </label>
                     <select
                       value={userPersonality}
                       onChange={(e) => setUserPersonality(e.target.value)}
-                      className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
+                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-2 sm:py-3 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white transition-all duration-200 hover:border-indigo-400"
+                      aria-label="Sélectionner votre style de communication"
                     >
                       <option value="standard">⚖️ Standard</option>
                       <option value="analytique">📊 Analytique</option>
@@ -495,15 +991,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   </div>
 
                   {/* Niveau d'expertise */}
-                  <div>
-                    <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
-                      <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                      Votre niveau
+                  <div className="personalization-option">
+                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-2 block flex items-center gap-2">
+                      <span className="personalization-indicator w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></span>
+                      <span>Votre niveau</span>
                     </label>
                     <select
                       value={expertiseLevel}
                       onChange={(e) => setExpertiseLevel(e.target.value)}
-                      className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 bg-white"
+                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-2 sm:py-3 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 bg-white transition-all duration-200 hover:border-purple-400"
+                      aria-label="Sélectionner votre niveau d'expertise"
                     >
                       <option value="débutant">🌱 Débutant</option>
                       <option value="intermediaire">📚 Intermédiaire</option>
@@ -513,15 +1010,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   </div>
 
                   {/* Ton d'Emma */}
-                  <div>
-                    <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
-                      <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
-                      Ton d'Emma
+                  <div className="personalization-option sm:col-span-2 lg:col-span-1">
+                    <label className="personalization-label text-xs sm:text-sm font-semibold text-gray-700 mb-2 block flex items-center gap-2">
+                      <span className="personalization-indicator w-2 h-2 bg-pink-500 rounded-full flex-shrink-0"></span>
+                      <span>Ton d'Emma</span>
                     </label>
                     <select
                       value={emmaPersonality}
                       onChange={(e) => setEmmaPersonality(e.target.value)}
-                      className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-pink-500 bg-white"
+                      className="personalization-select w-full text-xs sm:text-sm border border-gray-300 rounded-lg px-3 py-2 sm:py-3 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 bg-white transition-all duration-200 hover:border-pink-400"
+                      aria-label="Sélectionner le ton de communication d'Emma"
                     >
                       <option value="professionnelle">👔 Professionnelle</option>
                       <option value="amicale">😊 Amicale</option>
@@ -530,7 +1028,28 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                     </select>
                   </div>
                 </div>
-              )}
+                
+                {/* Résumé des préférences actives */}
+                <div className="personalization-summary mt-4 pt-4 border-t border-indigo-200">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <span className="text-xs sm:text-sm font-medium text-gray-600">Préférences actives :</span>
+                    <div className="flex flex-wrap gap-2">
+                      <div className="personalization-badge flex items-center gap-1 bg-white px-2 sm:px-3 py-1 rounded-full border border-indigo-200 text-xs sm:text-sm">
+                        <span className="text-indigo-500">⚖️</span>
+                        <span className="font-medium text-gray-700">{userPersonality}</span>
+                      </div>
+                      <div className="personalization-badge flex items-center gap-1 bg-white px-2 sm:px-3 py-1 rounded-full border border-purple-200 text-xs sm:text-sm">
+                        <span className="text-purple-500">📚</span>
+                        <span className="font-medium text-gray-700">{expertiseLevel}</span>
+                      </div>
+                      <div className="personalization-badge flex items-center gap-1 bg-white px-2 sm:px-3 py-1 rounded-full border border-pink-200 text-xs sm:text-sm">
+                        <span className="text-pink-500">😊</span>
+                        <span className="font-medium text-gray-700">{emmaPersonality}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="relative">
@@ -595,6 +1114,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                       <div
                         key={profile.id}
                         onClick={() => selectProfession({ id: profile.id, ...profile.profile })}
+                        onMouseEnter={() => playSound('hover')}
                         className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all cursor-pointer p-3 hover:scale-105 border-2 relative group ${
                           isTop3 
                             ? 'border-yellow-300 bg-gradient-to-br from-yellow-50 to-orange-50' 
@@ -705,6 +1225,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                       <div
                         key={profession.id}
                         onClick={() => selectProfession(profession)}
+                        onMouseEnter={() => playSound('hover')}
                         className={`profession-card bg-white rounded-xl shadow-md hover:shadow-xl transition-all cursor-pointer p-4 hover:scale-105 border-2 relative group ${
                           isTop3 
                             ? 'border-gradient-to-r from-yellow-400 to-orange-400 bg-gradient-to-br from-yellow-50 to-orange-50' 
@@ -952,7 +1473,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
 
                 <div className="text-center bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200">
                   <p className="text-sm text-gray-600">
-                    <strong>Propulsé par JSL AI</strong> - Intelligence Artificielle au service des professionnels
+                    <strong>Propulsé par Emma</strong> - Intelligence Artificielle au service des professionnels
                   </p>
                 </div>
               </div>
@@ -989,7 +1510,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   <ul className="list-disc list-inside space-y-1 ml-4">
                     <li>Aucune garantie d'exactitude, d'exhaustivité ou d'actualité des informations</li>
                     <li>Les informations ne remplacent pas l'avis d'un professionnel qualifié</li>
-                    <li>JSL AI décline toute responsabilité pour les décisions prises sur la base des informations fournies</li>
+                    <li>Emma décline toute responsabilité pour les décisions prises sur la base des informations fournies</li>
                     <li>En cas de doute, consultez toujours un professionnel certifié</li>
                   </ul>
                 </div>
@@ -1104,34 +1625,42 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           </div>
         )}
 
-        <div className="p-6 border-b border-gray-200">
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-200">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
-                <Settings size={16} className="text-indigo-600" />
-                Personnalisation des réponses
-                <span className="text-xs text-indigo-500 ml-2">← Ajustez ici</span>
+        <div className="p-4 sm:p-6 border-b border-gray-200">
+          <div className="sidebar-personalization bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+              <h3 className="text-xs sm:text-sm font-bold text-gray-800 flex items-center gap-2">
+                <Settings size={14} className="text-indigo-600 flex-shrink-0" />
+                <span className="sidebar-personalization-title">Personnalisation</span>
+                <span className="text-xs text-indigo-500 hidden sm:inline">← Ajustez ici</span>
               </h3>
               <button
                 onClick={() => setShowSettings(!showSettings)}
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                className="sidebar-personalization-toggle text-xs text-indigo-600 hover:text-indigo-800 font-medium px-2 py-1 rounded hover:bg-indigo-50 transition-all duration-200 flex items-center gap-1 self-start sm:self-auto"
+                aria-expanded={showSettings}
+                aria-label={showSettings ? 'Masquer les options de personnalisation' : 'Afficher les options de personnalisation'}
               >
-                {showSettings ? 'Masquer ▼' : 'Afficher ▶'}
+                <span className="sidebar-toggle-icon transition-transform duration-200" style={{ transform: showSettings ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  ▼
+                </span>
+                <span className="sidebar-toggle-text">{showSettings ? 'Masquer' : 'Afficher'}</span>
               </button>
             </div>
             
-            {showSettings && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className={`sidebar-personalization-options transition-all duration-300 ease-in-out overflow-hidden ${
+              showSettings ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+            }`}>
+              <div className="sidebar-personalization-grid grid grid-cols-1 gap-3">
                 {/* Style utilisateur */}
-                <div>
-                  <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
-                    <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
-                    Votre style
+                <div className="sidebar-personalization-option">
+                  <label className="sidebar-personalization-label text-xs font-semibold text-gray-700 mb-1 block flex items-center gap-2">
+                    <span className="sidebar-personalization-indicator w-2 h-2 bg-indigo-500 rounded-full flex-shrink-0"></span>
+                    <span>Votre style</span>
                   </label>
                   <select
                     value={userPersonality}
                     onChange={(e) => setUserPersonality(e.target.value)}
-                    className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
+                    className="sidebar-personalization-select w-full text-xs border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200 bg-white transition-all duration-200 hover:border-indigo-400"
+                    aria-label="Sélectionner votre style de communication"
                   >
                     <option value="standard">⚖️ Standard</option>
                     <option value="analytique">📊 Analytique</option>
@@ -1142,15 +1671,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 </div>
 
                 {/* Niveau d'expertise */}
-                <div>
-                  <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
-                    <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                    Votre niveau
+                <div className="sidebar-personalization-option">
+                  <label className="sidebar-personalization-label text-xs font-semibold text-gray-700 mb-1 block flex items-center gap-2">
+                    <span className="sidebar-personalization-indicator w-2 h-2 bg-purple-500 rounded-full flex-shrink-0"></span>
+                    <span>Votre niveau</span>
                   </label>
                   <select
                     value={expertiseLevel}
                     onChange={(e) => setExpertiseLevel(e.target.value)}
-                    className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-purple-500 bg-white"
+                    className="sidebar-personalization-select w-full text-xs border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-200 bg-white transition-all duration-200 hover:border-purple-400"
+                    aria-label="Sélectionner votre niveau d'expertise"
                   >
                     <option value="débutant">🌱 Débutant</option>
                     <option value="intermediaire">📚 Intermédiaire</option>
@@ -1160,15 +1690,16 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 </div>
 
                 {/* Ton d'Emma */}
-                <div>
-                  <label className="text-xs font-semibold text-gray-700 mb-2 block flex items-center gap-1">
-                    <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
-                    Ton d'Emma
+                <div className="sidebar-personalization-option">
+                  <label className="sidebar-personalization-label text-xs font-semibold text-gray-700 mb-1 block flex items-center gap-2">
+                    <span className="sidebar-personalization-indicator w-2 h-2 bg-pink-500 rounded-full flex-shrink-0"></span>
+                    <span>Ton d'Emma</span>
                   </label>
                   <select
                     value={emmaPersonality}
                     onChange={(e) => setEmmaPersonality(e.target.value)}
-                    className="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-pink-500 bg-white"
+                    className="sidebar-personalization-select w-full text-xs border border-gray-300 rounded-lg px-2 py-2 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-200 bg-white transition-all duration-200 hover:border-pink-400"
+                    aria-label="Sélectionner le ton de communication d'Emma"
                   >
                     <option value="professionnelle">👔 Professionnelle</option>
                     <option value="amicale">😊 Amicale</option>
@@ -1177,11 +1708,11 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   </select>
                 </div>
               </div>
-            )}
+            </div>
 
             {/* Résumé actuel compact */}
-            <div className="mt-3 pt-3 border-t border-indigo-200">
-              <div className="flex items-center justify-between text-xs text-gray-600">
+            <div className="sidebar-personalization-summary mt-3 pt-3 border-t border-indigo-200">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600">
                 <span className="flex items-center gap-1">
                   <span className="text-indigo-500">⚖️</span>
                   <span className="font-medium">{userPersonality}</span>
@@ -1200,16 +1731,37 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
         </div>
 
         <div className="p-6 border-b border-gray-200">
-          <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
+          <h4 className="text-xs font-semibold text-gray-700 mb-3 flex items-center gap-1">
             <BookOpen size={14} /> Sources fiables
           </h4>
-          <div className="space-y-1">
-            {profile.profile.sources.map((source, idx) => (
-              <div key={idx} className="text-xs text-gray-600 flex items-start gap-2">
-                <span className="text-indigo-500">•</span>
-                <span>{source}</span>
-              </div>
-            ))}
+          <div className="space-y-2">
+            {profile.profile.sources.map((source, idx) => {
+              const sourceInfo = RELIABLE_SOURCES[source];
+              return (
+                <div key={idx} className="bg-gray-50 rounded-lg p-2 border border-gray-200 hover:border-indigo-300 transition-colors">
+                  {sourceInfo ? (
+                    <a 
+                      href={sourceInfo.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block group"
+                      title={sourceInfo.description}
+                    >
+                      <div className="text-xs font-medium text-indigo-600 group-hover:text-indigo-800 transition-colors">
+                        {sourceInfo.name}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1 line-clamp-2">
+                        {sourceInfo.description}
+                      </div>
+                    </a>
+                  ) : (
+                    <div className="text-xs text-gray-600">
+                      {source}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -1221,7 +1773,10 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             {profile.examples.map((example, idx) => (
               <button
                 key={idx}
-                onClick={() => setInputMessage(example)}
+                onClick={() => {
+                  playSound('click');
+                  setInputMessage(example);
+                }}
                 className="w-full text-left text-xs bg-blue-50 hover:bg-blue-100 p-2 rounded border border-blue-200 transition-colors"
               >
                 {example}
@@ -1252,6 +1807,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             <div className="flex items-center gap-3">
               <button
                 onClick={() => {
+                  playSound('click');
                   setSelectedProfession(null);
                   setMessages([]);
                   setSessionStartTime(null);
@@ -1276,7 +1832,10 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setShowEmailModal(true)}
+                onClick={() => {
+                  playSound('click');
+                  setShowEmailModal(true);
+                }}
                 className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                 disabled={messages.length === 0}
               >
@@ -1285,6 +1844,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               </button>
               <button
                 onClick={() => {
+                  playSound('click');
                   setSelectedProfession(null);
                   setMessages([]);
                   setKeyPoints([]);
@@ -1458,6 +2018,19 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                   </p>
                 </div>
 
+                <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
+                  <h4 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                    <span className="text-lg">🔒</span>
+                    Confidentialité et sécurité
+                  </h4>
+                  <p className="text-sm text-blue-700">
+                    <strong>Pourquoi l'envoi par messagerie personnelle ?</strong><br/>
+                    Cette option utilise votre messagerie personnelle pour des fins de <strong>confidentialité maximale</strong>. 
+                    Vos informations ne sont pas stockées sur la plateforme et restent sous votre contrôle total. 
+                    Cela garantit que vos données sensibles ne transitent que par vos propres canaux de communication sécurisés.
+                  </p>
+                </div>
+
                 <div className="flex gap-3 justify-end">
                   <button
                     onClick={() => setShowEmailModal(false)}
@@ -1479,6 +2052,7 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                       // Utiliser mailto: pour ouvrir le client email
                       window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${body}`);
                       
+                      playSound('success');
                       setShowEmailModal(false);
                       setEmail('');
                     }}

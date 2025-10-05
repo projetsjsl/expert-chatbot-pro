@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![JSL AI](https://img.shields.io/badge/JSL-AI-blueviolet?style=for-the-badge)
+![Emma](https://img.shields.io/badge/Emma-AI-blueviolet?style=for-the-badge)
 ![Experts](https://img.shields.io/badge/Experts-Québécois-blue?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&style=for-the-badge)
 ![Gemini](https://img.shields.io/badge/Gemini-API-4285F4?logo=google&style=for-the-badge)
@@ -26,7 +26,7 @@
 - 💡 **Questions Suggérées** - Exemples cliquables par métier
 - ⚠️ **Limites Claires** - Transparence sur ce que l'expert peut faire
 - 📧 **Export Email** - Recevez le résumé complet par email
-- 🎨 **Logo JSL AI** - Branding professionnel
+- 🎨 **Logo Emma** - Branding professionnel
 - 🧠 **Mémoire Totale** - L'expert se souvient de toute la conversation
 - 🎨 **Design Pro** - Interface moderne et intuitive
 
@@ -82,7 +82,7 @@
 ### Interface Principale
 ```
 ┌─────────────────────────────────────────────────┐
-│  JSL AI                    [⚙️ Changer clé API]  │
+│  Emma                      [⚙️ Changer clé API]  │
 │  Experts Professionnels                          │
 │  Consultations avec experts québécois            │
 ├─────────────────────────────────────────────────┤
@@ -97,7 +97,7 @@
 ### Interface de Consultation
 ```
 ┌──────────────────┬───────────────────────────────┐
-│  JSL AI          │  Dr. Marie Tremblay, MD       │
+│  Emma            │  Dr. Marie Tremblay, MD       │
 │  ─────────────   │  [← Retour] [📧 Email] [🔄]  │
 │                  │                                │
 │  👤 Profil       │  ┌──────────────────────────┐ │
@@ -230,7 +230,7 @@ nouveau_metier: {
 ### Modifier les Couleurs
 
 ```javascript
-// Logo JSL AI
+// Logo Emma
 <div className="bg-gradient-to-r from-indigo-600 to-purple-600">
 
 // Personnaliser
@@ -421,7 +421,7 @@ MIT License - Libre d'utilisation et de modification
 
 ## 👨‍💻 Crédits
 
-**Propulsé par JSL AI**  
+**Propulsé par Emma**  
 Développé avec ❤️ pour les professionnels québécois
 
 **Technologies** :
