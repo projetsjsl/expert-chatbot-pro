@@ -1149,7 +1149,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {/* Image principale d'Emma */}
           <div className="emma-main-image-container">
             <img 
-              src="/images/mespros-presente-emma-bleu-fonce.jpg" 
+              src="images/mespros-presente-emma-bleu-fonce.jpg" 
               alt="Emma - Assistante Professionnelle" 
               className="emma-main-image"
             />
@@ -1185,9 +1185,9 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
           {introStep >= 3 && (
             <div className="emma-minimalist-description animate-minimalist-type">
               <div className="description-text">
-                <p className="text-sm text-gray-500 mb-2">Expertise Multi-Métiers</p>
-                <p className="text-lg font-semibold text-gray-800 mb-2">Consultation Gratuite</p>
-                <p className="text-sm text-gray-500">Votre assistante virtuelle spécialisée</p>
+                <p className="text-sm text-gray-500 mb-2">Assistante Professionnelle</p>
+                <p className="text-lg font-semibold text-gray-800 mb-2">Expertise Multi-Métiers</p>
+                <p className="text-sm text-gray-500">Votre assistante virtuelle spécialisée dans l'expertise professionnelle</p>
               </div>
             </div>
           )}
@@ -1248,7 +1248,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
       <div className="emma-transition-screen">
         <div className="transition-content">
           <img 
-            src="/images/mespros-presente-emma-bleu-fonce.jpg" 
+            src="images/mespros-presente-emma-bleu-fonce.jpg" 
             alt="Emma" 
             className="transition-image"
           />
@@ -1268,7 +1268,25 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden emma-avatar flex-shrink-0">
-                  <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+                  {selectedProfession && PROFESSION_AVATARS[selectedProfession.id] ? (
+                    <img
+                      src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                      alt={`Avatar ${selectedProfession.name}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.log('Erreur avatar loading:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id]);
+                        e.target.src = "/images/emma-avatar.jpg";
+                      }}
+                      onLoad={() => console.log('Avatar métier chargé dans header principal:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id])}
+                    />
+                  ) : (
+                    <img 
+                      src="images/emma-avatar.jpg" 
+                      alt="Emma" 
+                      className="w-full h-full object-cover"
+                      onLoad={() => console.log('Avatar par défaut utilisé dans header principal pour:', selectedProfession?.id)}
+                    />
+                  )}
                 </div>
                 <div className="welcome-animation flex-1 min-w-0">
                   <h1 className="text-2xl sm:text-3xl font-bold text-purple-600 leading-tight mb-1">
@@ -1590,7 +1608,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           {PROFESSION_AVATARS[profile.id] && (
                             <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 rounded-full overflow-hidden border-3 border-white shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                               <img 
-                                src={`/images/metier/${PROFESSION_AVATARS[profile.id]}`}
+                                src={`images/metier/${PROFESSION_AVATARS[profile.id]}`}
                                 alt={`Avatar ${profile.profile.name}`}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
@@ -1736,7 +1754,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                           {PROFESSION_AVATARS[profession.id] && (
                             <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full overflow-hidden border-3 border-white shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                               <img 
-                                src={`/images/metier/${PROFESSION_AVATARS[profession.id]}`}
+                                src={`images/metier/${PROFESSION_AVATARS[profession.id]}`}
                                 alt={`Avatar ${profession.name}`}
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
@@ -1810,11 +1828,29 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               <div className="space-y-6 text-gray-700">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
-                    <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+                    {selectedProfession && PROFESSION_AVATARS[selectedProfession.id] ? (
+                      <img
+                        src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                        alt={`Avatar ${selectedProfession.name}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.log('Erreur avatar loading dans about:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id]);
+                          e.target.src = "/images/emma-avatar.jpg";
+                        }}
+                        onLoad={() => console.log('Avatar métier chargé dans about:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id])}
+                      />
+                    ) : (
+                      <img 
+                        src="images/emma-avatar.jpg" 
+                        alt="Emma" 
+                        className="w-full h-full object-cover"
+                        onLoad={() => console.log('Avatar par défaut utilisé dans about pour:', selectedProfession?.id)}
+                      />
+                    )}
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">Emma</h3>
-                    <p className="text-sm text-gray-600">🎯 Votre Exploratrice Multi-Métiers Autonome</p>
+                    <p className="text-sm text-gray-600">🎯 Assistante Professionnelle - Expertise Multi-Métiers</p>
                   </div>
                 </div>
 
@@ -2207,7 +2243,25 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full overflow-hidden">
-              <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+              {selectedProfession && PROFESSION_AVATARS[selectedProfession.id] ? (
+                <img
+                  src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                  alt={`Avatar ${selectedProfession.name}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    console.log('Erreur avatar loading dans sidebar desktop:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id]);
+                    e.target.src = "/images/emma-avatar.jpg";
+                  }}
+                  onLoad={() => console.log('Avatar métier chargé dans sidebar desktop:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id])}
+                />
+              ) : (
+                <img 
+                  src="images/emma-avatar.jpg" 
+                  alt="Emma" 
+                  className="w-full h-full object-cover"
+                  onLoad={() => console.log('Avatar par défaut utilisé dans sidebar desktop pour:', selectedProfession?.id)}
+                />
+              )}
             </div>
             <div>
               <h1 className="text-xl font-bold">Emma</h1>
@@ -2451,7 +2505,25 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full overflow-hidden">
-                    <img src="/images/emma-avatar.jpg" alt="Emma" className="w-full h-full object-cover" />
+                    {selectedProfession && PROFESSION_AVATARS[selectedProfession.id] ? (
+                      <img
+                        src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                        alt={`Avatar ${selectedProfession.name}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.log('Erreur avatar loading dans sidebar mobile:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id]);
+                          e.target.src = "/images/emma-avatar.jpg";
+                        }}
+                        onLoad={() => console.log('Avatar métier chargé dans sidebar mobile:', selectedProfession.id, PROFESSION_AVATARS[selectedProfession.id])}
+                      />
+                    ) : (
+                      <img 
+                        src="images/emma-avatar.jpg" 
+                        alt="Emma" 
+                        className="w-full h-full object-cover"
+                        onLoad={() => console.log('Avatar par défaut utilisé dans sidebar mobile pour:', selectedProfession?.id)}
+                      />
+                    )}
                   </div>
                   <div>
                     <h1 className="text-xl font-bold">Emma</h1>
@@ -2613,10 +2685,10 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 <Settings size={20} />
               </button>
               <div className="flex items-center gap-3">
-                <div className="w-16 h-16 rounded-full overflow-hidden shadow-lg">
+                <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg">
                   {PROFESSION_AVATARS[selectedProfession.id] ? (
                     <img 
-                      src={`/images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                      src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
                       alt={`Avatar ${selectedProfession.name}`}
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -2627,7 +2699,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     />
                   ) : (
                     <img 
-                      src="/images/emma-avatar.jpg" 
+                      src="images/emma-avatar.jpg" 
                       alt="Emma" 
                       className="w-full h-full object-cover"
                       onLoad={() => console.log('Avatar par défaut utilisé pour:', selectedProfession.id)}
@@ -2643,22 +2715,37 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => {
                   playSound('click');
                   setShowEmailModal(true);
                 }}
-                className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                className="flex items-center gap-2 bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base"
                 disabled={messages.length === 0}
               >
-                <Mail size={18} />
-                Envoyer par email
+                <Mail size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <span className="hidden sm:inline">Envoyer par email</span>
+                <span className="sm:hidden">Email</span>
               </button>
-              <div className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg border-2 border-indigo-500">
-                <Clock size={18} />
-                <span className="font-semibold">{formatTime(elapsedTime)}</span>
+              <div className="flex items-center gap-2 bg-indigo-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-lg border-2 border-indigo-500">
+                <Clock size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <span className="font-semibold text-sm sm:text-base">{formatTime(elapsedTime)}</span>
               </div>
+              <button
+                onClick={() => {
+                  playSound('click');
+                  setMessages([]);
+                  setKeyPoints([]);
+                  setElapsedTime(0);
+                  setSessionStartTime(Date.now());
+                }}
+                className="flex items-center gap-2 bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm sm:text-base"
+              >
+                <RefreshCw size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <span className="hidden sm:inline">Nouveau</span>
+                <span className="sm:hidden">Reset</span>
+              </button>
             </div>
           </div>
           
@@ -2678,10 +2765,10 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 className={`chat-message flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'model' && (
-                  <div className="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0 shadow-lg">
+                  <div className="w-20 h-20 rounded-full overflow-hidden mr-4 flex-shrink-0 shadow-lg">
                     {PROFESSION_AVATARS[selectedProfession.id] ? (
                       <img 
-                        src={`/images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                        src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
                         alt={`Avatar ${selectedProfession.name}`}
                         className="w-full h-full object-cover"
                         onError={(e) => {
@@ -2692,7 +2779,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                       />
                     ) : (
                       <img 
-                        src="/images/emma-avatar.jpg" 
+                        src="images/emma-avatar.jpg" 
                         alt="Emma" 
                         className="w-full h-full object-cover"
                         onLoad={() => console.log('Avatar par défaut utilisé dans message pour:', selectedProfession.id)}
@@ -2729,7 +2816,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                 <div className="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0 shadow-lg">
                   {PROFESSION_AVATARS[selectedProfession.id] ? (
                     <img 
-                      src={`/images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
+                      src={`images/metier/${PROFESSION_AVATARS[selectedProfession.id]}`}
                       alt={`Avatar ${selectedProfession.name}`}
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -2740,7 +2827,7 @@ RAPPEL CRITIQUE: Fournis une réponse complète et détaillée. Structure obliga
                     />
                   ) : (
                     <img 
-                      src="/images/emma-avatar.jpg" 
+                      src="images/emma-avatar.jpg" 
                       alt="Emma" 
                       className="w-full h-full object-cover"
                       onLoad={() => console.log('Avatar par défaut utilisé dans loading pour:', selectedProfession.id)}
