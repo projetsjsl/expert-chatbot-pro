@@ -44,8 +44,14 @@ const EmmaExpertChatbot = () => {
   const sectors = getSectors();
 
   useEffect(() => {
+    // Priorité : variable d'environnement, puis localStorage
+    const envKey = import.meta.env.VITE_GEMINI_API_KEY;
     const saved = localStorage.getItem('gemini_api_key');
-    if (saved) {
+    
+    if (envKey) {
+      setApiKey(envKey);
+      setShowApiInput(false);
+    } else if (saved) {
       setApiKey(saved);
       setShowApiInput(false);
     }
