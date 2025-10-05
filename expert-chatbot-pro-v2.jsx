@@ -210,8 +210,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl">
-                  👋
+                <div className="w-12 h-12 rounded-full overflow-hidden">
+                  <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -314,8 +314,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
               
               <div className="space-y-4 text-gray-700">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl flex-shrink-0">
-                    👋
+                  <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
+                    <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold">Emma</h3>
@@ -433,8 +433,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
       <div className="w-80 bg-white shadow-xl border-r-2 border-indigo-200 overflow-y-auto">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">
-              👋
+            <div className="w-12 h-12 rounded-full overflow-hidden">
+              <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
             </div>
             <div>
               <h1 className="text-xl font-bold">Emma</h1>
@@ -614,8 +614,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 <ArrowLeft size={24} />
               </button>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white">
-                  👋
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
@@ -648,8 +648,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.role === 'model' && (
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white mr-2 flex-shrink-0">
-                    👋
+                  <div className="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
+                    <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                   </div>
                 )}
                 <div
@@ -667,8 +667,8 @@ RAPPEL CRITIQUE: Réponds en MAX 150 mots. Structure obligatoire: 1) Intro brèv
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white mr-2">
-                  👋
+                <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+                  <img src="/emma-avatar.png" alt="Emma" className="w-full h-full object-cover" />
                 </div>
                 <div className="bg-white rounded-2xl px-6 py-4 shadow-md border border-gray-200">
                   <div className="flex gap-2">
